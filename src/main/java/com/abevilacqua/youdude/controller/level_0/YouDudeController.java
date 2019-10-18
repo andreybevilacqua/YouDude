@@ -3,7 +3,6 @@ package com.abevilacqua.youdude.controller.level_0;
 import com.abevilacqua.youdude.model.Channel;
 import com.abevilacqua.youdude.service.ChannelService;
 import com.abevilacqua.youdude.service.UserService;
-import com.abevilacqua.youdude.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +16,11 @@ public class YouDudeController {
 
   private ChannelService channelService;
 
-  private VideoService videoService;
-
   @Autowired
-  public YouDudeController (UserService userService,
-                            ChannelService channelService,
-                            VideoService videoService) {
+  public YouDudeController(UserService userService,
+                           ChannelService channelService) {
     this.userService = userService;
     this.channelService = channelService;
-    this.videoService = videoService;
   }
 
   @PostMapping
