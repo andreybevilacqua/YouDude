@@ -6,8 +6,10 @@ import com.abevilacqua.youdude.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
@@ -32,13 +34,15 @@ public class YouDudeController {
   }
 
   @PostMapping
-  public ResponseEntity yoududeService(@PathParam("action") String action,
-                                       @PathParam("user_id") long user_id) {
+  public ResponseEntity yoududeService(@RequestParam(value = "action") String action,
+                                       @RequestParam(value = "user_id", required = false) long user_id,
+                                       @RequestParam(value = "channel_id", required = false) long channel_id) {
     if(action.equals("getUsers")) {
       return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
-    else if (action.equals("getChannelsPerUser")) {
+    else if(action.equals("getChannelsPerUser")) {
       return new ResponseEntity<>(channelService.getAllChannelsFromUser(user_id));
     }
+    else if(action.equals("getVideosPerChannel"))
   }
 }

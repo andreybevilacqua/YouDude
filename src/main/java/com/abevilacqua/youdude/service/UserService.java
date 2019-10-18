@@ -20,5 +20,5 @@ public class UserService {
     return userRepo.findAll();
   }
 
-  public Optional<User> getById(long id) { return userRepo.findById(id);}
+  Optional<User> getById(long id) { return userRepo.findById(id);}
 }
