@@ -1,18 +1,13 @@
 package com.abevilacqua.youdude.controller.level_0;
 
+import com.abevilacqua.youdude.model.Channel;
 import com.abevilacqua.youdude.service.ChannelService;
 import com.abevilacqua.youdude.service.UserService;
 import com.abevilacqua.youdude.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/youdude_level0")
@@ -25,9 +20,9 @@ public class YouDudeController {
   private VideoService videoService;
 
   @Autowired
-  public YouDudeController yoududeController(UserService userService,
-                                             ChannelService channelService,
-                                             VideoService videoService) {
+  public YouDudeController (UserService userService,
+                            ChannelService channelService,
+                            VideoService videoService) {
     this.userService = userService;
     this.channelService = channelService;
     this.videoService = videoService;
@@ -36,13 +31,17 @@ public class YouDudeController {
   @PostMapping
   public ResponseEntity yoududeService(@RequestParam(value = "action") String action,
                                        @RequestParam(value = "user_id", required = false) long user_id,
-                                       @RequestParam(value = "channel_id", required = false) long channel_id) {
-    if(action.equals("getUsers")) {
-      return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+                                       @RequestParam(value = "channel_id", required = false) long channel_id,
+                                       @RequestBody(required = false) Channel channel) {
+    switch (action) {
+      case "getUsers":
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+      case "getChannelsPerUser":
+        return new ResponseEntity<>(channelService.getAllChannelsFromUser(user_id), HttpStatus.OK);
+      case "createChannel":
+        return new ResponseEntity<>(channelService.createChannel(channel), HttpStatus.CREATED);
+      default:
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    else if(action.equals("getChannelsPerUser")) {
-      return new ResponseEntity<>(channelService.getAllChannelsFromUser(user_id));
-    }
-    else if(action.equals("getVideosPerChannel"))
   }
 }

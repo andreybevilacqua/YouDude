@@ -24,14 +24,16 @@ public class ChannelService {
     this.userService = userService;
   }
 
-  public List<Channel> getAllChannels() {
-    return this.channelRepo.findAll();
-  }
-
   public List getAllChannelsFromUser(long user_id) {
     Optional<User> optionalUser = userService.getById(user_id);
 
     if(optionalUser.isPresent()) return channelRepo.findAllByOwner(optionalUser.get());
     else return EMPTY_LIST;
+  }
+
+  Optional<Channel> getChannelById(long id) { return channelRepo.findById(id); }
+
+  public Channel createChannel(Channel channel) {
+    return channelRepo.save(channel);
   }
 }
