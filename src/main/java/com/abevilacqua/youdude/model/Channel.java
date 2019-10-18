@@ -21,6 +21,10 @@ public class Channel {
   @NotEmpty
   private String name;
 
+  @Column(name = "category")
+  @NotEmpty
+  private String category;
+
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User owner;
