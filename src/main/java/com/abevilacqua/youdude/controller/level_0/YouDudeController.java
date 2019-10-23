@@ -26,7 +26,6 @@ public class YouDudeController {
   @PostMapping
   public ResponseEntity yoududeService(@RequestParam(value = "action") String action,
                                        @RequestParam(value = "user_id", required = false) long user_id,
-                                       @RequestParam(value = "channel_id", required = false) long channel_id,
                                        @RequestBody(required = false) Channel channel) {
     switch (action) {
       case "getUsers":
