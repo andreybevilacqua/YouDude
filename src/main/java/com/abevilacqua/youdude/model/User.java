@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column
+  @Column(name = "user_id")
   private long id;
 
   @Column(name = "name")
@@ -28,17 +28,21 @@ public class User {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 
-  @OneToMany(mappedBy = "cart")
-  private Set<Channel> channels;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Video> videos;
 
   public User(String name, LocalDate creationDate) {
     this.name = name;
     this.creationDate = creationDate;
   }
 
-  public User(String name, LocalDate creationDate, Set<Channel> channels) {
+  public static User userWithVideos(String name, LocalDate creationDate, List<Video> videos) {
+    return new User(name, creationDate, videos);
+  }
+
+  private User(String name, LocalDate creationDate, List<Video> videos) {
     this.name = name;
     this.creationDate = creationDate;
-    this.channels = channels;
+    this.videos = videos;
   }
 }
