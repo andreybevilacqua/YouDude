@@ -20,11 +20,9 @@ public class User {
   private long id;
 
   @Column(name = "name")
-  @NotEmpty
   private String name;
 
   @Column(name = "creation_date")
-  @NotEmpty
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 

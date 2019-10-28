@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -20,12 +18,7 @@ public class Playlist extends RepresentationModel {
   private long id;
 
   @Column(name = "name")
-  @NotEmpty
   private String name;
-
-  @Column(name = "category")
-  @NotEmpty
-  private Category category;
 
   @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL)
   private List<Video> videos;
@@ -34,19 +27,17 @@ public class Playlist extends RepresentationModel {
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Playlist(String name, Category category, User user) {
+  public Playlist(String name, User user) {
     this.name = name;
-    this.category = category;
     this.user = user;
   }
 
-  public static Playlist playlistWithVideos(String name, Category category, User user, List<Video> videos) {
-    return new Playlist(name, category, user, videos);
+  public static Playlist playlistWithVideos(String name, User user, List<Video> videos) {
+    return new Playlist(name, user, videos);
   }
 
-  private Playlist(String name, Category category, User user, List<Video> videos) {
+  private Playlist(String name, User user, List<Video> videos) {
     this.name = name;
-    this.category = category;
     this.user = user;
     this.videos = videos;
   }

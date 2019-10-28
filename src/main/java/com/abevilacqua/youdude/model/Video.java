@@ -32,6 +32,10 @@ public class Video {
   @Setter
   private int duration;
 
+  @Column(name = "category")
+  @Setter
+  private Category category;
+
   @ManyToOne
   @JoinColumn(name = "user_id")
   @Setter
@@ -42,20 +46,23 @@ public class Video {
   @Setter
   private Playlist playlist;
 
-  public Video(String name, String subject, int duration) {
+  public Video(String name, String subject, int duration, Category category, User user) {
     this.name = name;
     this.subject = subject;
     this.duration = duration;
+    this.category = category;
+    this.user = user;
   }
 
-  public static Video VideoWithPlaylist(String name, String subject, int duration, Playlist playlist) {
-    return new Video(name, subject, duration, playlist);
+  public static Video VideoWithPlaylist(String name, String subject, int duration, Category category, Playlist playlist) {
+    return new Video(name, subject, duration, category, playlist);
   }
 
-  private Video(String name, String subject, int duration, Playlist playlist) {
+  private Video(String name, String subject, int duration, Category category, Playlist playlist) {
     this.name = name;
     this.subject = subject;
     this.duration = duration;
+    this.category = category;
     this.playlist = playlist;
   }
 }
