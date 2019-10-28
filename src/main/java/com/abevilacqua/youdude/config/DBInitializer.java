@@ -18,45 +18,50 @@ public final class DBInitializer {
   public static ApplicationRunner initDB(UserRepo userRepo,
                                          PlaylistRepo playlistRepo,
                                          VideoRepo videoRepo) {
+    User user1 = new User("user-1", LocalDate.now());
+    User user2 = new User("user-2", LocalDate.now());
+    User user3 = new User("user-3", LocalDate.now());
+
     return args -> {
-      Stream.of(
-          createUser("user-1"),
-          createUser("user-2"),
-          createUser("user-3"))
+      Stream.of(user1, user2, user3)
           .forEach(userRepo::save);
 
       Stream.of(
-        createVideo("video-1", "subject 1", 10, Category.COMEDY, userRepo.findById(1L).get()),
-          createVideo("video-2", "subject 2", 15, Category.EDUCATIONAL, userRepo.findById(1L).get()),
-          createVideo("video-3", "subject 3", 20, Category.VLOGS, userRepo.findById(1L).get()),
-          createVideo("video-4", "subject 4", 25, Category.UNBOXING, userRepo.findById(1L).get()),
-          createVideo("video-5", "subject 5", 30, Category.HOW_TO, userRepo.findById(1L).get()),
-          createVideo("video-6", "subject 6", 35, Category.BEST_OF, userRepo.findById(1L).get()),
-          createVideo("video-7", "subject 7", 37, Category.GAMING, userRepo.findById(2L).get()),
-          createVideo("video-8", "subject 8", 40, Category.COMEDY, userRepo.findById(2L).get()),
-          createVideo("video-9", "subject 9", 44, Category.EDUCATIONAL, userRepo.findById(2L).get()),
-          createVideo("video-10", "subject 10", 39, Category.UNBOXING, userRepo.findById(2L).get()),
-          createVideo("video-11", "subject 11", 17, Category.HOW_TO, userRepo.findById(3L).get()),
-          createVideo("video-12", "subject 11", 8, Category.BEST_OF, userRepo.findById(3L).get()),
-          createVideo("video-13", "subject 7", 37, Category.GAMING, userRepo.findById(2L).get()),
-          createVideo("video-14", "subject 3", 20, Category.VLOGS, userRepo.findById(1L).get()))
+          createVideo("video-1", "subject 1", 10, Category.COMEDY, user1),
+          createVideo("video-2", "subject 2", 15, Category.EDUCATIONAL, user1),
+          createVideo("video-3", "subject 3", 20, Category.VLOGS, user1),
+          createVideo("video-4", "subject 4", 25, Category.UNBOXING, user1),
+          createVideo("video-5", "subject 5", 30, Category.HOW_TO, user1),
+          createVideo("video-6", "subject 6", 35, Category.BEST_OF, user1),
+          createVideo("video-7", "subject 7", 37, Category.GAMING, user2),
+          createVideo("video-8", "subject 8", 40, Category.COMEDY, user2),
+          createVideo("video-9", "subject 9", 44, Category.EDUCATIONAL, user2),
+          createVideo("video-10", "subject 10", 39, Category.UNBOXING, user2),
+          createVideo("video-11", "subject 11", 17, Category.HOW_TO, user3),
+          createVideo("video-12", "subject 11", 8, Category.BEST_OF, user3),
+          createVideo("video-13", "subject 7", 37, Category.GAMING, user3),
+          createVideo("video-14", "subject 3", 20, Category.VLOGS, user3))
           .forEach(videoRepo::save);
 
+      List<Video> comedyList = videoRepo.findAllByCategory(Category.COMEDY);
+      List<Video> educationalList = videoRepo.findAllByCategory(Category.EDUCATIONAL);
+      List<Video> vlogList = videoRepo.findAllByCategory(Category.VLOGS);
+      List<Video> unboxingList = videoRepo.findAllByCategory(Category.UNBOXING);
+      List<Video> howToList = videoRepo.findAllByCategory(Category.HOW_TO);
+      List<Video> gamingList = videoRepo.findAllByCategory(Category.GAMING);
+      List<Video> bestOfList = videoRepo.findAllByCategory(Category.BEST_OF);
+
       Stream.of(
-          playlistWithVideos("playlist-1", userRepo.findById(1L).get(), videoRepo.findAllByCategory(Category.COMEDY)),
-          playlistWithVideos("playlist-2", userRepo.findById(1L).get(), videoRepo.findAllByCategory(Category.EDUCATIONAL)),
-          playlistWithVideos("playlist-3", userRepo.findById(2L).get(), videoRepo.findAllByCategory(Category.VLOGS)),
-          playlistWithVideos("playlist-4", userRepo.findById(2L).get(), videoRepo.findAllByCategory(Category.UNBOXING)),
-          playlistWithVideos("playlist-5", userRepo.findById(3L).get(), videoRepo.findAllByCategory(Category.HOW_TO)),
-          playlistWithVideos("playlist-6", userRepo.findById(3L).get(), videoRepo.findAllByCategory(Category.GAMING)),
-          playlistWithVideos("playlist-7", userRepo.findById(3L).get(), videoRepo.findAllByCategory(Category.BEST_OF)),
-          createPlaylist("playlist-8", userRepo.findById(3L).get()))
+          playlistWithVideos("playlist-1", user1, comedyList),
+          playlistWithVideos("playlist-2", user1, educationalList),
+          playlistWithVideos("playlist-3", user2, vlogList),
+          playlistWithVideos("playlist-4", user2, unboxingList),
+          playlistWithVideos("playlist-5", user3, howToList),
+          playlistWithVideos("playlist-6", user3, gamingList),
+          playlistWithVideos("playlist-7", user3, bestOfList),
+          createPlaylist("playlist-8", user1))
           .forEach(playlistRepo::save);
     };
-  }
-
-  private static User createUser(String name) {
-    return new User(name, LocalDate.now());
   }
 
   private static Video createVideo(String name, String subject, int duration, Category category, User user){
