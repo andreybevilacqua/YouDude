@@ -20,7 +20,7 @@ public class Playlist extends RepresentationModel {
   @Column(name = "name")
   private String name;
 
-  @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "playlist")
   private List<Video> videos;
 
   @ManyToOne

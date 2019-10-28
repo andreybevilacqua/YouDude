@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class User {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user")
   private List<Video> videos;
 
   public User(String name, LocalDate creationDate) {
