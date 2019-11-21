@@ -59,7 +59,9 @@ public final class DBInitializer {
           playlistWithVideos("playlist-5", user3, howToList),
           playlistWithVideos("playlist-6", user3, gamingList),
           playlistWithVideos("playlist-7", user3, bestOfList),
-          createPlaylist("playlist-8", user1))
+          createPlaylist("playlist-8", user1),
+          createPlaylist("playlist-9", user1),
+          createPlaylist("playlist-10", user1))
           .forEach(playlistRepo::save);
     };
   }

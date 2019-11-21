@@ -33,11 +33,7 @@ public class User {
     this.creationDate = creationDate;
   }
 
-  public static User userWithVideos(String name, LocalDate creationDate, List<Video> videos) {
-    return new User(name, creationDate, videos);
-  }
-
-  private User(String name, LocalDate creationDate, List<Video> videos) {
+  public User(String name, LocalDate creationDate, List<Video> videos) {
     this.name = name;
     this.creationDate = creationDate;
     this.videos = videos;
