@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_1_2;
+package com.abevilacqua.youdude.controller.level_2;
 
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.service.PlaylistService;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/playlist")
+@RequestMapping("/level2_playlist")
 public class PlaylistController {
 
   private PlaylistService playlistService;

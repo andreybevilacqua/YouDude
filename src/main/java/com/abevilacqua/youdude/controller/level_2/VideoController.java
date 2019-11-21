@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_1_2;
+package com.abevilacqua.youdude.controller.level_2;
 
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.service.VideoService;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/video")
+@RequestMapping("/level2_video")
 public class VideoController {
 
   private VideoService videoService;
@@ -18,7 +18,7 @@ public class VideoController {
     this.videoService = videoService;
   }
 
-  @GetMapping("/videos/{id}")
+  @GetMapping("/videos/{user_id}")
   public ResponseEntity getVideosPerUser(@PathVariable("user_id") long user_id) {
     return new ResponseEntity<>(videoService.getAllFromUser(user_id), HttpStatus.OK);
   }

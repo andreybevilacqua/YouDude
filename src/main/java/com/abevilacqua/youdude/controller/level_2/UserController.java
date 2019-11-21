@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_1_2;
+package com.abevilacqua.youdude.controller.level_2;
 
 import com.abevilacqua.youdude.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/level2_user")
 public class UserController {
 
   private UserService userService;
