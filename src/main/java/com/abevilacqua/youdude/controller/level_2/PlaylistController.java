@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/level2_playlist")
 public class PlaylistController {
 
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+
   private PlaylistService playlistService;
 
   @Autowired

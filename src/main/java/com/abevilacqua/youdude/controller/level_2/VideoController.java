@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/level2_video")
 public class VideoController {
 
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+
   private VideoService videoService;
 
   @Autowired

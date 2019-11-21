@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/level2_user")
 public class UserController {
 
-  // todo: CompletableFuture, Paging, RESTFul
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
 
   private UserService userService;
 
