@@ -40,7 +40,21 @@ public final class DBInitializer {
           createVideo("video-11", "subject 11", 17, Category.HOW_TO, user3),
           createVideo("video-12", "subject 11", 8, Category.BEST_OF, user3),
           createVideo("video-13", "subject 7", 37, Category.GAMING, user3),
-          createVideo("video-14", "subject 3", 20, Category.VLOGS, user3))
+          createVideo("video-14", "subject 3", 20, Category.COMEDY, user3),
+          createVideo("video-15", "subject 3", 20, Category.BEST_OF, user3),
+          createVideo("video-16", "subject 3", 20, Category.UNBOXING, user3),
+          createVideo("video-17", "subject 3", 20, Category.BEST_OF, user3),
+          createVideo("video-18", "subject 3", 20, Category.HOW_TO, user3),
+          createVideo("video-19", "subject 3", 20, Category.UNBOXING, user3),
+          createVideo("video-20", "subject 3", 20, Category.GAMING, user3),
+          createVideo("video-21", "subject 3", 20, Category.VLOGS, user3),
+          createVideo("video-22", "subject 3", 20, Category.COMEDY, user3),
+          createVideo("video-23", "subject 3", 20, Category.COMEDY, user3),
+          createVideo("video-24", "subject 3", 20, Category.VLOGS, user3),
+          createVideo("video-25", "subject 3", 20, Category.EDUCATIONAL, user3),
+          createVideo("video-26", "subject 3", 20, Category.VLOGS, user3),
+          createVideo("video-27", "subject 3", 20, Category.EDUCATIONAL, user3),
+          createVideo("video-28", "subject 3", 20, Category.HOW_TO, user3))
           .forEach(videoRepo::save);
 
       List<Video> comedyList = videoRepo.findAllByCategory(Category.COMEDY);
