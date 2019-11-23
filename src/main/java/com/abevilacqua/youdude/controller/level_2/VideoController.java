@@ -1,5 +1,6 @@
 package com.abevilacqua.youdude.controller.level_2;
 
+import com.abevilacqua.youdude.controller.dto.VideoDTO;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/level2/videos")
@@ -23,8 +25,11 @@ public class VideoController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Video>> getAllVideos() {
-    return new ResponseEntity<>(videoService.getAllVideos(), HttpStatus.OK);
+  public ResponseEntity<List<VideoDTO>> getAllVideos() {
+    return new ResponseEntity<>(videoService.getAllVideos()
+        .stream()
+        .map(VideoDTO::mapper)
+        .collect(Collectors.toList()), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
