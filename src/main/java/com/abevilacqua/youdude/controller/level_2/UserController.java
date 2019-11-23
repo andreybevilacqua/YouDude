@@ -5,9 +5,7 @@ import com.abevilacqua.youdude.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
 @RequestMapping("/level2/users")
 public class UserController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, integration tests
 
   private UserService userService;
 
@@ -27,5 +25,17 @@ public class UserController {
   @GetMapping
   public ResponseEntity<List<User>> getAllUsers() {
     return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+  }
+
+  @PostMapping
+  public ResponseEntity<User> createUser(@RequestBody User user) {
+    return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+  }
+
+  @DeleteMapping("{user_id}")
+  public ResponseEntity deleteUser(@PathVariable("user_id") long user_id) {
+    return userService.deleteUser(user_id)
+        .map(user -> new ResponseEntity<>(HttpStatus.OK))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }

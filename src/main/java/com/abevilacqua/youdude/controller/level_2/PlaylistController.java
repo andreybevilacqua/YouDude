@@ -17,7 +17,7 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 @RequestMapping("/level2/playlists")
 public class PlaylistController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, improves JSON
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, integration tests
 
   private PlaylistService playlistService;
 

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/level2/videos")
 public class VideoController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, integration tests
 
   private VideoService videoService;
 

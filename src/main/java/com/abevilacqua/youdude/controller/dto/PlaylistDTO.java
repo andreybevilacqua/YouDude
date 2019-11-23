@@ -33,7 +33,6 @@ public class PlaylistDTO {
         .videos_id(videos)
         .user_id(playlist.getUser().getId())
         .build();
-
   }
 
 }
