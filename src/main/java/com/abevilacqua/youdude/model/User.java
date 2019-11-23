@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
+@Entity()
 @NoArgsConstructor
 @Getter
 public class User {

@@ -1,9 +1,11 @@
 package com.abevilacqua.youdude.controller;
 
 import com.abevilacqua.youdude.controller.level_2.UserController;
+import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.service.UserService;
 import com.abevilacqua.youdude.utils.ObjectHelper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
+import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
+import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +42,7 @@ class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Should find all users")
   void shouldFindAllUsers() throws Exception {
     mockMvc.perform(get(URL)
         .contentType(MediaType.APPLICATION_JSON))
@@ -57,16 +62,42 @@ class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Should find user by ID")
   void shouldFindUserById() throws Exception {
     String id = "/" + 1;
     mockMvc.perform(get(URL + id)
         .contentType(MediaType.APPLICATION_JSON))
-        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.id").isNumber())
         .andExpect(jsonPath("$.id", is(1)))
+        .andExpect(jsonPath("$.name").exists())
         .andExpect(jsonPath("$.name", is("user-1")))
+        .andExpect(jsonPath("$.creationDate").exists())
         .andExpect(jsonPath("$.creationDate", is(LocalDate.now().toString())));
+  }
+
+  @Test
+  @DisplayName("Should create a new user")
+  void shouldCreateUser() throws Exception {
+    User user = createDefaultUser();
+    mockMvc.perform(post(URL)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(mapToJSON(user)))
+        .andDo(print())
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.name").exists())
+        .andExpect(jsonPath("$.name", is("Default User")))
+        .andExpect(jsonPath("$.creationDate").exists())
+        .andExpect(jsonPath("$.creationDate", is(LocalDate.now().toString())));
+  }
+
+  @Test
+  void shouldDeleteUser() throws Exception {
+    String id = "/" + 1;
+    mockMvc.perform(delete(URL + id)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
   }
 }
