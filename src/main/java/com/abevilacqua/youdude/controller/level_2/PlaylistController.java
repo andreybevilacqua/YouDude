@@ -34,7 +34,7 @@ public class PlaylistController {
         .collect(Collectors.toList()), HttpStatus.OK);
   }
 
-  @GetMapping("{user_id}")
+  @GetMapping("/{user_id}")
   public ResponseEntity<List<PlaylistDTO>> getPlaylistPerUser(@PathVariable("user_id") long user_id) {
     return new ResponseEntity<>(playlistService.getAllFromUser(user_id)
         .stream()
@@ -47,7 +47,7 @@ public class PlaylistController {
     return new ResponseEntity<>(mapper(playlistService.createPlaylist(playlist)), HttpStatus.CREATED);
   }
 
-  @DeleteMapping("{playlist_id}")
+  @DeleteMapping("/{playlist_id}")
   public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") long playlist_id) {
     return playlistService.deletePlaylist(playlist_id)
         .map(PlaylistDTO::mapper)

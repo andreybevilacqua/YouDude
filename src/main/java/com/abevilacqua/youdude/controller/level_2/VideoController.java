@@ -53,7 +53,7 @@ public class VideoController {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @DeleteMapping("{video_id}")
+  @DeleteMapping("/{video_id}")
   public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "video_id") long video_id) {
     return videoService.deleteVideo(video_id)
         .map(VideoDTO::mapper)
