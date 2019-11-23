@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/level2_user")
+@RequestMapping("/level2/users")
 public class UserController {
 
   // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
@@ -21,7 +21,7 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping("/users")
+  @GetMapping
   public ResponseEntity getAllUsers() {
     return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
   }

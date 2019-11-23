@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/level2_video")
+@RequestMapping("/level2/videos")
 public class VideoController {
 
   // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
@@ -20,24 +20,24 @@ public class VideoController {
     this.videoService = videoService;
   }
 
-  @GetMapping("/videos/{user_id}")
+  @GetMapping("/{user_id}")
   public ResponseEntity getVideosPerUser(@PathVariable("user_id") long user_id) {
     return new ResponseEntity<>(videoService.getAllFromUser(user_id), HttpStatus.OK);
   }
 
-  @PostMapping("/videos")
+  @PostMapping
   public ResponseEntity createVideo(@RequestBody Video video) {
     return new ResponseEntity<>(videoService.createVideo(video), HttpStatus.CREATED);
   }
 
-  @PutMapping("/videos")
+  @PutMapping
   public ResponseEntity updateVideo(@RequestBody Video video) {
     return videoService.updateVideo(video)
         .map(v -> new ResponseEntity<>(v, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @DeleteMapping("/videos/{video_id}")
+  @DeleteMapping("{video_id}")
   public ResponseEntity deleteVideo(@PathVariable(value = "video_id") long video_id) {
     return videoService.deleteVideo(video_id)
         .map(video -> new ResponseEntity<>(video, HttpStatus.OK))

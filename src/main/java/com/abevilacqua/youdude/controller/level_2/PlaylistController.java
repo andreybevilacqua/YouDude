@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/level2_playlist")
+@RequestMapping("/level2/playlists")
 public class PlaylistController {
 
   // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
@@ -20,17 +20,17 @@ public class PlaylistController {
     this.playlistService = playlistService;
   }
 
-  @GetMapping("/playlists")
+  @GetMapping
   public ResponseEntity getPlaylistPerUser(@PathVariable("user_id") long user_id) {
     return new ResponseEntity<>(playlistService.getAllFromUser(user_id), HttpStatus.OK);
   }
 
-  @PostMapping("/playlists")
+  @PostMapping
   public ResponseEntity createPlayList(@RequestBody Playlist playlist) {
     return new ResponseEntity<>(playlistService.createPlaylist(playlist), HttpStatus.CREATED);
   }
 
-  @DeleteMapping("/playlists/{playlist_id}")
+  @DeleteMapping("{playlist_id}")
   public ResponseEntity deletePlaylist(@PathVariable(value = "playlist_id") long playlist_id) {
     return playlistService.deletePlaylist(playlist_id)
         .map(playlist -> new ResponseEntity<>(playlist, HttpStatus.OK))
