@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/level2/playlists")
 public class PlaylistController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, improves JSON
 
   private PlaylistService playlistService;
 
@@ -21,6 +23,11 @@ public class PlaylistController {
   }
 
   @GetMapping
+  public ResponseEntity<List<Playlist>> getAllPlaylists() {
+    return new ResponseEntity<>(playlistService.getAllPlaylists(), HttpStatus.OK);
+  }
+
+  @GetMapping("{user_id}")
   public ResponseEntity getPlaylistPerUser(@PathVariable("user_id") long user_id) {
     return new ResponseEntity<>(playlistService.getAllFromUser(user_id), HttpStatus.OK);
   }

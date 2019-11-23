@@ -21,6 +21,10 @@ public class PlaylistService {
     this.userService = userService;
   }
 
+  public List<Playlist> getAllPlaylists() {
+    return playlistRepo.findAll();
+  }
+
   public List getAllFromUser(long user_id) {
     Optional<User> userOptional = userService.getById(user_id);
     if(userOptional.isPresent()) return playlistRepo.findAllByUser(userOptional.get());
