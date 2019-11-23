@@ -29,7 +29,7 @@ public class VideoService {
     return videoRepo.findAll();
   }
 
-  public List getAllFromUser(long user_id) {
+  public List<Video> getAllFromUser(long user_id) {
     Optional<User> optionalUser = userService.getById(user_id);
 
     if(optionalUser.isPresent()) return videoRepo.findAllByUser(optionalUser.get());

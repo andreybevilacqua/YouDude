@@ -28,17 +28,17 @@ public class PlaylistController {
   }
 
   @GetMapping("{user_id}")
-  public ResponseEntity getPlaylistPerUser(@PathVariable("user_id") long user_id) {
+  public ResponseEntity<List<Playlist>> getPlaylistPerUser(@PathVariable("user_id") long user_id) {
     return new ResponseEntity<>(playlistService.getAllFromUser(user_id), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity createPlayList(@RequestBody Playlist playlist) {
+  public ResponseEntity<Playlist> createPlayList(@RequestBody Playlist playlist) {
     return new ResponseEntity<>(playlistService.createPlaylist(playlist), HttpStatus.CREATED);
   }
 
   @DeleteMapping("{playlist_id}")
-  public ResponseEntity deletePlaylist(@PathVariable(value = "playlist_id") long playlist_id) {
+  public ResponseEntity<Playlist> deletePlaylist(@PathVariable(value = "playlist_id") long playlist_id) {
     return playlistService.deletePlaylist(playlist_id)
         .map(playlist -> new ResponseEntity<>(playlist, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
