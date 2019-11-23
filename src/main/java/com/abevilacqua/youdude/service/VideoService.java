@@ -25,6 +25,10 @@ public class VideoService {
     this.userService = userService;
   }
 
+  public List<Video> getAllVideos() {
+    return videoRepo.findAll();
+  }
+
   public List getAllFromUser(long user_id) {
     Optional<User> optionalUser = userService.getById(user_id);
 
@@ -51,7 +55,6 @@ public class VideoService {
       Video tempVideo = optVideo.get();
       tempVideo.setName(video.getName());
       tempVideo.setDuration(video.getDuration());
-      tempVideo.setPlaylist(video.getPlaylist());
       tempVideo.setUser(video.getUser());
       tempVideo.setSubject(video.getSubject());
       return Optional.of(videoRepo.save(tempVideo));

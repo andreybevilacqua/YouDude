@@ -7,17 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/level2/videos")
 public class VideoController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, improves JSON result
 
   private VideoService videoService;
 
   @Autowired
   public VideoController(VideoService videoService) {
     this.videoService = videoService;
+  }
+
+  @GetMapping
+  public ResponseEntity<List<Video>> getAllVideos() {
+    return new ResponseEntity<>(videoService.getAllVideos(), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")

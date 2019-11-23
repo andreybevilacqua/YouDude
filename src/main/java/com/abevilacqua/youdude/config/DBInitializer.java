@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.abevilacqua.youdude.model.Playlist.playlistWithVideos;
+
 public final class DBInitializer {
 
   public static ApplicationRunner initDB(UserRepo userRepo,
@@ -88,7 +90,4 @@ public final class DBInitializer {
     return new Playlist(name, user);
   }
 
-  private static Playlist playlistWithVideos(String name, User user, List<Video> videos) {
-    return Playlist.playlistWithVideos(name, user, videos);
-  }
 }

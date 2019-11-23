@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -25,17 +24,9 @@ public class User {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 
-  @OneToMany(mappedBy = "user")
-  private List<Video> videos;
-
   public User(String name, LocalDate creationDate) {
     this.name = name;
     this.creationDate = creationDate;
   }
 
-  public User(String name, LocalDate creationDate, List<Video> videos) {
-    this.name = name;
-    this.creationDate = creationDate;
-    this.videos = videos;
-  }
 }
