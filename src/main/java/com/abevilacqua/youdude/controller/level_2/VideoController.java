@@ -33,25 +33,30 @@ public class VideoController {
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<List<Video>> getVideosPerUser(@PathVariable("user_id") long user_id) {
-    return new ResponseEntity<>(videoService.getAllFromUser(user_id), HttpStatus.OK);
+  public ResponseEntity<List<VideoDTO>> getVideosPerUser(@PathVariable("user_id") long user_id) {
+    return new ResponseEntity<>(videoService.getAllFromUser(user_id)
+        .stream()
+        .map(VideoDTO::mapper)
+        .collect(Collectors.toList()), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<Video> createVideo(@RequestBody Video video) {
-    return new ResponseEntity<>(videoService.createVideo(video), HttpStatus.CREATED);
+  public ResponseEntity<VideoDTO> createVideo(@RequestBody Video video) {
+    return new ResponseEntity<>(VideoDTO.mapper(videoService.createVideo(video)), HttpStatus.CREATED);
   }
 
   @PutMapping
-  public ResponseEntity<Video> updateVideo(@RequestBody Video video) {
+  public ResponseEntity<VideoDTO> updateVideo(@RequestBody Video video) {
     return videoService.updateVideo(video)
+        .map(VideoDTO::mapper)
         .map(v -> new ResponseEntity<>(v, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   @DeleteMapping("{video_id}")
-  public ResponseEntity<Video> deleteVideo(@PathVariable(value = "video_id") long video_id) {
+  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "video_id") long video_id) {
     return videoService.deleteVideo(video_id)
+        .map(VideoDTO::mapper)
         .map(video -> new ResponseEntity<>(video, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
