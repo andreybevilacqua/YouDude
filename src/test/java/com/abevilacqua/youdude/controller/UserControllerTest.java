@@ -18,9 +18,9 @@ import java.time.LocalDate;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,21 +83,11 @@ class UserControllerTest {
     mockMvc.perform(post(URL)
         .contentType(MediaType.APPLICATION_JSON)
         .content(mapToJSON(user)))
-        .andDo(print())
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name").exists())
         .andExpect(jsonPath("$.name", is("Default User")))
         .andExpect(jsonPath("$.creationDate").exists())
         .andExpect(jsonPath("$.creationDate", is(LocalDate.now().toString())));
-  }
-
-  @Test
-  void shouldDeleteUser() throws Exception {
-    String id = "/" + 1;
-    mockMvc.perform(delete(URL + id)
-        .contentType(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk());
   }
 }

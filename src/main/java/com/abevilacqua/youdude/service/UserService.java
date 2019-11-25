@@ -24,12 +24,4 @@ public class UserService {
 
   public User createUser(User user) { return userRepo.save(user); }
 
-  public Optional<User> deleteUser(long userId) {
-    Optional<User> optionalUser = userRepo
-        .findById(userId);
-    if(optionalUser.isPresent()) {
-      userRepo.delete(optionalUser.get());
-      return optionalUser;
-    } else return Optional.empty();
-  }
 }
