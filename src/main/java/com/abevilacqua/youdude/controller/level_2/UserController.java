@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/level2/users")
 public class UserController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin, integration tests
+  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
 
   private UserService userService;
 

@@ -1,12 +1,7 @@
 package com.abevilacqua.youdude.controller;
 
 import com.abevilacqua.youdude.controller.level_2.PlaylistController;
-import com.abevilacqua.youdude.model.Playlist;
-import com.abevilacqua.youdude.model.User;
-import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.service.PlaylistService;
-import com.abevilacqua.youdude.service.UserService;
-import com.abevilacqua.youdude.service.VideoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static com.abevilacqua.youdude.utils.ObjectHelper.*;
+import static com.abevilacqua.youdude.utils.ObjectHelper.createMockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,12 +23,6 @@ class PlaylistControllerTest {
 
   @Autowired
   private PlaylistService playlistService;
-
-  @Autowired
-  private UserService userService;
-
-  @Autowired
-  private VideoService videoService;
 
   private MockMvc mockMvc;
 

@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class YouDudeApplication {
 
-	public static String CURIE_NAMESPACE = "youdude";
-
 	public static void main(String[] args) {
 		SpringApplication.run(YouDudeApplication.class, args);
 	}

@@ -1,6 +1,5 @@
 package com.abevilacqua.youdude.utils;
 
-import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static com.abevilacqua.youdude.model.Category.COMEDY;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -32,7 +30,4 @@ public final class ObjectHelper {
     return new Video("New video", "New subject", 20, COMEDY, user);
   }
 
-  public static Playlist createDefaultPlaylistWithVideos(User user, List<Video> videos) {
-    return Playlist.playlistWithVideos("New playlist", user, videos);
-  }
 }
