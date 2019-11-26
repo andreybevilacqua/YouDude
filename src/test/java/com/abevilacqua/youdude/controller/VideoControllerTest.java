@@ -16,10 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
