@@ -4,12 +4,15 @@ import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.repo.VideoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.Collections.EMPTY_LIST;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
 public class VideoService {
@@ -25,31 +28,37 @@ public class VideoService {
     this.userService = userService;
   }
 
-  public List<Video> getAllVideos() {
-    return videoRepo.findAll();
+  @Async
+  public CompletableFuture<List<Video>> getAllVideos() {
+    return completedFuture(videoRepo.findAll());
   }
 
-  public List<Video> getAllFromUser(long user_id) {
-    Optional<User> optionalUser = userService.getById(user_id);
-
-    if(optionalUser.isPresent()) return videoRepo.findAllByUser(optionalUser.get());
-    else return EMPTY_LIST;
+  @Async
+  public CompletableFuture getAllFromUser(long user_id) {
+    CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
+    Optional<User> optionalUser = threadUser.join();
+    return optionalUser
+        .map(user -> completedFuture(videoRepo.findAllByUser(user)))
+        .orElseGet(() -> completedFuture(EMPTY_LIST));
   }
 
-  public Video createVideo(Video video) {
-    return videoRepo.save(video);
+  @Async
+  public CompletableFuture<Video> createVideo(Video video) {
+    return completedFuture(videoRepo.save(video));
   }
 
-  public Optional<Video> deleteVideo(long video_id) {
+  @Async
+  public CompletableFuture<Optional<Video>> deleteVideo(long video_id) {
     Optional<Video> video = videoRepo.findById(video_id);
     if(video.isPresent()) {
       videoRepo.delete(video.get());
-      return video;
+      return completedFuture(video);
     }
-    else return Optional.empty();
+    else return completedFuture(Optional.empty());
   }
 
-  public Optional<Video> updateVideo(Video video) {
+  @Async
+  public CompletableFuture<Optional<Video>> updateVideo(Video video) {
     Optional<Video> optVideo = videoRepo.findById(video.getId());
     if(optVideo.isPresent()) {
       Video tempVideo = optVideo.get();
@@ -57,8 +66,8 @@ public class VideoService {
       tempVideo.setDuration(video.getDuration());
       tempVideo.setUser(video.getUser());
       tempVideo.setSubject(video.getSubject());
-      return Optional.of(videoRepo.save(tempVideo));
+      return completedFuture(Optional.of(videoRepo.save(tempVideo)));
     }
-    else return Optional.empty();
+    else return completedFuture(Optional.empty());
   }
 }
