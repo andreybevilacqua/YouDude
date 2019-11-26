@@ -20,7 +20,7 @@ public class Playlist extends RepresentationModel {
   @Column(name = "name")
   private String name;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private List<Video> videos;
 
   @ManyToOne
