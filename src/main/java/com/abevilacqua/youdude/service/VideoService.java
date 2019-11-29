@@ -34,7 +34,7 @@ public class VideoService {
   }
 
   @Async
-  public CompletableFuture getAllFromUser(long user_id) {
+  public CompletableFuture<List<Video>> getAllFromUser(long user_id) {
     CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
     Optional<User> optionalUser = threadUser.join();
     return optionalUser

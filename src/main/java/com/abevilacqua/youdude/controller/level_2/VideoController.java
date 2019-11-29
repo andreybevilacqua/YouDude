@@ -9,13 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 
 @RestController
 @RequestMapping("/level2/videos")
 public class VideoController {
 
-  // todo: CompletableFuture, Paging, RESTFul, Cache, Spring Admin
+  // todo: Paging, RESTFul, Cache, Spring Admin
 
   private VideoService videoService;
 
@@ -26,7 +30,9 @@ public class VideoController {
 
   @GetMapping
   public ResponseEntity<List<VideoDTO>> getAllVideos() {
-    return new ResponseEntity<>(videoService.getAllVideos()
+    CompletableFuture<List<Video>> completableFuture = videoService.getAllVideos();
+    return new ResponseEntity<>(completableFuture
+        .join()
         .stream()
         .map(VideoDTO::mapper)
         .collect(Collectors.toList()), HttpStatus.OK);
@@ -34,7 +40,9 @@ public class VideoController {
 
   @GetMapping("/{user_id}")
   public ResponseEntity<List<VideoDTO>> getVideosPerUser(@PathVariable("user_id") long user_id) {
-    return new ResponseEntity<>(videoService.getAllFromUser(user_id)
+    CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
+    return new ResponseEntity<>(completableFuture
+        .join()
         .stream()
         .map(VideoDTO::mapper)
         .collect(Collectors.toList()), HttpStatus.OK);
@@ -42,12 +50,14 @@ public class VideoController {
 
   @PostMapping
   public ResponseEntity<VideoDTO> createVideo(@RequestBody Video video) {
-    return new ResponseEntity<>(VideoDTO.mapper(videoService.createVideo(video)), HttpStatus.CREATED);
+    CompletableFuture<Video> completableFuture = videoService.createVideo(video);
+    return new ResponseEntity<>(mapper(completableFuture.join()), HttpStatus.CREATED);
   }
 
   @PutMapping
   public ResponseEntity<VideoDTO> updateVideo(@RequestBody Video video) {
-    return videoService.updateVideo(video)
+    CompletableFuture<Optional<Video>> completableFuture = videoService.updateVideo(video);
+    return completableFuture.join()
         .map(VideoDTO::mapper)
         .map(v -> new ResponseEntity<>(v, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -55,9 +65,11 @@ public class VideoController {
 
   @DeleteMapping("/{video_id}")
   public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "video_id") long video_id) {
-    return videoService.deleteVideo(video_id)
+    CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);
+    return completableFuture
+        .join()
         .map(VideoDTO::mapper)
-        .map(video -> new ResponseEntity<>(video, HttpStatus.OK))
+        .map(videoDTO -> new ResponseEntity<>(videoDTO, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
