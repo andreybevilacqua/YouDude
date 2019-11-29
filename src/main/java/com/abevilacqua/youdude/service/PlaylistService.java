@@ -28,7 +28,7 @@ public class PlaylistService {
     return completedFuture(playlistRepo.findAll());
   }
 
-  public CompletableFuture getAllFromUser(long user_id) {
+  public CompletableFuture<List<Playlist>> getAllFromUser(long user_id) {
     CompletableFuture<Optional<User>> user = userService.getById(user_id);
     Optional<User> userOptional = user.join();
     return userOptional
