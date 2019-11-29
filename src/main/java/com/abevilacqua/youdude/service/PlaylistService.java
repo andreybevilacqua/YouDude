@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
 public class PlaylistService {
@@ -21,25 +24,27 @@ public class PlaylistService {
     this.userService = userService;
   }
 
-  public List<Playlist> getAllPlaylists() {
-    return playlistRepo.findAll();
+  public CompletableFuture<List<Playlist>> getAllPlaylists() {
+    return completedFuture(playlistRepo.findAll());
   }
 
-  public List<Playlist> getAllFromUser(long user_id) {
-    Optional<User> userOptional = userService.getById(user_id);
-    if(userOptional.isPresent()) return playlistRepo.findAllByUser(userOptional.get());
-    else return Collections.EMPTY_LIST;
+  public CompletableFuture getAllFromUser(long user_id) {
+    CompletableFuture<Optional<User>> user = userService.getById(user_id);
+    Optional<User> userOptional = user.join();
+    return userOptional
+        .map(u -> completedFuture(playlistRepo.findAllByUser(userOptional.get())))
+        .orElseGet(() -> completedFuture(Collections.EMPTY_LIST));
   }
 
-  public Playlist createPlaylist(Playlist playlist) {
-    return playlistRepo.save(playlist);
+  public CompletableFuture<Playlist> createPlaylist(Playlist playlist) {
+    return completedFuture(playlistRepo.save(playlist));
   }
 
-  public Optional<Playlist> deletePlaylist(long playlist_id) {
+  public CompletableFuture<Optional<Playlist>> deletePlaylist(long playlist_id) {
     Optional<Playlist> playlist = playlistRepo.findById(playlist_id);
     if(playlist.isPresent()) {
       playlistRepo.delete(playlist.get());
-      return playlist;
-    } else return Optional.empty();
+      return completedFuture(playlist);
+    } else return completedFuture(Optional.empty());
   }
 }
