@@ -16,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.is;
@@ -78,7 +80,8 @@ class VideoControllerTest {
   @Test
   @DisplayName("Should create a new user")
   void shouldCreateVideo() throws Exception {
-    Optional<User> user = userService.getAllUsers().stream().findFirst();
+    CompletableFuture<List<User>> completableFuture = userService.getAllUsers();
+    Optional<User> user = completableFuture.join().stream().findFirst();
     if(user.isPresent()) {
       Video video = ObjectHelper.createDefaultVideo(user.get());
       mockMvc.perform(post(URL)
