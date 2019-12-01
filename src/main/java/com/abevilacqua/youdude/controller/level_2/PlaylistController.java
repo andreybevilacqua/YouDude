@@ -19,7 +19,7 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 @RequestMapping("/level2/playlists")
 public class PlaylistController {
 
-  // todo: Paging, RESTFul, Cache, Spring Admin
+  // todo: Paging, Sort, RESTFul, Cache, Spring Admin
 
   private PlaylistService playlistService;
 

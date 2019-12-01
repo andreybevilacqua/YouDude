@@ -3,6 +3,9 @@ package com.abevilacqua.youdude.service;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +24,9 @@ public class UserService {
   public UserService(UserRepo userRepo) { this.userRepo = userRepo; }
 
   @Async
-  public CompletableFuture<List<User>> getAllUsers() {
-    return completedFuture(userRepo.findAll());
+  public CompletableFuture<Page<User>> getAllUsers(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return completedFuture(userRepo.findAll(pageable));
   }
 
   @Async
