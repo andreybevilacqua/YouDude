@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/level2/users")
 public class UserController {
 
-  // todo: Paging, Sort, RESTFul, Cache, Spring Admin
+  // todo: RESTFul, Cache, Spring Admin
 
   private UserService userService;
 
