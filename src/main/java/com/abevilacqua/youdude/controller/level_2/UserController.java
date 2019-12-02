@@ -3,11 +3,12 @@ package com.abevilacqua.youdude.controller.level_2;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,8 +26,11 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<List<User>> getAllUsers() {
-    CompletableFuture<List<User>> completableFuture = userService.getAllUsers();
+  public ResponseEntity<Page<User>> getAllUsers(
+      @RequestParam(value = "page", defaultValue = "0") final int page,
+      @RequestParam(value = "size", defaultValue = "10") final int size,
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, Sort.by(sortBy));
     return new ResponseEntity<>(completableFuture.join(), HttpStatus.OK);
   }
 

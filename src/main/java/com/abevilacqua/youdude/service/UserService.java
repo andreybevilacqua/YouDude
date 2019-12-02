@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -24,8 +24,8 @@ public class UserService {
   public UserService(UserRepo userRepo) { this.userRepo = userRepo; }
 
   @Async
-  public CompletableFuture<Page<User>> getAllUsers(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
+  public CompletableFuture<Page<User>> getAllUsers(int page, int size, Sort sortBy) {
+    Pageable pageable = PageRequest.of(page, size, sortBy);
     return completedFuture(userRepo.findAll(pageable));
   }
 

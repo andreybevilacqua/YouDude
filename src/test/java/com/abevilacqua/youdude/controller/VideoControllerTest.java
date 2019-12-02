@@ -12,10 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -80,7 +84,7 @@ class VideoControllerTest {
   @Test
   @DisplayName("Should create a new user")
   void shouldCreateVideo() throws Exception {
-    CompletableFuture<List<User>> completableFuture = userService.getAllUsers();
+    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(0, 10, Sort.by("name"));
     Optional<User> user = completableFuture.join().stream().findFirst();
     if(user.isPresent()) {
       Video video = ObjectHelper.createDefaultVideo(user.get());
