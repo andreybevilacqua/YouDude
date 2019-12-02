@@ -30,7 +30,7 @@ public class UserController {
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
-    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, Sort.by(sortBy));
+    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, sortBy);
     return new ResponseEntity<>(completableFuture.join(), HttpStatus.OK);
   }
 

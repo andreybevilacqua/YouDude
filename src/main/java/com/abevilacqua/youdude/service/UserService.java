@@ -24,8 +24,8 @@ public class UserService {
   public UserService(UserRepo userRepo) { this.userRepo = userRepo; }
 
   @Async
-  public CompletableFuture<Page<User>> getAllUsers(int page, int size, Sort sortBy) {
-    Pageable pageable = PageRequest.of(page, size, sortBy);
+  public CompletableFuture<Page<User>> getAllUsers(int page, int size, String sortBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(userRepo.findAll(pageable));
   }
 
