@@ -20,7 +20,7 @@ import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 @RequestMapping("/level2/videos")
 public class VideoController {
 
-  // todo: Paging, Sort, RESTFul, Cache, Spring Admin
+  // todo: RESTFul, Cache, Spring Admin
 
   private VideoService videoService;
 
