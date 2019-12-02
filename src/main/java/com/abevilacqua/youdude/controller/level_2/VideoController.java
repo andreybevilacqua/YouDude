@@ -4,6 +4,10 @@ import com.abevilacqua.youdude.controller.dto.VideoDTO;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,23 +33,32 @@ public class VideoController {
   }
 
   @GetMapping
-  public ResponseEntity<List<VideoDTO>> getAllVideos() {
-    CompletableFuture<List<Video>> completableFuture = videoService.getAllVideos();
-    return new ResponseEntity<>(completableFuture
+  public ResponseEntity<Page<VideoDTO>> getAllVideos(
+      @RequestParam(value = "page", defaultValue = "0") final int page,
+      @RequestParam(value = "size", defaultValue = "10") final int size,
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+    CompletableFuture<Page<Video>> completableFuture = videoService.getAllVideos(page, size, sortBy);
+    Page<VideoDTO> resultPage = new PageImpl<>(completableFuture
         .join()
         .stream()
         .map(VideoDTO::mapper)
-        .collect(Collectors.toList()), HttpStatus.OK);
+        .collect(Collectors.toList()));
+    return new ResponseEntity<>(resultPage, HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<List<VideoDTO>> getVideosPerUser(@PathVariable("user_id") long user_id) {
-    CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
-    return new ResponseEntity<>(completableFuture
+  public ResponseEntity<Page<VideoDTO>> getVideosPerUser(
+      @PathVariable("user_id") long user_id,
+      @RequestParam(value = "page", defaultValue = "0") final int page,
+      @RequestParam(value = "size", defaultValue = "10") final int size,
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+    CompletableFuture<Page<Video>> completableFuture = videoService.getAllFromUser(user_id, page, size, sortBy);
+    Page<VideoDTO> resultPage = new PageImpl<>(completableFuture
         .join()
         .stream()
         .map(VideoDTO::mapper)
-        .collect(Collectors.toList()), HttpStatus.OK);
+        .collect(Collectors.toList()));
+    return new ResponseEntity<>(resultPage, HttpStatus.OK);
   }
 
   @PostMapping

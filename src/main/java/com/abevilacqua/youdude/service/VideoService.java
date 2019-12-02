@@ -4,14 +4,16 @@ import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.repo.VideoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static java.util.Collections.EMPTY_LIST;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
@@ -29,17 +31,19 @@ public class VideoService {
   }
 
   @Async
-  public CompletableFuture<List<Video>> getAllVideos() {
-    return completedFuture(videoRepo.findAll());
+  public CompletableFuture<Page<Video>> getAllVideos(int page, int size, String sortBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    return completedFuture(videoRepo.findAll(pageable));
   }
 
   @Async
-  public CompletableFuture<List<Video>> getAllFromUser(long user_id) {
+  public CompletableFuture<Page<Video>> getAllFromUser(long user_id, int page, int size, String sortBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
     Optional<User> optionalUser = threadUser.join();
     return optionalUser
-        .map(user -> completedFuture(videoRepo.findAllByUser(user)))
-        .orElseGet(() -> completedFuture(EMPTY_LIST));
+        .map(user -> completedFuture(videoRepo.findAllByUser(user, pageable)))
+        .orElseGet(() -> completedFuture(Page.empty()));
   }
 
   @Async
