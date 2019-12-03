@@ -84,7 +84,7 @@ class VideoControllerTest {
   @Test
   @DisplayName("Should create a new user")
   void shouldCreateVideo() throws Exception {
-    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(0, 10, Sort.by("name"));
+    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(0, 10, "name");
     Optional<User> user = completableFuture.join().stream().findFirst();
     if(user.isPresent()) {
       Video video = ObjectHelper.createDefaultVideo(user.get());
