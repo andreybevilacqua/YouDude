@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/level2/users")
 public class UserController {
 
-  // todo: RESTFul, Cache, Spring Admin
+  // todo: RESTFul, Cache, Spring Admin, Evo Suite
 
   private UserService userService;
 
