@@ -1,11 +1,11 @@
-package com.abevilacqua.youdude.model;
+package com.abevilacqua.youdude.controller.dto;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public class PageImplYoudude<T> extends PageImpl<T> {
+public class PageImplDTO<T> extends PageImpl<T> {
 
   private List<T> content;
 
@@ -15,7 +15,7 @@ public class PageImplYoudude<T> extends PageImpl<T> {
 
   private int totalPages, size, numberOfElements;
 
-  public PageImplYoudude(List<T> content, Pageable pageable, long total) {
+  public PageImplDTO(List<T> content, Pageable pageable, long total) {
     super(content, pageable, total);
 
     this.content = content;
@@ -26,7 +26,6 @@ public class PageImplYoudude<T> extends PageImpl<T> {
     this.size = super.getSize();
     this.numberOfElements = super.getNumberOfElements();
   }
-
 
   @Override
   public List<T> getContent() {
