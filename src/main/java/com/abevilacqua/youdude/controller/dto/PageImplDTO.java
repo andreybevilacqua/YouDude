@@ -1,10 +1,16 @@
 package com.abevilacqua.youdude.controller.dto;
 
+import com.abevilacqua.youdude.model.User;
+import lombok.Builder;
+import lombok.Getter;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+@Builder
+@Getter
 public class PageImplDTO<T> extends PageImpl<T> {
 
   private List<T> content;
@@ -27,38 +33,15 @@ public class PageImplDTO<T> extends PageImpl<T> {
     this.numberOfElements = super.getNumberOfElements();
   }
 
-  @Override
-  public List<T> getContent() {
-    return content;
-  }
-
-  @Override
-  public long getTotalElements() {
-    return totalElements;
-  }
-
-  @Override
-  public boolean isFirst() {
-    return first;
-  }
-
-  @Override
-  public boolean isLast() {
-    return last;
-  }
-
-  @Override
-  public int getTotalPages() {
-    return totalPages;
-  }
-
-  @Override
-  public int getSize() {
-    return size;
-  }
-
-  @Override
-  public int getNumberOfElements() {
-    return numberOfElements;
+  public static PageImplDTO mapper(Page pageImpl) {
+    return PageImplDTO.builder()
+        .content(pageImpl.getContent())
+        .totalElements(pageImpl.getTotalElements())
+        .first(pageImpl.isFirst())
+        .last(pageImpl.isLast())
+        .totalPages(pageImpl.getTotalPages())
+        .size(pageImpl.getSize())
+        .numberOfElements(pageImpl.getNumberOfElements())
+        .build();
   }
 }

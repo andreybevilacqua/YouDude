@@ -1,5 +1,6 @@
 package com.abevilacqua.youdude.controller.level_2;
 
+import com.abevilacqua.youdude.controller.dto.PageImplDTO;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ public class UserController {
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, sortBy);
-    return new ResponseEntity<>(completableFuture.join(), HttpStatus.OK);
+    Page<User> page2 = completableFuture.join();
+    return new ResponseEntity<>(PageImplDTO.mapper(page2), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
