@@ -1,6 +1,5 @@
 package com.abevilacqua.youdude.controller.dto;
 
-import com.abevilacqua.youdude.model.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -9,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-@Builder
 @Getter
+@Builder
 public class PageImplDTO<T> extends PageImpl<T> {
 
   private List<T> content;
