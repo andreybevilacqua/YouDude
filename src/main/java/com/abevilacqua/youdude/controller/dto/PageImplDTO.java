@@ -32,7 +32,7 @@ public class PageImplDTO<T> extends PageImpl<T> {
     this.numberOfElements = super.getNumberOfElements();
   }
 
-  public static PageImplDTO pageImplDTOMapper(Page pageImpl) {
+  public static PageImplDTO pageMapper(Page pageImpl) {
     return PageImplDTO.builder()
         .content(pageImpl.getContent())
         .totalElements(pageImpl.getTotalElements())

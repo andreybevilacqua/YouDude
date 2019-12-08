@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageImplDTOMapper;
+import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 
 @RestController
@@ -38,7 +38,7 @@ public class VideoController {
     Page<VideoDTO> videos = completableFuture
         .join()
         .map(VideoDTO::mapper);
-    return new ResponseEntity<>(pageImplDTOMapper(videos), HttpStatus.OK);
+    return new ResponseEntity<>(pageMapper(videos), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
@@ -51,7 +51,7 @@ public class VideoController {
     Page<VideoDTO> videos = completableFuture
         .join()
         .map(VideoDTO::mapper);
-    return new ResponseEntity<>(pageImplDTOMapper(videos), HttpStatus.OK);
+    return new ResponseEntity<>(pageMapper(videos), HttpStatus.OK);
   }
 
   @PostMapping
