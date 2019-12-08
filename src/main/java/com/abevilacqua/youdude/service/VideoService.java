@@ -39,8 +39,7 @@ public class VideoService {
   @Async
   public CompletableFuture<Page<Video>> getAllFromUser(long user_id, int page, int size, String sortBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
-    Optional<User> optionalUser = threadUser.join();
+    Optional<User> optionalUser = getOptionalUser(user_id);
     return optionalUser
         .map(user -> completedFuture(videoRepo.findAllByUser(user, pageable)))
         .orElseGet(() -> completedFuture(Page.empty()));
@@ -73,5 +72,10 @@ public class VideoService {
       return completedFuture(Optional.of(videoRepo.save(tempVideo)));
     }
     else return completedFuture(Optional.empty());
+  }
+
+  private Optional<User> getOptionalUser(long user_id) {
+    CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
+    return threadUser.join();
   }
 }

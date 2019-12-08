@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,11 +27,13 @@ public class PlaylistService {
     this.userService = userService;
   }
 
+  @Async
   public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(playlistRepo.findAll(pageable));
   }
 
+  @Async
   public CompletableFuture<Page<Playlist>> getAllFromUser(int page, int size, String sortBy, long user_id) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> userOptional = getOptionalUser(user_id);
@@ -39,10 +42,12 @@ public class PlaylistService {
         .orElseGet(() -> completedFuture(Page.empty()));
   }
 
+  @Async
   public CompletableFuture<Playlist> createPlaylist(Playlist playlist) {
     return completedFuture(playlistRepo.save(playlist));
   }
 
+  @Async
   public CompletableFuture<Optional<Playlist>> deletePlaylist(long playlist_id) {
     Optional<Playlist> playlist = playlistRepo.findById(playlist_id);
     if(playlist.isPresent()) {
