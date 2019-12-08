@@ -35,7 +35,9 @@ public class PlaylistController {
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<Playlist>> playlists = playlistService.getAllPlaylists(page, size, sortBy);
-    Page<Playlist> playlistPage = playlists.join();
+    Page<PlaylistDTO> playlistPage = playlists
+        .join()
+        .map(PlaylistDTO::mapper);
     return new ResponseEntity<>(pageImplDTOMapper(playlistPage), HttpStatus.OK);
   }
 
@@ -46,7 +48,9 @@ public class PlaylistController {
       @RequestParam(value = "size", defaultValue = "10") int size,
       @RequestParam(value = "sort", defaultValue = "id") String sortBy) {
     CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, user_id);
-    Page<Playlist> playlistPage = playlistsFromUser.join();
+    Page<PlaylistDTO> playlistPage = playlistsFromUser
+        .join()
+        .map(PlaylistDTO::mapper);
     return new ResponseEntity<>(pageImplDTOMapper(playlistPage), HttpStatus.OK);
   }
 
