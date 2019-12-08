@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.controller.dto.PageImplDTO.mapper;
+import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageImplDTOMapper;
 import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 
 @RestController
@@ -36,7 +36,7 @@ public class PlaylistController {
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<Playlist>> playlists = playlistService.getAllPlaylists(page, size, sortBy);
     Page<Playlist> playlistPage = playlists.join();
-    return new ResponseEntity<>(mapper(playlistPage), HttpStatus.OK);
+    return new ResponseEntity<>(pageImplDTOMapper(playlistPage), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
@@ -47,7 +47,7 @@ public class PlaylistController {
       @RequestParam(value = "sort", defaultValue = "id") String sortBy) {
     CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, user_id);
     Page<Playlist> playlistPage = playlistsFromUser.join();
-    return new ResponseEntity<>(mapper(playlistPage), HttpStatus.OK);
+    return new ResponseEntity<>(pageImplDTOMapper(playlistPage), HttpStatus.OK);
   }
 
   @PostMapping

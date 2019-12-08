@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.controller.dto.PageImplDTO.mapper;
+import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageImplDTOMapper;
 
 @RestController
 @RequestMapping("/level2/users")
@@ -34,7 +34,7 @@ public class UserController {
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, sortBy);
     Page<User> userPage = completableFuture.join();
-    return new ResponseEntity<>(mapper(userPage), HttpStatus.OK);
+    return new ResponseEntity<>(pageImplDTOMapper(userPage), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")

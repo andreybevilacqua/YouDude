@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.controller.dto.PageImplDTO.mapper;
+import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageImplDTOMapper;
 import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 
 @RestController
@@ -35,8 +35,10 @@ public class VideoController {
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<Video>> completableFuture = videoService.getAllVideos(page, size, sortBy);
-    Page<Video> videos = completableFuture.join();
-    return new ResponseEntity<>(mapper(videos), HttpStatus.OK);
+    Page<VideoDTO> videos = completableFuture
+        .join()
+        .map(VideoDTO::mapper);
+    return new ResponseEntity<>(pageImplDTOMapper(videos), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
@@ -46,8 +48,10 @@ public class VideoController {
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<Video>> completableFuture = videoService.getAllFromUser(user_id, page, size, sortBy);
-    Page<Video> videos = completableFuture.join();
-    return new ResponseEntity<>(mapper(videos), HttpStatus.OK);
+    Page<VideoDTO> videos = completableFuture
+        .join()
+        .map(VideoDTO::mapper);
+    return new ResponseEntity<>(pageImplDTOMapper(videos), HttpStatus.OK);
   }
 
   @PostMapping
