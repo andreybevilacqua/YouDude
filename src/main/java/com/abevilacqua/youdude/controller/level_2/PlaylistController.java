@@ -1,25 +1,26 @@
 package com.abevilacqua.youdude.controller.level_2;
 
+import com.abevilacqua.youdude.controller.dto.PageImplDTO;
 import com.abevilacqua.youdude.controller.dto.PlaylistDTO;
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
+import static com.abevilacqua.youdude.controller.dto.PageImplDTO.mapper;
 import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 
 @RestController
 @RequestMapping("/level2/playlists")
 public class PlaylistController {
 
-  // todo: Paging, Sort, RESTFul, Cache, Spring Admin, Evo Suite
+  // todo: RESTFul, Cache, Spring Admin, Evo Suite
 
   private PlaylistService playlistService;
 
@@ -29,23 +30,24 @@ public class PlaylistController {
   }
 
   @GetMapping
-  public ResponseEntity<List<PlaylistDTO>> getAllPlaylists() {
-    CompletableFuture<List<Playlist>> playlists = playlistService.getAllPlaylists();
-    return new ResponseEntity<>(playlists
-        .join()
-        .stream()
-        .map(PlaylistDTO::mapper)
-        .collect(Collectors.toList()), HttpStatus.OK);
+  public ResponseEntity<PageImplDTO<PlaylistDTO>> getAllPlaylists(
+      @RequestParam(value = "page", defaultValue = "0") final int page,
+      @RequestParam(value = "size", defaultValue = "10") final int size,
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+    CompletableFuture<Page<Playlist>> playlists = playlistService.getAllPlaylists(page, size, sortBy);
+    Page<Playlist> playlistPage = playlists.join();
+    return new ResponseEntity<>(mapper(playlistPage), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<List<PlaylistDTO>> getPlaylistPerUser(@PathVariable("user_id") long user_id) {
-    CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(user_id);
-    return new ResponseEntity<>(playlistsFromUser
-        .join()
-        .stream()
-        .map(PlaylistDTO::mapper)
-        .collect(Collectors.toList()), HttpStatus.OK);
+  public ResponseEntity<PageImplDTO<PlaylistDTO>> getPlaylistPerUser(
+      @PathVariable("user_id") long user_id,
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "size", defaultValue = "10") int size,
+      @RequestParam(value = "sort", defaultValue = "id") String sortBy) {
+    CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, user_id);
+    Page<Playlist> playlistPage = playlistsFromUser.join();
+    return new ResponseEntity<>(mapper(playlistPage), HttpStatus.OK);
   }
 
   @PostMapping

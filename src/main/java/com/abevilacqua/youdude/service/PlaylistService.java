@@ -3,10 +3,12 @@ package com.abevilacqua.youdude.service;
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.PlaylistRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -24,16 +26,17 @@ public class PlaylistService {
     this.userService = userService;
   }
 
-  public CompletableFuture<List<Playlist>> getAllPlaylists() {
-    return completedFuture(playlistRepo.findAll());
+  public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    return completedFuture(playlistRepo.findAll(pageable));
   }
 
-  public CompletableFuture<List<Playlist>> getAllFromUser(long user_id) {
-    CompletableFuture<Optional<User>> user = userService.getById(user_id);
-    Optional<User> userOptional = user.join();
+  public CompletableFuture<Page<Playlist>> getAllFromUser(int page, int size, String sortBy, long user_id) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    Optional<User> userOptional = getOptionalUser(user_id);
     return userOptional
-        .map(u -> completedFuture(playlistRepo.findAllByUser(userOptional.get())))
-        .orElseGet(() -> completedFuture(Collections.EMPTY_LIST));
+        .map(u -> completedFuture(playlistRepo.findAllByUser(userOptional.get(), pageable)))
+        .orElseGet(() -> completedFuture(Page.empty()));
   }
 
   public CompletableFuture<Playlist> createPlaylist(Playlist playlist) {
@@ -46,5 +49,10 @@ public class PlaylistService {
       playlistRepo.delete(playlist.get());
       return completedFuture(playlist);
     } else return completedFuture(Optional.empty());
+  }
+
+  private Optional<User> getOptionalUser(long user_id) {
+    CompletableFuture<Optional<User>> user = userService.getById(user_id);
+    return user.join();
   }
 }
