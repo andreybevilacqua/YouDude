@@ -47,18 +47,18 @@ class UserControllerTest {
     mockMvc.perform(get(URL)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].id").exists())
-        .andExpect(jsonPath("$[0].id").isNumber())
-        .andExpect(jsonPath("$[0].id", is(1)))
-        .andExpect(jsonPath("$[1].id").exists())
-        .andExpect(jsonPath("$[1].id").isNumber())
-        .andExpect(jsonPath("$[1].id", is(2)))
-        .andExpect(jsonPath("$[2].id").exists())
-        .andExpect(jsonPath("$[2].id").isNumber())
-        .andExpect(jsonPath("$[2].id", is(3)))
-        .andExpect(jsonPath("$[0].name", is("user-1")))
-        .andExpect(jsonPath("$[1].name", is("user-2")))
-        .andExpect(jsonPath("$[2].name", is("user-3")));
+        .andExpect(jsonPath("$.content.[0].id").exists())
+        .andExpect(jsonPath("$.content.[0].id").isNumber())
+        .andExpect(jsonPath("$.content.[0].id", is(1)))
+        .andExpect(jsonPath("$.content.[1].id").exists())
+        .andExpect(jsonPath("$.content.[1].id").isNumber())
+        .andExpect(jsonPath("$.content.[1].id", is(2)))
+        .andExpect(jsonPath("$.content.[2].id").exists())
+        .andExpect(jsonPath("$.content.[2].id").isNumber())
+        .andExpect(jsonPath("$.content.[2].id", is(3)))
+        .andExpect(jsonPath("$.content.[0].name", is("user-1")))
+        .andExpect(jsonPath("$.content.[1].name", is("user-2")))
+        .andExpect(jsonPath("$.content.[2].name", is("user-3")));
   }
 
   @Test
