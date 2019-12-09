@@ -40,10 +40,10 @@ class PlaylistControllerTest {
     mockMvc.perform(get(URL)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].playlist_id").isNumber())
-        .andExpect(jsonPath("$[0].name").isString())
-        .andExpect(jsonPath("$[0].videos_id").isArray())
-        .andExpect(jsonPath("$[0].user_id").isNumber());
+        .andExpect(jsonPath("$.content.[0].playlist_id").isNumber())
+        .andExpect(jsonPath("$.content.[0].name").isString())
+        .andExpect(jsonPath("$.content.[0].videos_id").isArray())
+        .andExpect(jsonPath("$.content.[0].user_id").isNumber());
   }
 
   @Test
@@ -52,9 +52,9 @@ class PlaylistControllerTest {
     mockMvc.perform(get(URL + "/1")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].playlist_id").isNumber())
-        .andExpect(jsonPath("$[0].name").isString())
-        .andExpect(jsonPath("$[0].videos_id").isArray())
-        .andExpect(jsonPath("$[0].user_id").isNumber());
+        .andExpect(jsonPath("$.content.[0].playlist_id").isNumber())
+        .andExpect(jsonPath("$.content.[0].name").isString())
+        .andExpect(jsonPath("$.content.[0].videos_id").isArray())
+        .andExpect(jsonPath("$.content.[0].user_id").isNumber());
   }
 }

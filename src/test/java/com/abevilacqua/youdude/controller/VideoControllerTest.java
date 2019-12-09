@@ -53,13 +53,13 @@ class VideoControllerTest {
     mockMvc.perform(get(URL)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].video_id").exists())
-        .andExpect(jsonPath("$[0].video_id").isNumber())
-        .andExpect(jsonPath("$[0].name").isString())
-        .andExpect(jsonPath("$[0].subject").isString())
-        .andExpect(jsonPath("$[0].duration").isNumber())
-        .andExpect(jsonPath("$[0].category").isString())
-        .andExpect(jsonPath("$[0].user_id").isNumber());
+        .andExpect(jsonPath("$.content.[0].video_id").exists())
+        .andExpect(jsonPath("$.content.[0].video_id").isNumber())
+        .andExpect(jsonPath("$.content.[0].name").isString())
+        .andExpect(jsonPath("$.content.[0].subject").isString())
+        .andExpect(jsonPath("$.content.[0].duration").isNumber())
+        .andExpect(jsonPath("$.content.[0].category").isString())
+        .andExpect(jsonPath("$.content.[0].user_id").isNumber());
   }
 
   @Test
@@ -68,13 +68,13 @@ class VideoControllerTest {
     mockMvc.perform(get(URL + "/1")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].video_id").exists())
-        .andExpect(jsonPath("$[0].video_id").isNumber())
-        .andExpect(jsonPath("$[0].name").isString())
-        .andExpect(jsonPath("$[0].subject").isString())
-        .andExpect(jsonPath("$[0].duration").isNumber())
-        .andExpect(jsonPath("$[0].category").isString())
-        .andExpect(jsonPath("$[0].user_id", is(1)));
+        .andExpect(jsonPath("$.content.[0].video_id").exists())
+        .andExpect(jsonPath("$.content.[0].video_id").isNumber())
+        .andExpect(jsonPath("$.content.[0].name").isString())
+        .andExpect(jsonPath("$.content.[0].subject").isString())
+        .andExpect(jsonPath("$.content.[0].duration").isNumber())
+        .andExpect(jsonPath("$.content.[0].category").isString())
+        .andExpect(jsonPath("$.content.[0].user_id", is(1)));
   }
 
   @Test
