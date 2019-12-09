@@ -42,7 +42,7 @@ public class VideoController {
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<Page<VideoDTO>> getVideosPerUser(
+  public ResponseEntity<PageImplDTO<VideoDTO>> getVideosPerUser(
       @PathVariable("user_id") long user_id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
