@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
 
 @SpringBootApplication
 @EnableAsync
-
+@EnableCaching
 public class YouDudeApplication {
 
 	public static void main(String[] args) {

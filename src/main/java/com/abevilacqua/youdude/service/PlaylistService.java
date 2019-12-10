@@ -3,6 +3,7 @@ package com.abevilacqua.youdude.service;
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.PlaylistRepo;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ public class PlaylistService {
   }
 
   @Async
+  @Cacheable
   public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -36,6 +38,7 @@ public class PlaylistService {
   }
 
   @Async
+  @Cacheable
   public CompletableFuture<Page<Playlist>> getAllFromUser(int page, int size, String sortBy, long user_id) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));

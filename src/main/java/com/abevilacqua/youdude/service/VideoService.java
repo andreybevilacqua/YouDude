@@ -4,6 +4,7 @@ import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.repo.VideoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,7 @@ public class VideoService {
   }
 
   @Async
+  @Cacheable
   public CompletableFuture<Page<Video>> getAllVideos(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -39,6 +41,7 @@ public class VideoService {
   }
 
   @Async
+  @Cacheable
   public CompletableFuture<Page<Video>> getAllFromUser(long user_id, int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
