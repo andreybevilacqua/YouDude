@@ -20,7 +20,7 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 @RequestMapping("/level2/playlists")
 public class PlaylistController {
 
-  // todo: RESTFul, Cache, Spring Admin, Evo Suite
+  // todo: RESTFul, Spring Admin, Evo Suite
 
   private PlaylistService playlistService;
 

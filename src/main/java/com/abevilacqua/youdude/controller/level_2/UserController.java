@@ -18,7 +18,7 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 @RequestMapping("/level2/users")
 public class UserController {
 
-  // todo: RESTFul, Cache, Spring Admin, Evo Suite
+  // todo: RESTFul, Spring Admin, Evo Suite
 
   private UserService userService;
 
