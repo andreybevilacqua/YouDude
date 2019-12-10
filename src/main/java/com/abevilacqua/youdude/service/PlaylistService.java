@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
@@ -29,12 +30,14 @@ public class PlaylistService {
 
   @Async
   public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
+    simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(playlistRepo.findAll(pageable));
   }
 
   @Async
   public CompletableFuture<Page<Playlist>> getAllFromUser(int page, int size, String sortBy, long user_id) {
+    simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> userOptional = getOptionalUser(user_id);
     return userOptional

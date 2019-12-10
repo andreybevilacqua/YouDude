@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
@@ -32,12 +33,14 @@ public class VideoService {
 
   @Async
   public CompletableFuture<Page<Video>> getAllVideos(int page, int size, String sortBy) {
+    simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(videoRepo.findAll(pageable));
   }
 
   @Async
   public CompletableFuture<Page<Video>> getAllFromUser(long user_id, int page, int size, String sortBy) {
+    simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> optionalUser = getOptionalUser(user_id);
     return optionalUser
