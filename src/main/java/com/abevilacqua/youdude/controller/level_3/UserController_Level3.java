@@ -20,12 +20,12 @@ import static com.abevilacqua.youdude.controller.level_3.link.LinkHelper.getUser
 
 @RestController
 @RequestMapping("/level3/users")
-public class UserController {
+public class UserController_Level3 {
 
   private UserService userService;
 
   @Autowired
-  public UserController(UserService userService) {
+  public UserController_Level3(UserService userService) {
     this.userService = userService;
   }
 

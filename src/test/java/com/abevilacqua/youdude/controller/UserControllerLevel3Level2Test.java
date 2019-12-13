@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserControllerLevel2Test {
+class UserControllerLevel3Level2Test {
 
   @Autowired
   private UserService userService;
