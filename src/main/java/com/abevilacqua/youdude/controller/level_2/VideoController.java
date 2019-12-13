@@ -20,7 +20,7 @@ import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 @RequestMapping("/level2/videos")
 public class VideoController {
 
-  // todo: RESTFul, Spring Admin, Evo Suite
+  // todo: RESTFul, Evo Suite
 
   private VideoService videoService;
 
