@@ -27,7 +27,7 @@ public class UserService {
   public UserService(UserRepo userRepo) { this.userRepo = userRepo; }
 
   @Async
-  @Cacheable
+  @Cacheable("getAllUsers")
   public CompletableFuture<Page<User>> getAllUsers(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -35,7 +35,7 @@ public class UserService {
   }
 
   @Async
-  @Cacheable
+  @Cacheable("getById")
   public CompletableFuture<Optional<User>> getById(long id) {
     simulateSlowService();
     return completedFuture(userRepo.findById(id));

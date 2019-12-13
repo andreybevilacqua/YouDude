@@ -30,7 +30,7 @@ public class PlaylistService {
   }
 
   @Async
-  @Cacheable
+  @Cacheable("getAllPlaylists")
   public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -38,7 +38,7 @@ public class PlaylistService {
   }
 
   @Async
-  @Cacheable
+  @Cacheable("getAllFromUser")
   public CompletableFuture<Page<Playlist>> getAllFromUser(int page, int size, String sortBy, long user_id) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));

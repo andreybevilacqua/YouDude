@@ -33,7 +33,7 @@ public class VideoService {
   }
 
   @Async
-  @Cacheable
+  @Cacheable("getAllVideos")
   public CompletableFuture<Page<Video>> getAllVideos(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -41,7 +41,7 @@ public class VideoService {
   }
 
   @Async
-  @Cacheable
+  @Cacheable("getAllFromUser")
   public CompletableFuture<Page<Video>> getAllFromUser(long user_id, int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
