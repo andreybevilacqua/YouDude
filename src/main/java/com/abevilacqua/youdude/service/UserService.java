@@ -1,6 +1,7 @@
 package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,9 +23,13 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public class UserService {
 
   private UserRepoPageable userRepoPageable;
+  private UserRepo userRepo;
 
   @Autowired
-  public UserService(UserRepoPageable userRepoPageable) { this.userRepoPageable = userRepoPageable; }
+  public UserService(UserRepoPageable userRepoPageable, UserRepo userRepo) {
+    this.userRepoPageable = userRepoPageable;
+    this.userRepo = userRepo;
+  }
 
   @Async
   @Cacheable("getAllUsersPageable")
@@ -31,6 +37,12 @@ public class UserService {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(userRepoPageable.findAll(pageable));
+  }
+
+  @Async
+  @Cacheable("getAllUsers")
+  public CompletableFuture<List<User>> getAllUsers() {
+    return completedFuture(userRepo.findAll());
   }
 
   @Async

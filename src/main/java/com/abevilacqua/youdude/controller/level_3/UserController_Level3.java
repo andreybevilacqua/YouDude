@@ -1,20 +1,21 @@
 package com.abevilacqua.youdude.controller.level_3;
 
 import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.model.resource.UserResource;
+import com.abevilacqua.youdude.model.resource.UserResourceAssembler;
 import com.abevilacqua.youdude.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -30,18 +31,21 @@ public class UserController_Level3 {
   }
 
   @GetMapping
-  public ResponseEntity<CollectionModel<EntityModel<User>>> getAllUsers(
-      @RequestParam(value = "page", defaultValue = "0") final int page,
-      @RequestParam(value = "size", defaultValue = "10") final int size,
-      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
-    CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, sortBy);
-    Page<User> userPage = completableFuture.join();
-    CollectionModel<EntityModel<User>> recentResources = CollectionModel.wrap(userPage.getContent());
-    recentResources.add(
-        WebMvcLinkBuilder
-            .linkTo(methodOn(UserController_Level3.class).getAllUsers(page, size, sortBy))
-            .withSelfRel());
-    return new ResponseEntity<>(recentResources, HttpStatus.OK);
+  public ResponseEntity<CollectionModel<UserResource>> getAllUsers() {
+    CompletableFuture<List<User>> completableFuture = userService.getAllUsers();
+
+    List<UserResource> userResources = completableFuture
+        .join()
+        .stream()
+        .map(user -> new UserResourceAssembler().toModel(user))
+        .collect(Collectors.toList());
+
+    CollectionModel<UserResource> resources = new CollectionModel<>(userResources);
+    resources.add(WebMvcLinkBuilder
+        .linkTo(methodOn(UserController_Level3.class).getAllUsers())
+        .withRel("recents"));
+
+    return new ResponseEntity<>(resources, HttpStatus.OK);
   }
 
 }

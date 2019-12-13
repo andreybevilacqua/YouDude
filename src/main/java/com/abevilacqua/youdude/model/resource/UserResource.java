@@ -2,6 +2,7 @@ package com.abevilacqua.youdude.model.resource;
 
 import com.abevilacqua.youdude.model.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
