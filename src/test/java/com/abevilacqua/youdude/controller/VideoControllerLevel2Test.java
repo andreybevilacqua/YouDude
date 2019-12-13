@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.controller;
 
-import com.abevilacqua.youdude.controller.level_2.VideoController;
+import com.abevilacqua.youdude.controller.level_2.VideoController_Level2;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.service.UserService;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class VideoControllerTest {
+class VideoControllerLevel2Test {
 
   @Autowired
   private VideoService videoService;
@@ -43,8 +43,8 @@ class VideoControllerTest {
 
   @BeforeEach
   void setup() {
-    VideoController videoController = new VideoController(videoService);
-    mockMvc = ObjectHelper.createMockMvc(videoController);
+    VideoController_Level2 videoControllerLevel2 = new VideoController_Level2(videoService);
+    mockMvc = ObjectHelper.createMockMvc(videoControllerLevel2);
   }
 
   @Test

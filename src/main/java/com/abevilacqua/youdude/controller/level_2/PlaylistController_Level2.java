@@ -18,14 +18,14 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 
 @RestController
 @RequestMapping("/level2/playlists")
-public class PlaylistController {
+public class PlaylistController_Level2 {
 
   // todo: RESTFul, Evo Suite
 
   private PlaylistService playlistService;
 
   @Autowired
-  public PlaylistController(PlaylistService playlistService) {
+  public PlaylistController_Level2(PlaylistService playlistService) {
     this.playlistService = playlistService;
   }
 

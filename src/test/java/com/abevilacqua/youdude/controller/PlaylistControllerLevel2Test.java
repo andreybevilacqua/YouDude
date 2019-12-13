@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.controller;
 
-import com.abevilacqua.youdude.controller.level_2.PlaylistController;
+import com.abevilacqua.youdude.controller.level_2.PlaylistController_Level2;
 import com.abevilacqua.youdude.service.PlaylistService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class PlaylistControllerTest {
+class PlaylistControllerLevel2Test {
 
   @Autowired
   private PlaylistService playlistService;
@@ -30,8 +30,8 @@ class PlaylistControllerTest {
 
   @BeforeEach
   void setup() {
-    PlaylistController playlistController = new PlaylistController(playlistService);
-    mockMvc = createMockMvc(playlistController);
+    PlaylistController_Level2 playlistControllerLevel2 = new PlaylistController_Level2(playlistService);
+    mockMvc = createMockMvc(playlistControllerLevel2);
   }
 
   @Test

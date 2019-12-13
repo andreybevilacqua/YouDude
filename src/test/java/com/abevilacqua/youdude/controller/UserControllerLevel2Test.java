@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.controller;
 
-import com.abevilacqua.youdude.controller.level_2.UserController;
+import com.abevilacqua.youdude.controller.level_2.UserController_Level2;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.service.UserService;
 import com.abevilacqua.youdude.utils.ObjectHelper;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserControllerTest {
+class UserControllerLevel2Test {
 
   @Autowired
   private UserService userService;
@@ -37,8 +37,8 @@ class UserControllerTest {
 
   @BeforeEach
   void setup() {
-    UserController userController = new UserController(userService);
-    mockMvc = ObjectHelper.createMockMvc(userController);
+    UserController_Level2 userControllerLevel2 = new UserController_Level2(userService);
+    mockMvc = ObjectHelper.createMockMvc(userControllerLevel2);
   }
 
   @Test

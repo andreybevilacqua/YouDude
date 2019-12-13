@@ -16,14 +16,14 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 
 @RestController
 @RequestMapping("/level2/users")
-public class UserController {
+public class UserController_Level2 {
 
   // todo: RESTFul, Evo Suite
 
   private UserService userService;
 
   @Autowired
-  public UserController(UserService userService) {
+  public UserController_Level2(UserService userService) {
     this.userService = userService;
   }
 
