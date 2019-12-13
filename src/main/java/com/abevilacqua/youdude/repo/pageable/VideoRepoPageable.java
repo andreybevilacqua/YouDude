@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.repo;
+package com.abevilacqua.youdude.repo.pageable;
 
 import com.abevilacqua.youdude.model.Category;
 import com.abevilacqua.youdude.model.User;

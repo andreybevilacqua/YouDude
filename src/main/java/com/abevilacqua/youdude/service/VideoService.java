@@ -2,7 +2,7 @@ package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
-import com.abevilacqua.youdude.repo.VideoRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

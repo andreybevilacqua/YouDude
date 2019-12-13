@@ -4,9 +4,9 @@ import com.abevilacqua.youdude.model.Category;
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
-import com.abevilacqua.youdude.repo.PlaylistRepoPageable;
-import com.abevilacqua.youdude.repo.UserRepoPageable;
-import com.abevilacqua.youdude.repo.VideoRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
 import org.springframework.boot.ApplicationRunner;
 
 import java.time.LocalDate;

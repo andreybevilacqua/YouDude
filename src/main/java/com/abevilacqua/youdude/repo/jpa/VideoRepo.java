@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.repo;
+package com.abevilacqua.youdude.repo.jpa;
 
 import com.abevilacqua.youdude.model.Video;
 import org.springframework.data.jpa.repository.JpaRepository;

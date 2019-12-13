@@ -1,7 +1,7 @@
 package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
-import com.abevilacqua.youdude.repo.UserRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

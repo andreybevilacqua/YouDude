@@ -1,9 +1,9 @@
 package com.abevilacqua.youdude;
 
 import com.abevilacqua.youdude.config.DBInitializer;
-import com.abevilacqua.youdude.repo.PlaylistRepoPageable;
-import com.abevilacqua.youdude.repo.UserRepoPageable;
-import com.abevilacqua.youdude.repo.VideoRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
+import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
