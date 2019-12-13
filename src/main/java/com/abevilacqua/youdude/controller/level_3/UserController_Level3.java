@@ -34,18 +34,13 @@ public class UserController_Level3 {
   public ResponseEntity<CollectionModel<UserResource>> getAllUsers() {
     CompletableFuture<List<User>> completableFuture = userService.getAllUsers();
 
-    List<UserResource> userResources = completableFuture
-        .join()
-        .stream()
-        .map(user -> new UserResourceAssembler().toModel(user))
-        .collect(Collectors.toList());
+    CollectionModel<UserResource> userResources =
+        new UserResourceAssembler().toCollectionModel(completableFuture.join());
 
-    CollectionModel<UserResource> resources = new CollectionModel<>(userResources);
-    resources.add(WebMvcLinkBuilder
+    userResources.add(WebMvcLinkBuilder
         .linkTo(methodOn(UserController_Level3.class).getAllUsers())
         .withRel("recents"));
-
-    return new ResponseEntity<>(resources, HttpStatus.OK);
+    return new ResponseEntity<>(userResources, HttpStatus.OK);
   }
 
 }
