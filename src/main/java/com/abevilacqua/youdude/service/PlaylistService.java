@@ -2,7 +2,7 @@ package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
-import com.abevilacqua.youdude.repo.PlaylistRepo;
+import com.abevilacqua.youdude.repo.PlaylistRepoPageable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +20,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @Service
 public class PlaylistService {
 
-  private PlaylistRepo playlistRepo;
+  private PlaylistRepoPageable playlistRepoPageable;
 
   private UserService userService;
 
-  public PlaylistService(PlaylistRepo repo, UserService userService) {
-    this.playlistRepo = repo;
+  public PlaylistService(PlaylistRepoPageable repo, UserService userService) {
+    this.playlistRepoPageable = repo;
     this.userService = userService;
   }
 
@@ -34,7 +34,7 @@ public class PlaylistService {
   public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return completedFuture(playlistRepo.findAll(pageable));
+    return completedFuture(playlistRepoPageable.findAll(pageable));
   }
 
   @Async
@@ -44,20 +44,20 @@ public class PlaylistService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> userOptional = getOptionalUser(user_id);
     return userOptional
-        .map(u -> completedFuture(playlistRepo.findAllByUser(userOptional.get(), pageable)))
+        .map(u -> completedFuture(playlistRepoPageable.findAllByUser(userOptional.get(), pageable)))
         .orElseGet(() -> completedFuture(Page.empty()));
   }
 
   @Async
   public CompletableFuture<Playlist> createPlaylist(Playlist playlist) {
-    return completedFuture(playlistRepo.save(playlist));
+    return completedFuture(playlistRepoPageable.save(playlist));
   }
 
   @Async
   public CompletableFuture<Optional<Playlist>> deletePlaylist(long playlist_id) {
-    Optional<Playlist> playlist = playlistRepo.findById(playlist_id);
+    Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
     if(playlist.isPresent()) {
-      playlistRepo.delete(playlist.get());
+      playlistRepoPageable.delete(playlist.get());
       return completedFuture(playlist);
     } else return completedFuture(Optional.empty());
   }

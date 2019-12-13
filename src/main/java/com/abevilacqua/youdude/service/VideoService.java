@@ -2,7 +2,7 @@ package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
-import com.abevilacqua.youdude.repo.VideoRepo;
+import com.abevilacqua.youdude.repo.VideoRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -21,14 +21,14 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @Service
 public class VideoService {
 
-  private VideoRepo videoRepo;
+  private VideoRepoPageable videoRepoPageable;
 
   private UserService userService;
 
   @Autowired
-  public VideoService(VideoRepo videoRepo,
+  public VideoService(VideoRepoPageable videoRepoPageable,
                       UserService userService) {
-    this.videoRepo = videoRepo;
+    this.videoRepoPageable = videoRepoPageable;
     this.userService = userService;
   }
 
@@ -37,7 +37,7 @@ public class VideoService {
   public CompletableFuture<Page<Video>> getAllVideos(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return completedFuture(videoRepo.findAll(pageable));
+    return completedFuture(videoRepoPageable.findAll(pageable));
   }
 
   @Async
@@ -47,20 +47,20 @@ public class VideoService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> optionalUser = getOptionalUser(user_id);
     return optionalUser
-        .map(user -> completedFuture(videoRepo.findAllByUser(user, pageable)))
+        .map(user -> completedFuture(videoRepoPageable.findAllByUser(user, pageable)))
         .orElseGet(() -> completedFuture(Page.empty()));
   }
 
   @Async
   public CompletableFuture<Video> createVideo(Video video) {
-    return completedFuture(videoRepo.save(video));
+    return completedFuture(videoRepoPageable.save(video));
   }
 
   @Async
   public CompletableFuture<Optional<Video>> deleteVideo(long video_id) {
-    Optional<Video> video = videoRepo.findById(video_id);
+    Optional<Video> video = videoRepoPageable.findById(video_id);
     if(video.isPresent()) {
-      videoRepo.delete(video.get());
+      videoRepoPageable.delete(video.get());
       return completedFuture(video);
     }
     else return completedFuture(Optional.empty());
@@ -68,14 +68,14 @@ public class VideoService {
 
   @Async
   public CompletableFuture<Optional<Video>> updateVideo(Video video) {
-    Optional<Video> optVideo = videoRepo.findById(video.getId());
+    Optional<Video> optVideo = videoRepoPageable.findById(video.getId());
     if(optVideo.isPresent()) {
       Video tempVideo = optVideo.get();
       tempVideo.setName(video.getName());
       tempVideo.setDuration(video.getDuration());
       tempVideo.setUser(video.getUser());
       tempVideo.setSubject(video.getSubject());
-      return completedFuture(Optional.of(videoRepo.save(tempVideo)));
+      return completedFuture(Optional.of(videoRepoPageable.save(tempVideo)));
     }
     else return completedFuture(Optional.empty());
   }

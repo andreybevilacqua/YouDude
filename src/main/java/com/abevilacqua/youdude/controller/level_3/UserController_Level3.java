@@ -1,6 +1,8 @@
 package com.abevilacqua.youdude.controller.level_3;
 
 import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.model.resource.UserResource;
+import com.abevilacqua.youdude.model.resource.UserResourceAssembler;
 import com.abevilacqua.youdude.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

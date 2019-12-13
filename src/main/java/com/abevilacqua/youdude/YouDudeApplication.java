@@ -1,9 +1,9 @@
 package com.abevilacqua.youdude;
 
 import com.abevilacqua.youdude.config.DBInitializer;
-import com.abevilacqua.youdude.repo.PlaylistRepo;
-import com.abevilacqua.youdude.repo.UserRepo;
-import com.abevilacqua.youdude.repo.VideoRepo;
+import com.abevilacqua.youdude.repo.PlaylistRepoPageable;
+import com.abevilacqua.youdude.repo.UserRepoPageable;
+import com.abevilacqua.youdude.repo.VideoRepoPageable;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,10 +24,10 @@ public class YouDudeApplication {
 	}
 
 	@Bean
-	public ApplicationRunner runner(UserRepo userRepo,
-									PlaylistRepo playlistRepo,
-									VideoRepo videoRepo) {
-		return DBInitializer.initDB(userRepo, playlistRepo, videoRepo);
+	public ApplicationRunner runner(UserRepoPageable userRepoPageable,
+									PlaylistRepoPageable playlistRepoPageable,
+									VideoRepoPageable videoRepoPageable) {
+		return DBInitializer.initDB(userRepoPageable, playlistRepoPageable, videoRepoPageable);
 	}
 
 	@Bean

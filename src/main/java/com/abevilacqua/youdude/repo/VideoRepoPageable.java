@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VideoRepo extends PagingAndSortingRepository<Video, Long> {
+public interface VideoRepoPageable extends PagingAndSortingRepository<Video, Long> {
 
   Page<Video> findAllByUser(User user, Pageable pageable);
   List<Video> findAllByCategory(Category category);

@@ -1,8 +1,7 @@
 package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
-import com.abevilacqua.youdude.repo.UserRepo;
-import com.abevilacqua.youdude.service.helper.ServiceHelper;
+import com.abevilacqua.youdude.repo.UserRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -21,29 +20,29 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @Service
 public class UserService {
 
-  private UserRepo userRepo;
+  private UserRepoPageable userRepoPageable;
 
   @Autowired
-  public UserService(UserRepo userRepo) { this.userRepo = userRepo; }
+  public UserService(UserRepoPageable userRepoPageable) { this.userRepoPageable = userRepoPageable; }
 
   @Async
-  @Cacheable("getAllUsers")
+  @Cacheable("getAllUsersPageable")
   public CompletableFuture<Page<User>> getAllUsers(int page, int size, String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return completedFuture(userRepo.findAll(pageable));
+    return completedFuture(userRepoPageable.findAll(pageable));
   }
 
   @Async
   @Cacheable("getById")
   public CompletableFuture<Optional<User>> getById(long id) {
     simulateSlowService();
-    return completedFuture(userRepo.findById(id));
+    return completedFuture(userRepoPageable.findById(id));
   }
 
   @Async
   public CompletableFuture<User> createUser(User user) {
-    return completedFuture(userRepo.save(user));
+    return completedFuture(userRepoPageable.save(user));
   }
 
 }
