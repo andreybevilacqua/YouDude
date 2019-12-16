@@ -10,10 +10,12 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -42,4 +44,20 @@ public class UserController_Level3 {
     return new ResponseEntity<>(userResources, HttpStatus.OK);
   }
 
+  @GetMapping("/{user_id}")
+  public ResponseEntity<UserResource> getUserById(@PathVariable("user_id") long user_id) {
+    CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
+
+    return completableFuture
+        .join()
+        .map(user -> {
+          UserResource userResource = new UserResourceAssembler().toModel(user);
+          userResource
+              .add(WebMvcLinkBuilder
+              .linkTo(methodOn(UserController_Level3.class).getAllUsers())
+              .withRel("base-uri"));
+          return new ResponseEntity<>(userResource, HttpStatus.OK);
+        })
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
 }
