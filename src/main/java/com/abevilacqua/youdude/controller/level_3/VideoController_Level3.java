@@ -10,6 +10,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,5 +42,19 @@ public class VideoController_Level3 {
         .withRel("self"));
 
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+  }
+
+  @GetMapping("/user{user_id}")
+  public ResponseEntity<CollectionModel<VideoResource>> getVideoPerUser(@PathVariable final long user_id) {
+    CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
+
+    CollectionModel<VideoResource> videoResourceCollectionModel =
+        new VideoResourceAssembler().toCollectionModel(completableFuture.join());
+
+    videoResourceCollectionModel.add(WebMvcLinkBuilder
+        .linkTo(methodOn(VideoController_Level3.class).getVideoPerUser(user_id))
+        .withRel("self"));
+
+    return new ResponseEntity<>(videoResourceCollectionModel, HttpStatus.OK);
   }
 }

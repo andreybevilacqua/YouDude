@@ -41,7 +41,7 @@ public class VideoController_Level2 {
     return new ResponseEntity<>(pageMapper(videos), HttpStatus.OK);
   }
 
-  @GetMapping("/{user_id}")
+  @GetMapping("/user/{user_id}")
   public ResponseEntity<PageImplDTO<VideoDTO>> getVideosPerUser(
       @PathVariable("user_id") final long user_id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
