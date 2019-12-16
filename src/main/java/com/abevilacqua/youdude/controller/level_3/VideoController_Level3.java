@@ -44,7 +44,7 @@ public class VideoController_Level3 {
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
   }
 
-  @GetMapping("/user{user_id}")
+  @GetMapping("/user/{user_id}")
   public ResponseEntity<CollectionModel<VideoResource>> getVideoPerUser(@PathVariable final long user_id) {
     CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
 
