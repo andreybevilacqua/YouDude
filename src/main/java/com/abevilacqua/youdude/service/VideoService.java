@@ -2,6 +2,7 @@ package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
+import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -23,23 +25,34 @@ public class VideoService {
 
   private VideoRepoPageable videoRepoPageable;
 
+  private VideoRepo videoRepo;
+
   private UserService userService;
 
   @Autowired
   public VideoService(final VideoRepoPageable videoRepoPageable,
-                      final UserService userService) {
+                      final UserService userService,
+                      final VideoRepo videoRepo) {
     this.videoRepoPageable = videoRepoPageable;
     this.userService = userService;
+    this.videoRepo = videoRepo;
   }
 
   @Async
-  @Cacheable("getAllVideos")
+  @Cacheable("getAllVideosPageable")
   public CompletableFuture<Page<Video>> getAllVideos(final int page,
                                                      final int size,
                                                      final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(videoRepoPageable.findAll(pageable));
+  }
+
+  @Async
+  @Cacheable("getAllVideos")
+  public CompletableFuture<List<Video>> getAllVideos() {
+    simulateSlowService();
+    return completedFuture(videoRepo.findAll());
   }
 
   @Async
