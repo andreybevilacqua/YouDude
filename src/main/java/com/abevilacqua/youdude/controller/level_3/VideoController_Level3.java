@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -56,5 +57,21 @@ public class VideoController_Level3 {
         .withRel("self"));
 
     return new ResponseEntity<>(videoResourceCollectionModel, HttpStatus.OK);
+  }
+
+  @GetMapping("/{video_id}")
+  public ResponseEntity<VideoResource> getVideoById(@PathVariable final long video_id) {
+    CompletableFuture<Optional<Video>> completableFutureOptional = videoService.getVideoById(video_id);
+
+    return completableFutureOptional
+        .join()
+        .map(video -> {
+          VideoResource videoResource = new VideoResourceAssembler().toModel(video);
+          videoResource
+              .add(WebMvcLinkBuilder
+              .linkTo(methodOn(VideoController_Level3.class).getVideoById(video_id))
+              .withRel("self"));
+          return new ResponseEntity<>(videoResource, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }

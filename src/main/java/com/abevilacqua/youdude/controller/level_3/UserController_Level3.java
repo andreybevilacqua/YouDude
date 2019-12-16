@@ -50,7 +50,7 @@ public class UserController_Level3 {
           UserResource userResource = new UserResourceAssembler().toModel(user);
           userResource
               .add(WebMvcLinkBuilder
-              .linkTo(methodOn(UserController_Level3.class).getAllUsers())
+              .linkTo(methodOn(UserController_Level3.class).getUserById(user_id))
               .withRel("base-uri"));
           return new ResponseEntity<>(userResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
