@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/level3/users")
+@RequestMapping(value = "/level3/users", produces = "application/hal+json")
 public class UserController_Level3 {
 
   private UserService userService;

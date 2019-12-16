@@ -11,6 +11,11 @@ public class UserResourceAssembler extends RepresentationModelAssemblerSupport<U
     super(UserController_Level3.class, UserResource.class);
   }
 
+  @Override // You need to override this instantiateModel() method to be able to set the correct constructor.
+  protected UserResource instantiateModel(User entity) {
+    return new UserResource(entity);
+  }
+
   @Override
   public UserResource toModel(User user) {
     return createModelWithId(user.getId(), user);
