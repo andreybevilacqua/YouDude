@@ -9,10 +9,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,5 +54,12 @@ public class UserController_Level3 {
               .withRel("base-uri"));
           return new ResponseEntity<>(userResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @PostMapping(consumes = "application/json")
+  public ResponseEntity<UserResource> createUser(@RequestBody User user) {
+    CompletableFuture<User> completableFuture = userService.createUser(user);
+    UserResource userResource = new UserResourceAssembler().toModel(completableFuture.join());
+    return new ResponseEntity<>(userResource, HttpStatus.CREATED);
   }
 }
