@@ -25,7 +25,7 @@ public class VideoController_Level2 {
   private VideoService videoService;
 
   @Autowired
-  public VideoController_Level2(VideoService videoService) {
+  public VideoController_Level2(final VideoService videoService) {
     this.videoService = videoService;
   }
 
@@ -43,7 +43,7 @@ public class VideoController_Level2 {
 
   @GetMapping("/{user_id}")
   public ResponseEntity<PageImplDTO<VideoDTO>> getVideosPerUser(
-      @PathVariable("user_id") long user_id,
+      @PathVariable("user_id") final long user_id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
@@ -55,13 +55,13 @@ public class VideoController_Level2 {
   }
 
   @PostMapping
-  public ResponseEntity<VideoDTO> createVideo(@RequestBody Video video) {
+  public ResponseEntity<VideoDTO> createVideo(@RequestBody final Video video) {
     CompletableFuture<Video> completableFuture = videoService.createVideo(video);
     return new ResponseEntity<>(mapper(completableFuture.join()), HttpStatus.CREATED);
   }
 
   @PutMapping
-  public ResponseEntity<VideoDTO> updateVideo(@RequestBody Video video) {
+  public ResponseEntity<VideoDTO> updateVideo(@RequestBody final Video video) {
     CompletableFuture<Optional<Video>> completableFuture = videoService.updateVideo(video);
     return completableFuture.join()
         .map(VideoDTO::mapper)
@@ -70,7 +70,7 @@ public class VideoController_Level2 {
   }
 
   @DeleteMapping("/{video_id}")
-  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "video_id") long video_id) {
+  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "video_id") final long video_id) {
     CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);
     return completableFuture
         .join()

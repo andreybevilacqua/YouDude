@@ -25,7 +25,7 @@ public class PlaylistController_Level2 {
   private PlaylistService playlistService;
 
   @Autowired
-  public PlaylistController_Level2(PlaylistService playlistService) {
+  public PlaylistController_Level2(final PlaylistService playlistService) {
     this.playlistService = playlistService;
   }
 
@@ -43,10 +43,10 @@ public class PlaylistController_Level2 {
 
   @GetMapping("/{user_id}")
   public ResponseEntity<PageImplDTO<PlaylistDTO>> getPlaylistPerUser(
-      @PathVariable("user_id") long user_id,
-      @RequestParam(value = "page", defaultValue = "0") int page,
-      @RequestParam(value = "size", defaultValue = "10") int size,
-      @RequestParam(value = "sort", defaultValue = "id") String sortBy) {
+      @PathVariable("user_id") final long user_id,
+      @RequestParam(value = "page", defaultValue = "0") final int page,
+      @RequestParam(value = "size", defaultValue = "10") final int size,
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, user_id);
     Page<PlaylistDTO> playlistPage = playlistsFromUser
         .join()
@@ -55,13 +55,13 @@ public class PlaylistController_Level2 {
   }
 
   @PostMapping
-  public ResponseEntity<PlaylistDTO> createPlayList(@RequestBody Playlist playlist) {
+  public ResponseEntity<PlaylistDTO> createPlayList(@RequestBody final Playlist playlist) {
     CompletableFuture<Playlist> playlistCompletableFuture = playlistService.createPlaylist(playlist);
     return new ResponseEntity<>(mapper(playlistCompletableFuture.join()), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{playlist_id}")
-  public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") long playlist_id) {
+  public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") final long playlist_id) {
     CompletableFuture<Optional<Playlist>> optionalCompletableFuture = playlistService.deletePlaylist(playlist_id);
     return optionalCompletableFuture.join()
         .map(PlaylistDTO::mapper)

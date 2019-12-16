@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface VideoRepoPageable extends PagingAndSortingRepository<Video, Long> {
 
-  Page<Video> findAllByUser(User user, Pageable pageable);
-  List<Video> findAllByCategory(Category category);
+  Page<Video> findAllByUser(final User user, final Pageable pageable);
+  List<Video> findAllByCategory(final Category category);
 }

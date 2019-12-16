@@ -20,7 +20,7 @@ public class PlaylistDTO {
 
   private final long user_id;
 
-  public static PlaylistDTO mapper(Playlist playlist) {
+  public static PlaylistDTO mapper(final Playlist playlist) {
     List videos = playlist
         .getVideos()
         .stream()

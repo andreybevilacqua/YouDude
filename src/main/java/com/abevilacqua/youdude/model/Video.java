@@ -41,7 +41,11 @@ public class Video {
   @Setter
   private User user;
 
-  public Video(String name, String subject, int duration, Category category, User user) {
+  public Video(final String name,
+               final String subject,
+               final int duration,
+               final Category category,
+               final User user) {
     this.name = name;
     this.subject = subject;
     this.duration = duration;

@@ -18,12 +18,12 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 @RequestMapping("/level2/users")
 public class UserController_Level2 {
 
-  // todo: RESTFul, Evo Suite
+  // todo: Evo Suite
 
   private UserService userService;
 
   @Autowired
-  public UserController_Level2(UserService userService) {
+  public UserController_Level2(final UserService userService) {
     this.userService = userService;
   }
 
@@ -38,7 +38,7 @@ public class UserController_Level2 {
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<User> getUserById(@PathVariable("user_id") long user_id) {
+  public ResponseEntity<User> getUserById(@PathVariable("user_id") final long user_id) {
     CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
     return completableFuture
         .join()
@@ -47,7 +47,7 @@ public class UserController_Level2 {
   }
 
   @PostMapping
-  public ResponseEntity<User> createUser(@RequestBody User user) {
+  public ResponseEntity<User> createUser(@RequestBody final User user) {
     CompletableFuture<User> completableFuture = userService.createUser(user);
     return new ResponseEntity<>(completableFuture.join(), HttpStatus.CREATED);
   }

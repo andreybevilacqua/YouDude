@@ -26,14 +26,17 @@ public class UserService {
   private UserRepo userRepo;
 
   @Autowired
-  public UserService(UserRepoPageable userRepoPageable, UserRepo userRepo) {
+  public UserService(final UserRepoPageable userRepoPageable,
+                     final UserRepo userRepo) {
     this.userRepoPageable = userRepoPageable;
     this.userRepo = userRepo;
   }
 
   @Async
   @Cacheable("getAllUsersPageable")
-  public CompletableFuture<Page<User>> getAllUsers(int page, int size, String sortBy) {
+  public CompletableFuture<Page<User>> getAllUsers(final int page,
+                                                   final int size,
+                                                   final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(userRepoPageable.findAll(pageable));
@@ -47,13 +50,13 @@ public class UserService {
 
   @Async
   @Cacheable("getById")
-  public CompletableFuture<Optional<User>> getById(long id) {
+  public CompletableFuture<Optional<User>> getById(final long id) {
     simulateSlowService();
     return completedFuture(userRepoPageable.findById(id));
   }
 
   @Async
-  public CompletableFuture<User> createUser(User user) {
+  public CompletableFuture<User> createUser(final User user) {
     return completedFuture(userRepoPageable.save(user));
   }
 

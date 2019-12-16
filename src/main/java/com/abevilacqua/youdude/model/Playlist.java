@@ -2,7 +2,6 @@ package com.abevilacqua.youdude.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Playlist extends RepresentationModel {
+public class Playlist {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,16 +26,21 @@ public class Playlist extends RepresentationModel {
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Playlist(String name, User user) {
+  public Playlist(final String name,
+                  final User user) {
     this.name = name;
     this.user = user;
   }
 
-  public static Playlist playlistWithVideos(String name, User user, List<Video> videos) {
+  public static Playlist playlistWithVideos(final String name,
+                                            final User user,
+                                            final List<Video> videos) {
     return new Playlist(name, user, videos);
   }
 
-  private Playlist(String name, User user, List<Video> videos) {
+  private Playlist(final String name,
+                   final User user,
+                   final List<Video> videos) {
     this.name = name;
     this.user = user;
     this.videos = videos;

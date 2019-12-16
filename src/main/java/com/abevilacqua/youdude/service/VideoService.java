@@ -26,15 +26,17 @@ public class VideoService {
   private UserService userService;
 
   @Autowired
-  public VideoService(VideoRepoPageable videoRepoPageable,
-                      UserService userService) {
+  public VideoService(final VideoRepoPageable videoRepoPageable,
+                      final UserService userService) {
     this.videoRepoPageable = videoRepoPageable;
     this.userService = userService;
   }
 
   @Async
   @Cacheable("getAllVideos")
-  public CompletableFuture<Page<Video>> getAllVideos(int page, int size, String sortBy) {
+  public CompletableFuture<Page<Video>> getAllVideos(final int page,
+                                                     final int size,
+                                                     final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(videoRepoPageable.findAll(pageable));
@@ -42,7 +44,10 @@ public class VideoService {
 
   @Async
   @Cacheable("getAllFromUser")
-  public CompletableFuture<Page<Video>> getAllFromUser(long user_id, int page, int size, String sortBy) {
+  public CompletableFuture<Page<Video>> getAllFromUser(final long user_id,
+                                                       final int page,
+                                                       final int size,
+                                                       final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> optionalUser = getOptionalUser(user_id);
@@ -52,12 +57,12 @@ public class VideoService {
   }
 
   @Async
-  public CompletableFuture<Video> createVideo(Video video) {
+  public CompletableFuture<Video> createVideo(final Video video) {
     return completedFuture(videoRepoPageable.save(video));
   }
 
   @Async
-  public CompletableFuture<Optional<Video>> deleteVideo(long video_id) {
+  public CompletableFuture<Optional<Video>> deleteVideo(final long video_id) {
     Optional<Video> video = videoRepoPageable.findById(video_id);
     if(video.isPresent()) {
       videoRepoPageable.delete(video.get());
@@ -67,7 +72,7 @@ public class VideoService {
   }
 
   @Async
-  public CompletableFuture<Optional<Video>> updateVideo(Video video) {
+  public CompletableFuture<Optional<Video>> updateVideo(final Video video) {
     Optional<Video> optVideo = videoRepoPageable.findById(video.getId());
     if(optVideo.isPresent()) {
       Video tempVideo = optVideo.get();
@@ -80,7 +85,7 @@ public class VideoService {
     else return completedFuture(Optional.empty());
   }
 
-  private Optional<User> getOptionalUser(long user_id) {
+  private Optional<User> getOptionalUser(final long user_id) {
     CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
     return threadUser.join();
   }

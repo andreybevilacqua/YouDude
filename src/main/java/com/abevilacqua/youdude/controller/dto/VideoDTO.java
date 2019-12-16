@@ -21,7 +21,7 @@ public class VideoDTO {
 
   private final long user_id;
 
-  public static VideoDTO mapper(Video video) {
+  public static VideoDTO mapper(final Video video) {
     return VideoDTO.builder()
         .video_id(video.getId())
         .name(video.getName())

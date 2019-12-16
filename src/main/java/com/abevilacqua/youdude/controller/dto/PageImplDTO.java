@@ -21,7 +21,7 @@ public class PageImplDTO<T> {
 
   private Sort sort;
 
-  public static PageImplDTO pageMapper(Page page) {
+  public static PageImplDTO pageMapper(final Page page) {
     return PageImplDTO.builder()
         .content(page.getContent())
         .totalElements(page.getTotalElements())

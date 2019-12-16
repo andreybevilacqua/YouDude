@@ -24,7 +24,8 @@ public class User {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 
-  public User(String name, LocalDate creationDate) {
+  public User(final String name,
+              final LocalDate creationDate) {
     this.name = name;
     this.creationDate = creationDate;
   }

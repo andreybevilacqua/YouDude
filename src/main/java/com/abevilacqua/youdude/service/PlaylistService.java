@@ -24,14 +24,17 @@ public class PlaylistService {
 
   private UserService userService;
 
-  public PlaylistService(PlaylistRepoPageable repo, UserService userService) {
+  public PlaylistService(final PlaylistRepoPageable repo,
+                         final UserService userService) {
     this.playlistRepoPageable = repo;
     this.userService = userService;
   }
 
   @Async
   @Cacheable("getAllPlaylists")
-  public CompletableFuture<Page<Playlist>> getAllPlaylists(int page, int size, String sortBy) {
+  public CompletableFuture<Page<Playlist>> getAllPlaylists(final int page,
+                                                           final int size,
+                                                           final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(playlistRepoPageable.findAll(pageable));
@@ -39,7 +42,10 @@ public class PlaylistService {
 
   @Async
   @Cacheable("getAllFromUser")
-  public CompletableFuture<Page<Playlist>> getAllFromUser(int page, int size, String sortBy, long user_id) {
+  public CompletableFuture<Page<Playlist>> getAllFromUser(final int page,
+                                                          final int size,
+                                                          final String sortBy,
+                                                          final long user_id) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> userOptional = getOptionalUser(user_id);
@@ -49,12 +55,12 @@ public class PlaylistService {
   }
 
   @Async
-  public CompletableFuture<Playlist> createPlaylist(Playlist playlist) {
+  public CompletableFuture<Playlist> createPlaylist(final Playlist playlist) {
     return completedFuture(playlistRepoPageable.save(playlist));
   }
 
   @Async
-  public CompletableFuture<Optional<Playlist>> deletePlaylist(long playlist_id) {
+  public CompletableFuture<Optional<Playlist>> deletePlaylist(final long playlist_id) {
     Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
     if(playlist.isPresent()) {
       playlistRepoPageable.delete(playlist.get());
@@ -62,7 +68,7 @@ public class PlaylistService {
     } else return completedFuture(Optional.empty());
   }
 
-  private Optional<User> getOptionalUser(long user_id) {
+  private Optional<User> getOptionalUser(final long user_id) {
     CompletableFuture<Optional<User>> user = userService.getById(user_id);
     return user.join();
   }

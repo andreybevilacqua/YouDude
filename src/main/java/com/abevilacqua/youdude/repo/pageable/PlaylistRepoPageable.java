@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlaylistRepoPageable extends PagingAndSortingRepository<Playlist, Long> {
 
-  Page<Playlist> findAllByUser(User user, Pageable pageable);
+  Page<Playlist> findAllByUser(final User user, final Pageable pageable);
 }
