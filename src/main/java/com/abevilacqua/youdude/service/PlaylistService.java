@@ -2,6 +2,7 @@ package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -22,12 +23,16 @@ public class PlaylistService {
 
   private PlaylistRepoPageable playlistRepoPageable;
 
+  private PlaylistRepo playlistRepo;
+
   private UserService userService;
 
   public PlaylistService(final PlaylistRepoPageable repo,
-                         final UserService userService) {
+                         final UserService userService,
+                         final PlaylistRepo playlistRepo) {
     this.playlistRepoPageable = repo;
     this.userService = userService;
+    this.playlistRepo = playlistRepo;
   }
 
   @Async
@@ -41,7 +46,7 @@ public class PlaylistService {
   }
 
   @Async
-  @Cacheable("getAllFromUser")
+  @Cacheable("getAllFromUserPageable")
   public CompletableFuture<Page<Playlist>> getAllFromUser(final int page,
                                                           final int size,
                                                           final String sortBy,
@@ -52,6 +57,13 @@ public class PlaylistService {
     return userOptional
         .map(u -> completedFuture(playlistRepoPageable.findAllByUser(userOptional.get(), pageable)))
         .orElseGet(() -> completedFuture(Page.empty()));
+  }
+
+  @Async
+  @Cacheable("getAllById")
+  public CompletableFuture<Optional<Playlist>> getAllById(final long playlist_id) {
+    simulateSlowService();
+    return completedFuture(playlistRepo.findById(playlist_id));
   }
 
   @Async
