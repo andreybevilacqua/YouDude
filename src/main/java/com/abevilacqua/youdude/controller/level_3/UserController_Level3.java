@@ -47,7 +47,6 @@ public class UserController_Level3 {
   @GetMapping("/{user_id}")
   public ResponseEntity<UserResource> getUserById(@PathVariable("user_id") long user_id) {
     CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
-
     return completableFuture
         .join()
         .map(user -> {
@@ -57,7 +56,6 @@ public class UserController_Level3 {
               .linkTo(methodOn(UserController_Level3.class).getAllUsers())
               .withRel("base-uri"));
           return new ResponseEntity<>(userResource, HttpStatus.OK);
-        })
-        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }
