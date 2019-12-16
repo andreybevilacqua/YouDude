@@ -20,7 +20,7 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 @RequestMapping("/level2/playlists")
 public class PlaylistController_Level2 {
 
-  // todo: RESTFul, Evo Suite
+  // todo: RESTFul, Evo Suite, bug with the page/size/sort
 
   private PlaylistService playlistService;
 
