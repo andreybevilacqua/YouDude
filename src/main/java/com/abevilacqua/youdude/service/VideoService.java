@@ -58,7 +58,7 @@ public class VideoService {
   }
 
   @Async
-  @Cacheable("getAllFromUser")
+  @Cacheable("getAllFromUserPageable")
   public CompletableFuture<Page<Video>> getAllFromUser(final long user_id,
                                                        final int page,
                                                        final int size,
@@ -79,6 +79,13 @@ public class VideoService {
     return optionalUser
         .map(user -> completedFuture(videoRepo.findAllByUser(user)))
         .orElseGet(() -> completedFuture(EMPTY_LIST));
+  }
+
+  @Async
+  @Cacheable("getVideoById")
+  public CompletableFuture<Optional<Video>> getVideoById(final long id) {
+    simulateSlowService();
+    return completedFuture(videoRepo.findById(id));
   }
 
   @Async
