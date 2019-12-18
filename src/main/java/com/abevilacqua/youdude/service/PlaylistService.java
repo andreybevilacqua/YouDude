@@ -12,10 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
+import static java.util.Collections.EMPTY_LIST;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Service
@@ -36,13 +39,20 @@ public class PlaylistService {
   }
 
   @Async
-  @Cacheable("getAllPlaylists")
+  @Cacheable("getAllPlaylistsPageable")
   public CompletableFuture<Page<Playlist>> getAllPlaylists(final int page,
                                                            final int size,
                                                            final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     return completedFuture(playlistRepoPageable.findAll(pageable));
+  }
+
+  @Async
+  @Cacheable("getAllPlaylists")
+  public CompletableFuture<List<Playlist>> getAllPlaylists() {
+    simulateSlowService();
+    return completedFuture(playlistRepo.findAll());
   }
 
   @Async
@@ -57,6 +67,16 @@ public class PlaylistService {
     return userOptional
         .map(u -> completedFuture(playlistRepoPageable.findAllByUser(userOptional.get(), pageable)))
         .orElseGet(() -> completedFuture(Page.empty()));
+  }
+
+  @Async
+  @Cacheable("getAllFromUser")
+  public CompletableFuture<List<Playlist>> getAllFromUser(final long user_id) {
+    simulateSlowService();
+    Optional<User> userOptional = getOptionalUser(user_id);
+    return userOptional
+        .map(user -> completedFuture(playlistRepo.findAllByUser(user)))
+        .orElseGet(() -> completedFuture(EMPTY_LIST));
   }
 
   @Async
