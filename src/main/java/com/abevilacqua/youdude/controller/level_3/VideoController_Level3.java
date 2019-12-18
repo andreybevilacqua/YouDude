@@ -1,6 +1,5 @@
 package com.abevilacqua.youdude.controller.level_3;
 
-import com.abevilacqua.youdude.controller.dto.VideoDTO;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.model.resource.VideoResource;
 import com.abevilacqua.youdude.model.resource.VideoResourceAssembler;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
