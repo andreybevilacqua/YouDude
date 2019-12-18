@@ -62,8 +62,14 @@ public class VideoController_Level3 {
 
     return completableFutureOptional
         .join()
-        .map(video -> new ResponseEntity<>(new VideoResourceAssembler().toModel(video), HttpStatus.OK))
-        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        .map(video -> {
+          VideoResource videoResource = new VideoResourceAssembler().toModel(video);
+          videoResource
+              .add(WebMvcLinkBuilder
+                  .linkTo(methodOn(VideoController_Level3.class).getAllVideos())
+                  .withRel("base-link"));
+          return new ResponseEntity<>(videoResource, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   @PostMapping
