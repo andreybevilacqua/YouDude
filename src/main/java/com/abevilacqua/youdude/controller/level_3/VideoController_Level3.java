@@ -1,5 +1,6 @@
 package com.abevilacqua.youdude.controller.level_3;
 
+import com.abevilacqua.youdude.controller.dto.VideoDTO;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.model.resource.VideoResource;
 import com.abevilacqua.youdude.model.resource.VideoResourceAssembler;
@@ -9,15 +10,13 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
@@ -46,14 +45,14 @@ public class VideoController_Level3 {
   }
 
   @GetMapping("/user/{user_id}")
-  public ResponseEntity<CollectionModel<VideoResource>> getVideoPerUser(@PathVariable final long user_id) {
+  public ResponseEntity<CollectionModel<VideoResource>> getVideosPerUser(@PathVariable final long user_id) {
     CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
 
     CollectionModel<VideoResource> videoResourceCollectionModel =
         new VideoResourceAssembler().toCollectionModel(completableFuture.join());
 
     videoResourceCollectionModel.add(WebMvcLinkBuilder
-        .linkTo(methodOn(VideoController_Level3.class).getVideoPerUser(user_id))
+        .linkTo(methodOn(VideoController_Level3.class).getVideosPerUser(user_id))
         .withRel("self"));
 
     return new ResponseEntity<>(videoResourceCollectionModel, HttpStatus.OK);
@@ -73,5 +72,30 @@ public class VideoController_Level3 {
               .withRel("self"));
           return new ResponseEntity<>(videoResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @PostMapping
+  public ResponseEntity<VideoResource> createVideo(@RequestBody final Video video) {
+    CompletableFuture<Video> completableFuture = videoService.createVideo(video);
+    VideoResource videoResource = new VideoResourceAssembler().toModel(completableFuture.join());
+    return new ResponseEntity<>(videoResource, HttpStatus.CREATED);
+  }
+
+  @PutMapping
+  public ResponseEntity<VideoResource> updateVideo(@RequestBody final Video video) {
+    CompletableFuture<Optional<Video>> completableFuture = videoService.updateVideo(video);
+    return completableFuture
+        .join()
+        .map(newVideo -> new ResponseEntity<>(new VideoResourceAssembler().toModel(newVideo), HttpStatus.OK))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @DeleteMapping("/{video_id}")
+  public ResponseEntity<VideoResource> deleteVideo(@PathVariable(value = "video_id") final long video_id) {
+    CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);
+    return completableFuture
+        .join()
+        .map(video -> new ResponseEntity<>(new VideoResourceAssembler().toModel(video), HttpStatus.OK))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }
