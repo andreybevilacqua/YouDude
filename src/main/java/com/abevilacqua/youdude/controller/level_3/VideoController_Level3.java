@@ -34,12 +34,11 @@ public class VideoController_Level3 {
 
     CollectionModel<VideoResource> collectionModel =
         new VideoResourceAssembler().toCollectionModel(videosCompletableFuture.join());
-    collectionModel.getContent().forEach(videoResource -> videoResource.getUser());
-
     collectionModel
         .getContent()
-        .forEach(videoResource -> videoResource
-            .add(WebMvcLinkBuilder
+        .forEach(videoResource ->
+            videoResource
+                .add(WebMvcLinkBuilder
                 .linkTo(methodOn(UserController_Level3.class).getUserById(videoResource.getUser().getId()))
                 .withRel("user-link")));
     collectionModel.add(WebMvcLinkBuilder
