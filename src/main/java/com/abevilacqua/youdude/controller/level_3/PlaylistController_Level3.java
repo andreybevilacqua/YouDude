@@ -40,6 +40,13 @@ public class PlaylistController_Level3 {
     CollectionModel<PlaylistResource> collectionModel =
         new PlaylistResourceAssembler().toCollectionModel(playlists.join());
 
+    collectionModel
+        .getContent()
+        .forEach(playlistResource ->
+            playlistResource.add(WebMvcLinkBuilder
+                .linkTo(methodOn(PlaylistController_Level3.class).getPlaylistById(playlistResource.getId()))
+                .withRel("playlist-link")));
+
     collectionModel.add(WebMvcLinkBuilder
         .linkTo(methodOn(PlaylistController_Level3.class))
         .withRel("recents"));
@@ -55,5 +62,17 @@ public class PlaylistController_Level3 {
         new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser.join());
 
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<PlaylistResource> getPlaylistById(@PathVariable("id") final long id) {
+    CompletableFuture<Optional<Playlist>> optionalPlaylist = playlistService.getById(id);
+    return optionalPlaylist
+        .join()
+        .map(playlist -> {
+          PlaylistResource playlistResource = new PlaylistResourceAssembler().toModel(playlist);
+          return new ResponseEntity<>(playlistResource, HttpStatus.OK);
+        })
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }

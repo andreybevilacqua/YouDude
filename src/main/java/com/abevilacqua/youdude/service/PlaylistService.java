@@ -81,7 +81,7 @@ public class PlaylistService {
 
   @Async
   @Cacheable("getAllById")
-  public CompletableFuture<Optional<Playlist>> getAllById(final long playlist_id) {
+  public CompletableFuture<Optional<Playlist>> getById(final long playlist_id) {
     simulateSlowService();
     return completedFuture(playlistRepo.findById(playlist_id));
   }
