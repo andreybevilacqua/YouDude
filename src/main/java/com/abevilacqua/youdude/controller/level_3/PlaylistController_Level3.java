@@ -1,25 +1,23 @@
 package com.abevilacqua.youdude.controller.level_3;
 
-import com.abevilacqua.youdude.controller.dto.PageImplDTO;
-import com.abevilacqua.youdude.controller.dto.PlaylistDTO;
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.resource.PlaylistResource;
 import com.abevilacqua.youdude.model.resource.PlaylistResourceAssembler;
 import com.abevilacqua.youdude.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
-import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
@@ -43,23 +41,13 @@ public class PlaylistController_Level3 {
     collectionModel
         .getContent()
         .forEach(playlistResource ->
-            playlistResource.add(WebMvcLinkBuilder
-                .linkTo(methodOn(PlaylistController_Level3.class).getPlaylistById(playlistResource.getId()))
-                .withRel("playlist-link")));
-
-    collectionModel.add(WebMvcLinkBuilder
-        .linkTo(methodOn(PlaylistController_Level3.class))
-        .withRel("recents"));
-
-    return new ResponseEntity<>(collectionModel, HttpStatus.OK);
-  }
-
-  @GetMapping("/{user_id}")
-  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("user_id") final long user_id) {
-    CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(user_id);
-
-    CollectionModel<PlaylistResource> collectionModel =
-        new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser.join());
+            playlistResource
+                .add(WebMvcLinkBuilder
+                  .linkTo(methodOn(PlaylistController_Level3.class).getPlaylistById(playlistResource.getId()))
+                  .withRel("playlist-link"))
+                .add(WebMvcLinkBuilder
+                  .linkTo(methodOn(UserController_Level3.class).getUserById(playlistResource.getUser().getId()))
+                  .withRel("user-link")));
 
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
   }
@@ -75,4 +63,15 @@ public class PlaylistController_Level3 {
         })
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
+
+  @GetMapping("/user/{user_id}")
+  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("user_id") final long user_id) {
+    CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(user_id);
+
+    CollectionModel<PlaylistResource> collectionModel =
+        new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser.join());
+
+    return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+  }
+
 }
