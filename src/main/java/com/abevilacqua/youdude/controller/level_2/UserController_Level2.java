@@ -18,7 +18,7 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 @RequestMapping("/level2/users")
 public class UserController_Level2 {
 
-  // todo: Evo Suite, bug with the page/size/sort
+  // todo: Evo Suite, bug with the page/size/sort, gRPC
 
   private UserService userService;
 
