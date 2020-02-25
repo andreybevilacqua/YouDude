@@ -39,7 +39,7 @@ public class PlaylistController_Level2 {
     Page<PlaylistDTO> playlistPage = playlists
         .join()
         .map(PlaylistDTO::mapper);
-    return new ResponseEntity<>(pageMapper(playlistPage), HttpStatus.OK);
+    return new ResponseEntity<PageImplDTO<PlaylistDTO>>(pageMapper(playlistPage), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
@@ -52,7 +52,7 @@ public class PlaylistController_Level2 {
     Page<PlaylistDTO> playlistPage = playlistsFromUser
         .join()
         .map(PlaylistDTO::mapper);
-    return new ResponseEntity<>(pageMapper(playlistPage), HttpStatus.OK);
+    return new ResponseEntity<PageImplDTO<PlaylistDTO>>(pageMapper(playlistPage), HttpStatus.OK);
   }
 
   @PostMapping

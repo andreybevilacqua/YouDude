@@ -34,7 +34,7 @@ public class UserController_Level2 {
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
     CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(page, size, sortBy);
     Page<User> userPage = completableFuture.join();
-    return new ResponseEntity<>(pageMapper(userPage), HttpStatus.OK);
+    return new ResponseEntity<PageImplDTO<User>>(pageMapper(userPage), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")

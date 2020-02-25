@@ -38,7 +38,7 @@ public class VideoController_Level2 {
     Page<VideoDTO> videos = completableFuture
         .join()
         .map(VideoDTO::mapper);
-    return new ResponseEntity<>(pageMapper(videos), HttpStatus.OK);
+    return new ResponseEntity<PageImplDTO<VideoDTO>>(pageMapper(videos), HttpStatus.OK);
   }
 
   @GetMapping("/user/{user_id}")
@@ -51,7 +51,7 @@ public class VideoController_Level2 {
     Page<VideoDTO> videos = completableFuture
         .join()
         .map(VideoDTO::mapper);
-    return new ResponseEntity<>(pageMapper(videos), HttpStatus.OK);
+    return new ResponseEntity<PageImplDTO<VideoDTO>>(pageMapper(videos), HttpStatus.OK);
   }
 
   @GetMapping("/{user_id}")
