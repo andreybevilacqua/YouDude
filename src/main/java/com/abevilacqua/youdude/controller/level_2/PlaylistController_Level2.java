@@ -34,6 +34,7 @@ public class PlaylistController_Level2 {
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+    System.out.println("Thread running getAllPlaylists controller: " + Thread.currentThread());
     CompletableFuture<Page<Playlist>> playlists = playlistService.getAllPlaylists(page, size, sortBy);
     Page<PlaylistDTO> playlistPage = playlists
         .join()

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -20,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service
 public class PlaylistService {
@@ -45,14 +45,19 @@ public class PlaylistService {
                                                            final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return completedFuture(playlistRepoPageable.findAll(pageable));
+    System.out.println("Thread running getAllPlaylists pageable service: " + Thread.currentThread());
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return playlistRepoPageable.findAll(pageable);
+    });
   }
 
   @Async
   @Cacheable("getAllPlaylists")
   public CompletableFuture<List<Playlist>> getAllPlaylists() {
     simulateSlowService();
-    return completedFuture(playlistRepo.findAll());
+    System.out.println("Thread running getAllPlaylists service: " + Thread.currentThread());
+    return supplyAsync(() -> playlistRepo.findAll());
   }
 
   @Async
@@ -64,9 +69,10 @@ public class PlaylistService {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> userOptional = getOptionalUser(user_id);
+    System.out.println("Thread running getAllFromUser pageable service: " + Thread.currentThread());
     return userOptional
-        .map(u -> completedFuture(playlistRepoPageable.findAllByUser(userOptional.get(), pageable)))
-        .orElseGet(() -> completedFuture(Page.empty()));
+        .map(u -> supplyAsync(() -> playlistRepoPageable.findAllByUser(userOptional.get(), pageable)))
+        .orElseGet(() -> completedFuture((Page.empty())));
   }
 
   @Async
@@ -74,8 +80,9 @@ public class PlaylistService {
   public CompletableFuture<List<Playlist>> getAllFromUser(final long user_id) {
     simulateSlowService();
     Optional<User> userOptional = getOptionalUser(user_id);
+    System.out.println("Thread running getAllFromUser service: " + Thread.currentThread());
     return userOptional
-        .map(user -> completedFuture(playlistRepo.findAllByUser(user)))
+        .map(user -> supplyAsync(() -> playlistRepo.findAllByUser(user)))
         .orElseGet(() -> completedFuture(EMPTY_LIST));
   }
 
@@ -83,25 +90,28 @@ public class PlaylistService {
   @Cacheable("getAllById")
   public CompletableFuture<Optional<Playlist>> getById(final long playlist_id) {
     simulateSlowService();
-    return completedFuture(playlistRepo.findById(playlist_id));
+    System.out.println("Thread running getById service: " + Thread.currentThread());
+    return supplyAsync(() -> playlistRepo.findById(playlist_id));
   }
 
   @Async
   public CompletableFuture<Playlist> createPlaylist(final Playlist playlist) {
-    return completedFuture(playlistRepoPageable.save(playlist));
+    System.out.println("Thread running createPlaylist service: " + Thread.currentThread());
+    return supplyAsync(() -> playlistRepoPageable.save(playlist));
   }
 
   @Async
   public CompletableFuture<Optional<Playlist>> deletePlaylist(final long playlist_id) {
     Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
+    System.out.println("Thread running deletePlaylist service: " + Thread.currentThread());
     if(playlist.isPresent()) {
       playlistRepoPageable.delete(playlist.get());
-      return completedFuture(playlist);
+      return supplyAsync(() -> playlist);
     } else return completedFuture(Optional.empty());
   }
 
   private Optional<User> getOptionalUser(final long user_id) {
-    CompletableFuture<Optional<User>> user = userService.getById(user_id);
-    return user.join();
+    System.out.println("Thread running getOptionalUser service: " + Thread.currentThread());
+    return supplyAsync(() -> userService.getById(user_id)).join().join();
   }
 }
