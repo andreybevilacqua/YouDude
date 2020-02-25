@@ -13,13 +13,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.concurrent.CompletableFuture.*;
 
 @Service
 public class VideoService {
@@ -46,14 +46,20 @@ public class VideoService {
                                                      final String sortBy) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return completedFuture(videoRepoPageable.findAll(pageable));
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return videoRepoPageable.findAll(pageable);
+    });
   }
 
   @Async
   @Cacheable("getAllVideos")
   public CompletableFuture<List<Video>> getAllVideos() {
     simulateSlowService();
-    return completedFuture(videoRepo.findAll());
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return videoRepo.findAll();
+    });
   }
 
   @Async
@@ -66,7 +72,10 @@ public class VideoService {
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> optionalUser = getOptionalUser(user_id);
     return optionalUser
-        .map(user -> completedFuture(videoRepoPageable.findAllByUser(user, pageable)))
+        .map(user -> supplyAsync(() -> {
+          System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+          return videoRepoPageable.findAllByUser(user, pageable);
+        }))
         .orElseGet(() -> completedFuture(Page.empty()));
   }
 
@@ -76,28 +85,40 @@ public class VideoService {
     simulateSlowService();
     Optional<User> optionalUser = getOptionalUser(user_id);
     return optionalUser
-        .map(user -> completedFuture(videoRepo.findAllByUser(user)))
-        .orElseGet(() -> completedFuture(EMPTY_LIST));
+        .map(user -> supplyAsync(() -> {
+          System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+          return videoRepo.findAllByUser(user);
+        }))
+        .orElseGet(() -> completedFuture(new ArrayList<>()));
   }
 
   @Async
   @Cacheable("getVideoById")
   public CompletableFuture<Optional<Video>> getVideoById(final long id) {
     simulateSlowService();
-    return completedFuture(videoRepo.findById(id));
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return videoRepo.findById(id);
+    });
   }
 
   @Async
   public CompletableFuture<Video> createVideo(final Video video) {
-    return completedFuture(videoRepoPageable.save(video));
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return videoRepoPageable.save(video);
+    });
   }
 
   @Async
   public CompletableFuture<Optional<Video>> deleteVideo(final long video_id) {
     Optional<Video> video = videoRepoPageable.findById(video_id);
     if(video.isPresent()) {
-      videoRepoPageable.delete(video.get());
-      return completedFuture(video);
+      return supplyAsync(() -> {
+        System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+        videoRepoPageable.delete(video.get());
+        return video;
+      });
     }
     else return completedFuture(Optional.empty());
   }
@@ -111,13 +132,18 @@ public class VideoService {
       tempVideo.setDuration(video.getDuration());
       tempVideo.setUser(video.getUser());
       tempVideo.setSubject(video.getSubject());
-      return completedFuture(Optional.of(videoRepoPageable.save(tempVideo)));
+      return supplyAsync(() -> {
+        System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+        return Optional.of(videoRepoPageable.save(tempVideo));
+      });
     }
     else return completedFuture(Optional.empty());
   }
 
   private Optional<User> getOptionalUser(final long user_id) {
-    CompletableFuture<Optional<User>> threadUser = userService.getById(user_id);
-    return threadUser.join();
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return userService.getById(user_id);
+    }).join().join();
   }
 }
