@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service
 public class UserService {
@@ -37,27 +37,43 @@ public class UserService {
   public CompletableFuture<Page<User>> getAllUsers(final int page,
                                                    final int size,
                                                    final String sortBy) {
+    System.out.println("Thread running getAllUsers pageable service: " + Thread.currentThread());
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return completedFuture(userRepoPageable.findAll(pageable));
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return userRepoPageable.findAll(pageable);
+    });
   }
 
   @Async
   @Cacheable("getAllUsers")
   public CompletableFuture<List<User>> getAllUsers() {
-    return completedFuture(userRepo.findAll());
+    System.out.println("Thread running getAllUsers service: " + Thread.currentThread());
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return userRepo.findAll();
+    });
   }
 
   @Async
   @Cacheable("getById")
   public CompletableFuture<Optional<User>> getById(final long id) {
+    System.out.println("Thread running getAllUsers pageable service: " + Thread.currentThread());
     simulateSlowService();
-    return completedFuture(userRepoPageable.findById(id));
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return userRepoPageable.findById(id);
+    });
   }
 
   @Async
   public CompletableFuture<User> createUser(final User user) {
-    return completedFuture(userRepoPageable.save(user));
+    System.out.println("Thread running createUser service: " + Thread.currentThread());
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      return userRepoPageable.save(user);
+    });
   }
 
 }
