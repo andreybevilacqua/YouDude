@@ -1,12 +1,11 @@
 package com.abevilacqua.youdude.service.helper;
 
+import lombok.SneakyThrows;
+
 public final class ServiceHelper {
 
+  @SneakyThrows
   public static void simulateSlowService() {
-    try {
-      Thread.sleep(3000L);
-    } catch (InterruptedException e) {
-      throw new IllegalStateException(e);
-    }
+    Thread.sleep(3000L);
   }
 }
