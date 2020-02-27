@@ -20,7 +20,7 @@ import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 @RequestMapping("/level2/videos")
 public class VideoController_Level2 {
 
-  // todo: RESTFul, Evo Suite, bug with the page/size/sort
+  // todo: Evo Suite, gRPC, RESTful
 
   private VideoService videoService;
 
