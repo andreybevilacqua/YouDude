@@ -20,7 +20,7 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 @RequestMapping("/level2/playlists")
 public class PlaylistController_Level2 {
 
-  // todo: Evo Suite, gRPC, RESTful
+  // todo: Evo Suite, gRPC
 
   private PlaylistService playlistService;
 

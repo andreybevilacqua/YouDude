@@ -18,7 +18,7 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 @RequestMapping("/level2/users")
 public class UserController_Level2 {
 
-  // todo: Evo Suite, gRPC, RESTful
+  // todo: Evo Suite, gRPC
 
   private UserService userService;
 
