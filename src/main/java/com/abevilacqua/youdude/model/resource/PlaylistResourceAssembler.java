@@ -5,8 +5,6 @@ import com.abevilacqua.youdude.model.Playlist;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
-import javax.swing.*;
-
 public class PlaylistResourceAssembler extends RepresentationModelAssemblerSupport<Playlist, PlaylistResource> {
 
   public PlaylistResourceAssembler() { super(PlaylistController_Level3.class, PlaylistResource.class); }
