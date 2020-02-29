@@ -12,6 +12,8 @@ import java.time.LocalDate;
 @Getter
 public class User {
 
+  private int hashCode; // Lazyli initialized cached hash code.
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "user_id")
@@ -30,4 +32,20 @@ public class User {
     this.creationDate = creationDate;
   }
 
+  @Override
+  public String toString() {
+    return id + " " + name + " " + creationDate;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = hashCode;
+    if(result == 0) {
+      result = Long.hashCode(id);
+      result = 31 * result + name.hashCode();
+      result = 31 * result + creationDate.hashCode();
+      hashCode = result;
+    }
+    return result;
+  }
 }

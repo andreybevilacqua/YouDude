@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 public class Playlist {
 
+  private int hashCode;
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "playlist_id")
@@ -44,5 +46,22 @@ public class Playlist {
     this.name = name;
     this.user = user;
     this.videos = videos;
+  }
+
+  @Override
+  public String toString() {
+    return id + " " + name;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = hashCode;
+    if(result == 0) {
+      result = Long.hashCode(id);
+      result = 31 * result + name.hashCode();
+      for(Video video : videos) { result = 31 * result + video.hashCode(); }
+      hashCode = result;
+    }
+    return result;
   }
 }

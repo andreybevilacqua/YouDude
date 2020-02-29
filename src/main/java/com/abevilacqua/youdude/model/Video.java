@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class Video {
 
+  private int hashCode;
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
@@ -51,5 +53,23 @@ public class Video {
     this.duration = duration;
     this.category = category;
     this.user = user;
+  }
+
+  @Override
+  public String toString() {
+    return id + " " + name + " " + category;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = hashCode;
+    if(result == 0) {
+      result = Long.hashCode(id);
+      result = 31 * result + name.hashCode();
+      result = 31 * result + Integer.hashCode(duration);
+      result = 31 * result + category.hashCode();
+      hashCode = result;
+    }
+    return result;
   }
 }
