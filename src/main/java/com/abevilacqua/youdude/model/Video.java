@@ -57,7 +57,7 @@ public class Video {
 
   @Override
   public String toString() {
-    return id + " " + name + " " + category;
+    return "Id: " + id + ", Name: " + name + ", Category: " + category;
   }
 
   @Override

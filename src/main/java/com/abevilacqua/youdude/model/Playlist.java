@@ -50,7 +50,7 @@ public class Playlist {
 
   @Override
   public String toString() {
-    return id + " " + name;
+    return "Id: " + id + ", Name: " + name;
   }
 
   @Override

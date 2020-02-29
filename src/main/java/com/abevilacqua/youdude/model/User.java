@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 public class User {
 
-  private int hashCode; // Lazyli initialized cached hash code.
+  private int hashCode; // Lazily initialized cached hash code.
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +34,7 @@ public class User {
 
   @Override
   public String toString() {
-    return id + " " + name + " " + creationDate;
+    return "Id: " + id + ", Name: " + name + ", Creation Date: " + creationDate;
   }
 
   @Override
