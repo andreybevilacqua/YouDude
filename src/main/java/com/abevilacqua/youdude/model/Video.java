@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 public final class Video {
 
-  private int hashCode;
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "video_id")
@@ -90,14 +88,11 @@ public final class Video {
 
   @Override
   public int hashCode() {
-    int result = hashCode;
-    if(result == 0) {
-      result = Long.hashCode(id);
-      result = 31 * result + name.hashCode();
-      result = 31 * result + Integer.hashCode(duration);
-      result = 31 * result + category.hashCode();
-      hashCode = result;
-    }
+    int result;
+    result = Long.hashCode(id);
+    result = 31 * result + name.hashCode();
+    result = 31 * result + Integer.hashCode(duration);
+    result = 31 * result + category.hashCode();
     return result;
   }
 }
