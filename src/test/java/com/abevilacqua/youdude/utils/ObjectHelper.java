@@ -26,6 +26,14 @@ public final class ObjectHelper {
     return User.newInstance("Default User", LocalDate.now());
   }
 
+  public static Video updateDefaultVideo(Video video) {
+    return Video.newInstanceWithId(video.getId(), video.getName() + " default update",
+        video.getSubject(),
+        video.getDuration(),
+        video.getCategory(),
+        video.getUser());
+  }
+
   public static Video createDefaultVideo(User user) {
     return Video.newInstance("New video", "New subject", 20, COMEDY, user);
   }

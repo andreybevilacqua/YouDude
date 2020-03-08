@@ -1,7 +1,6 @@
 package com.abevilacqua.youdude.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -20,26 +19,21 @@ public final class Video {
 
   @Column(name = "name")
   @NotEmpty
-  @Setter
   private String name;
 
   @Column(name = "subject")
   @NotEmpty
-  @Setter
   private String subject;
 
   @Column(name = "duration")
   @NotNull
-  @Setter
   private int duration;
 
   @Column(name = "category")
-  @Setter
   private Category category;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  @Setter
   private User user;
 
   Video(){}
@@ -56,12 +50,37 @@ public final class Video {
     this.user = user;
   }
 
-  public static Video newInstance(final String name,
-                                  final String subject,
-                                  final int duration,
-                                  final Category category,
-                                  final User user) {
+  Video(final long id,
+        final String name,
+        final String subject,
+        final int duration,
+        final Category category,
+        final User user) {
+    this.id = id;
+    this.name = name;
+    this.subject = subject;
+    this.duration = duration;
+    this.category = category;
+    this.user = user;
+  }
+
+  public static Video newInstance(
+      final String name,
+      final String subject,
+      final int duration,
+      final Category category,
+      final User user) {
     return new Video(name, subject, duration, category, user);
+  }
+
+  public static Video newInstanceWithId(
+      final long id,
+      final String name,
+      final String subject,
+      final int duration,
+      final Category category,
+      final User user) {
+    return new Video(id, name, subject, duration, category, user);
   }
 
   @Override

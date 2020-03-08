@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,9 +20,10 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
+import static com.abevilacqua.youdude.utils.ObjectHelper.updateDefaultVideo;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +51,7 @@ class VideoControllerLevel2Test {
   @DisplayName("Should find all videos")
   void shouldFindAllVideos() throws Exception {
     mockMvc.perform(get(URL)
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.[0].video_id").exists())
         .andExpect(jsonPath("$.content.[0].video_id").isNumber())
@@ -66,7 +66,7 @@ class VideoControllerLevel2Test {
   @DisplayName("Should find all videos from an user")
   void shouldFindAllVideosFromUser() throws Exception {
     mockMvc.perform(get(URL + "/4")
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.video_id").exists())
         .andExpect(jsonPath("$.video_id").isNumber())
@@ -78,19 +78,40 @@ class VideoControllerLevel2Test {
   }
 
   @Test
-  @DisplayName("Should create a new user")
+  @DisplayName("Should create a new video")
   void shouldCreateVideo() throws Exception {
     CompletableFuture<Page<User>> completableFuture = userService.getAllUsers(0, 10, "name");
     Optional<User> user = completableFuture.join().stream().findFirst();
     if(user.isPresent()) {
       Video video = ObjectHelper.createDefaultVideo(user.get());
       mockMvc.perform(post(URL)
-          .contentType(MediaType.APPLICATION_JSON)
+          .contentType(APPLICATION_JSON)
           .content(mapToJSON(video)))
           .andExpect(status().isCreated())
           .andExpect(jsonPath("$.video_id").exists())
           .andExpect(jsonPath("$.video_id").isNumber())
           .andExpect(jsonPath("$.name").isString())
+          .andExpect(jsonPath("$.subject").isString())
+          .andExpect(jsonPath("$.duration").isNumber())
+          .andExpect(jsonPath("$.category").isString())
+          .andExpect(jsonPath("$.user_id", is(1)));
+    }
+  }
+
+  @Test
+  @DisplayName("Should update a new video")
+  void shouldUpdateVideo() throws Exception {
+    Optional<Video> optionalVideo = videoService.getAllVideos().join().stream().findFirst();
+    if(optionalVideo.isPresent()) {
+      Video video = updateDefaultVideo(optionalVideo.get());
+      mockMvc.perform(put(URL)
+          .contentType(APPLICATION_JSON)
+          .content(mapToJSON(video)))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.video_id").exists())
+          .andExpect(jsonPath("$.video_id").isNumber())
+          .andExpect(jsonPath("$.name").isString())
+          .andExpect(jsonPath("$.name").value(video.getName()))
           .andExpect(jsonPath("$.subject").isString())
           .andExpect(jsonPath("$.duration").isNumber())
           .andExpect(jsonPath("$.category").isString())
