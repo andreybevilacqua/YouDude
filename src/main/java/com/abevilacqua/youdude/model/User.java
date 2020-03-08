@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Immutable
 @AllArgsConstructor
-public final class User {
+public final class User implements Comparable<User>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,5 +53,10 @@ public final class User {
     result = 31 * result + name.hashCode();
     result = 31 * result + creationDate.hashCode();
     return result;
+  }
+
+  @Override
+  public int compareTo(User o) {
+    return String.CASE_INSENSITIVE_ORDER.compare(name, o.getName());
   }
 }

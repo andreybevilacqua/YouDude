@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Immutable
 @AllArgsConstructor
-public final class Playlist {
+public final class Playlist implements Comparable<Playlist> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -62,5 +62,10 @@ public final class Playlist {
     result = 31 * result + name.hashCode();
     for(Video video : videos) { result = 31 * result + video.hashCode(); }
     return result;
+  }
+
+  @Override
+  public int compareTo(Playlist o) {
+    return String.CASE_INSENSITIVE_ORDER.compare(name, o.getName());
   }
 }

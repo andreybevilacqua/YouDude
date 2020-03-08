@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
-public final class Video {
+public final class Video implements Comparable<Video>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -94,5 +94,10 @@ public final class Video {
     result = 31 * result + Integer.hashCode(duration);
     result = 31 * result + category.hashCode();
     return result;
+  }
+
+  @Override
+  public int compareTo(Video o) {
+    return String.CASE_INSENSITIVE_ORDER.compare(name, o.getName());
   }
 }
