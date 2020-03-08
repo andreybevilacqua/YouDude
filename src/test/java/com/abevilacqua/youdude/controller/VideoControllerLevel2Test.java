@@ -65,16 +65,16 @@ class VideoControllerLevel2Test {
   @Test
   @DisplayName("Should find all videos from an user")
   void shouldFindAllVideosFromUser() throws Exception {
-    mockMvc.perform(get(URL + "/1")
+    mockMvc.perform(get(URL + "/4")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.content.[0].video_id").exists())
-        .andExpect(jsonPath("$.content.[0].video_id").isNumber())
-        .andExpect(jsonPath("$.content.[0].name").isString())
-        .andExpect(jsonPath("$.content.[0].subject").isString())
-        .andExpect(jsonPath("$.content.[0].duration").isNumber())
-        .andExpect(jsonPath("$.content.[0].category").isString())
-        .andExpect(jsonPath("$.content.[0].user_id", is(1)));
+        .andExpect(jsonPath("$.video_id").exists())
+        .andExpect(jsonPath("$.video_id").isNumber())
+        .andExpect(jsonPath("$.name").isString())
+        .andExpect(jsonPath("$.subject").isString())
+        .andExpect(jsonPath("$.duration").isNumber())
+        .andExpect(jsonPath("$.category").isString())
+        .andExpect(jsonPath("$.user_id", is(1)));
   }
 
   @Test

@@ -11,12 +11,13 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Video {
+public final class Video {
 
   private int hashCode;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "video_id")
   private long id;
 
   @Column(name = "name")

@@ -54,9 +54,9 @@ public class VideoController_Level2 {
     return new ResponseEntity<PageImplDTO<VideoDTO>>(pageMapper(videos), HttpStatus.OK);
   }
 
-  @GetMapping("/{user_id}")
-  public ResponseEntity<VideoDTO> getVideoById(@PathVariable("user_id") final long user_id) {
-    CompletableFuture<Optional<Video>> completableFuture = videoService.getVideoById(user_id);
+  @GetMapping("/{id}")
+  public ResponseEntity<VideoDTO> getVideoById(@PathVariable("id") final long id) {
+    CompletableFuture<Optional<Video>> completableFuture = videoService.getVideoById(id);
     return completableFuture
         .join()
         .map(video -> new ResponseEntity<>(VideoDTO.mapper(video), HttpStatus.OK))
