@@ -99,7 +99,7 @@ class VideoControllerLevel2Test {
   }
 
   @Test
-  @DisplayName("Should update a new video")
+  @DisplayName("Should update video")
   void shouldUpdateVideo() throws Exception {
     Optional<Video> optionalVideo = videoService.getAllVideos().join().stream().findFirst();
     if(optionalVideo.isPresent()) {

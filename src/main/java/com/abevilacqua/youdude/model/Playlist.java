@@ -29,7 +29,15 @@ public final class Playlist {
   private User user;
 
   Playlist(){}
+
   Playlist(final String name, final User user, final List<Video> videos) {
+    this.name = name;
+    this.user = user;
+    this.videos = videos;
+  }
+
+  Playlist(final long id, final String name, final User user, final List<Video> videos) {
+    this.id = id;
     this.name = name;
     this.user = user;
     this.videos = videos;
@@ -39,6 +47,14 @@ public final class Playlist {
                                      final User user,
                                      final List<Video> videos) {
     return new Playlist(name, user, videos);
+  }
+
+  public static Playlist newInstanceWithId(
+      final long id,
+      final String name,
+      final User user,
+      final List<Video> videos) {
+    return new Playlist(id, name, user, videos);
   }
 
   @Override

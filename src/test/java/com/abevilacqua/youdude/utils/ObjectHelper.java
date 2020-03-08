@@ -1,5 +1,6 @@
 package com.abevilacqua.youdude.utils;
 
+import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,6 +27,10 @@ public final class ObjectHelper {
     return User.newInstance("Default User", LocalDate.now());
   }
 
+  public static Video createDefaultVideo(User user) {
+    return Video.newInstance("New video", "New subject", 20, COMEDY, user);
+  }
+
   public static Video updateDefaultVideo(Video video) {
     return Video.newInstanceWithId(video.getId(), video.getName() + " default update",
         video.getSubject(),
@@ -34,8 +39,11 @@ public final class ObjectHelper {
         video.getUser());
   }
 
-  public static Video createDefaultVideo(User user) {
-    return Video.newInstance("New video", "New subject", 20, COMEDY, user);
+  public static Playlist updateDefaultPlaylist(Playlist playlist) {
+    return Playlist.newInstanceWithId(playlist.getId(),
+        playlist.getName() + " default update",
+        playlist.getUser(),
+        playlist.getVideos());
   }
 
 }

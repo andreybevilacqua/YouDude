@@ -116,6 +116,19 @@ public class PlaylistService {
   }
 
   @Async
+  public CompletableFuture<Playlist> updatePlaylist(final Playlist playlist) {
+    System.out.println("Thread running updatePlaylist service: " + Thread.currentThread());
+    return supplyAsync(() -> {
+      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+      Playlist playlist1
+          = Playlist.newInstanceWithId(playlist.getId(), playlist.getName(), playlist.getUser(), playlist.getVideos());
+      playlistRepo.deleteById(playlist1.getId());
+      playlistRepo.save(playlist1);
+      return playlist1;
+    });
+  }
+
+  @Async
   public CompletableFuture<Optional<Playlist>> deletePlaylist(final long playlist_id) {
     Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
     System.out.println("Thread running deletePlaylist service: " + Thread.currentThread());
