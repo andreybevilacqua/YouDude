@@ -1,7 +1,6 @@
 package com.abevilacqua.youdude.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public final class Video {
 
@@ -44,16 +42,26 @@ public final class Video {
   @Setter
   private User user;
 
-  public Video(final String name,
-               final String subject,
-               final int duration,
-               final Category category,
-               final User user) {
+  Video(){}
+
+  Video(final String name,
+        final String subject,
+        final int duration,
+        final Category category,
+        final User user) {
     this.name = name;
     this.subject = subject;
     this.duration = duration;
     this.category = category;
     this.user = user;
+  }
+
+  public static Video newInstance(final String name,
+                                  final String subject,
+                                  final int duration,
+                                  final Category category,
+                                  final User user) {
+    return new Video(name, subject, duration, category, user);
   }
 
   @Override

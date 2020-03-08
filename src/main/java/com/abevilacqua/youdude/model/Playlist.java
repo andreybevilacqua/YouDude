@@ -1,15 +1,15 @@
 package com.abevilacqua.youdude.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @Getter
-public class Playlist {
+@Immutable
+public final class Playlist {
 
   private int hashCode;
 
@@ -28,24 +28,17 @@ public class Playlist {
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Playlist(final String name,
-                  final User user) {
-    this.name = name;
-    this.user = user;
-  }
-
-  public static Playlist playlistWithVideos(final String name,
-                                            final User user,
-                                            final List<Video> videos) {
-    return new Playlist(name, user, videos);
-  }
-
-  private Playlist(final String name,
-                   final User user,
-                   final List<Video> videos) {
+  Playlist(){}
+  Playlist(final String name, final User user, final List<Video> videos) {
     this.name = name;
     this.user = user;
     this.videos = videos;
+  }
+
+  public static Playlist newInstance(final String name,
+                                     final User user,
+                                     final List<Video> videos) {
+    return new Playlist(name, user, videos);
   }
 
   @Override

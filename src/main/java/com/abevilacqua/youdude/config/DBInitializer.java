@@ -10,10 +10,11 @@ import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
 import org.springframework.boot.ApplicationRunner;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.abevilacqua.youdude.model.Playlist.playlistWithVideos;
+import static java.util.Collections.EMPTY_LIST;
 
 public final class DBInitializer {
 
@@ -68,26 +69,22 @@ public final class DBInitializer {
       List<Video> bestOfList = videoRepoPageable.findAllByCategory(Category.BEST_OF);
 
       Stream.of(
-          playlistWithVideos("playlist-1", user1, comedyList),
-          playlistWithVideos("playlist-2", user1, educationalList),
-          playlistWithVideos("playlist-3", user2, vlogList),
-          playlistWithVideos("playlist-4", user2, unboxingList),
-          playlistWithVideos("playlist-5", user3, howToList),
-          playlistWithVideos("playlist-6", user3, gamingList),
-          playlistWithVideos("playlist-7", user3, bestOfList),
-          createPlaylist("playlist-8", user1),
-          createPlaylist("playlist-9", user1),
-          createPlaylist("playlist-10", user1))
+          Playlist.newInstance("playlist-1", user1, comedyList),
+          Playlist.newInstance("playlist-2", user1, educationalList),
+          Playlist.newInstance("playlist-3", user2, vlogList),
+          Playlist.newInstance("playlist-4", user2, unboxingList),
+          Playlist.newInstance("playlist-5", user3, howToList),
+          Playlist.newInstance("playlist-6", user3, gamingList),
+          Playlist.newInstance("playlist-7", user3, bestOfList),
+          Playlist.newInstance("playlist-8", user1, EMPTY_LIST),
+          Playlist.newInstance("playlist-9", user1, EMPTY_LIST),
+          Playlist.newInstance("playlist-10", user1, EMPTY_LIST))
           .forEach(playlistRepoPageable::save);
     };
   }
 
   private static Video createVideo(String name, String subject, int duration, Category category, User user){
-    return new Video(name, subject, duration, category, user);
-  }
-
-  private static Playlist createPlaylist(String name, User user) {
-    return new Playlist(name, user);
+    return Video.newInstance(name, subject, duration, category, user);
   }
 
 }

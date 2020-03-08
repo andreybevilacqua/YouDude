@@ -27,7 +27,7 @@ public final class ObjectHelper {
   }
 
   public static Video createDefaultVideo(User user) {
-    return new Video("New video", "New subject", 20, COMEDY, user);
+    return Video.newInstance("New video", "New subject", 20, COMEDY, user);
   }
 
 }
