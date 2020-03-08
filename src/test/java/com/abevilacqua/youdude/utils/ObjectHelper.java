@@ -23,7 +23,7 @@ public final class ObjectHelper {
   }
 
   public static User createDefaultUser() {
-    return new User("Default User", LocalDate.now());
+    return User.newInstance("Default User", LocalDate.now());
   }
 
   public static Video createDefaultVideo(User user) {

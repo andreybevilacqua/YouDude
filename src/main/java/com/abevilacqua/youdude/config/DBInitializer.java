@@ -20,9 +20,9 @@ public final class DBInitializer {
   public static ApplicationRunner initDB(UserRepoPageable userRepoPageable,
                                          PlaylistRepoPageable playlistRepoPageable,
                                          VideoRepoPageable videoRepoPageable) {
-    User user1 = new User("user-1", LocalDate.now());
-    User user2 = new User("user-2", LocalDate.now());
-    User user3 = new User("user-3", LocalDate.now());
+    User user1 = User.newInstance("user-1", LocalDate.now());
+    User user2 = User.newInstance("user-2", LocalDate.now());
+    User user3 = User.newInstance("user-3", LocalDate.now());
 
     return args -> {
       Stream.of(user1, user2, user3)

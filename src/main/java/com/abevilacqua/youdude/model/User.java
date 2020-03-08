@@ -2,15 +2,15 @@ package com.abevilacqua.youdude.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@NoArgsConstructor
 @Getter
-public class User {
+@Immutable
+public final class User {
 
   private int hashCode; // Lazily initialized cached hash code.
 
@@ -26,10 +26,15 @@ public class User {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 
-  public User(final String name,
-              final LocalDate creationDate) {
+  User(){}
+
+  User(final String name, final LocalDate creationDate) {
     this.name = name;
     this.creationDate = creationDate;
+  }
+
+  public static User newInstance(final String name, final LocalDate creationDate) {
+    return new User(name, creationDate);
   }
 
   @Override
