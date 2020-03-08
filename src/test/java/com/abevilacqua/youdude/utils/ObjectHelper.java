@@ -42,8 +42,8 @@ public final class ObjectHelper {
   public static Playlist updateDefaultPlaylist(Playlist playlist) {
     return Playlist.newInstanceWithId(playlist.getId(),
         playlist.getName() + " default update",
-        playlist.getUser(),
-        playlist.getVideos());
+        playlist.getVideos(),
+        playlist.getUser());
   }
 
 }

@@ -1,6 +1,7 @@
 package com.abevilacqua.youdude.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 
@@ -10,9 +11,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Immutable
+@AllArgsConstructor
 public final class User {
-
-  private int hashCode; // Lazily initialized cached hash code.
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,6 +37,10 @@ public final class User {
     return new User(name, creationDate);
   }
 
+  public static User newInstanceWithId(final long id, final String name, final LocalDate creationDate) {
+    return new User(id, name, creationDate);
+  }
+
   @Override
   public String toString() {
     return "Id: " + id + ", Name: " + name + ", Creation Date: " + creationDate;
@@ -44,13 +48,10 @@ public final class User {
 
   @Override
   public int hashCode() {
-    int result = hashCode;
-    if(result == 0) {
-      result = Long.hashCode(id);
-      result = 31 * result + name.hashCode();
-      result = 31 * result + creationDate.hashCode();
-      hashCode = result;
-    }
+    int result;
+    result = Long.hashCode(id);
+    result = 31 * result + name.hashCode();
+    result = 31 * result + creationDate.hashCode();
     return result;
   }
 }

@@ -120,11 +120,11 @@ public class PlaylistService {
     System.out.println("Thread running updatePlaylist service: " + Thread.currentThread());
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      Playlist playlist1
-          = Playlist.newInstanceWithId(playlist.getId(), playlist.getName(), playlist.getUser(), playlist.getVideos());
-      playlistRepo.deleteById(playlist1.getId());
-      playlistRepo.save(playlist1);
-      return playlist1;
+      Playlist newPlaylist
+          = Playlist.newInstanceWithId(playlist.getId(), playlist.getName(), playlist.getVideos(), playlist.getUser());
+      playlistRepo.deleteById(playlist.getId());
+      playlistRepo.save(newPlaylist);
+      return newPlaylist;
     });
   }
 

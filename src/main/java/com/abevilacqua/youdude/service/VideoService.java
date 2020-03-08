@@ -125,17 +125,14 @@ public class VideoService {
 
   @Async
   public CompletableFuture<Optional<Video>> updateVideo(final Video video) {
-    Optional<Video> optVideo = videoRepoPageable.findById(video.getId());
+    Optional<Video> optVideo = videoRepo.findById(video.getId());
     if(optVideo.isPresent()) {
-      Video tempVideo = Video
-          .newInstance(video.getName(),
-              video.getSubject(),
-              video.getDuration(),
-              video.getCategory(),
-              video.getUser());
       return supplyAsync(() -> {
         System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-        return Optional.of(videoRepoPageable.save(tempVideo));
+        Video tempVideo
+            = Video.newInstance(video.getName(), video.getSubject(), video.getDuration(), video.getCategory(), video.getUser());
+        videoRepo.deleteById(video.getId());
+        return Optional.of(videoRepo.save(tempVideo));
       });
     }
     else return completedFuture(Optional.empty());

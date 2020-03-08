@@ -1,5 +1,6 @@
 package com.abevilacqua.youdude.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 
@@ -9,9 +10,8 @@ import java.util.List;
 @Entity
 @Getter
 @Immutable
+@AllArgsConstructor
 public final class Playlist {
-
-  private int hashCode;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,13 +36,6 @@ public final class Playlist {
     this.videos = videos;
   }
 
-  Playlist(final long id, final String name, final User user, final List<Video> videos) {
-    this.id = id;
-    this.name = name;
-    this.user = user;
-    this.videos = videos;
-  }
-
   public static Playlist newInstance(final String name,
                                      final User user,
                                      final List<Video> videos) {
@@ -52,9 +45,9 @@ public final class Playlist {
   public static Playlist newInstanceWithId(
       final long id,
       final String name,
-      final User user,
-      final List<Video> videos) {
-    return new Playlist(id, name, user, videos);
+      final List<Video> videos,
+      final User user) {
+    return new Playlist(id, name, videos, user);
   }
 
   @Override
@@ -64,13 +57,10 @@ public final class Playlist {
 
   @Override
   public int hashCode() {
-    int result = hashCode;
-    if(result == 0) {
-      result = Long.hashCode(id);
-      result = 31 * result + name.hashCode();
-      for(Video video : videos) { result = 31 * result + video.hashCode(); }
-      hashCode = result;
-    }
+    int result;
+    result = Long.hashCode(id);
+    result = 31 * result + name.hashCode();
+    for(Video video : videos) { result = 31 * result + video.hashCode(); }
     return result;
   }
 }
