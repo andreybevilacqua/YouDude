@@ -99,7 +99,7 @@ public class PlaylistService {
     System.out.println("Thread running createPlaylist service: " + Thread.currentThread());
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return playlistRepoPageable.save(playlist);
+      return playlistRepo.save(playlist);
     });
   }
 
@@ -107,7 +107,7 @@ public class PlaylistService {
     Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
     System.out.println("Thread running deletePlaylist service: " + Thread.currentThread());
     if(playlist.isPresent()) {
-      playlistRepoPageable.delete(playlist.get());
+      playlistRepo.delete(playlist.get());
       return supplyAsync(() -> {
         System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
         return playlist;

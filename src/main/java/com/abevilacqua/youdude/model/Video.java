@@ -1,6 +1,7 @@
 package com.abevilacqua.youdude.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +14,7 @@ public final class Video implements Comparable<Video>{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "video_id")
+  @Setter
   private long id;
 
   @Column(name = "name")

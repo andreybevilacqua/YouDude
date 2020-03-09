@@ -96,7 +96,7 @@ public class VideoService {
   public CompletableFuture<Video> createVideo(final Video video) {
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return videoRepoPageable.save(video);
+      return videoRepo.save(video);
     });
   }
 
@@ -105,7 +105,7 @@ public class VideoService {
     if(video.isPresent()) {
       return supplyAsync(() -> {
         System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-        videoRepoPageable.delete(video.get());
+        videoRepo.delete(video.get());
         return video;
       });
     }

@@ -3,6 +3,7 @@ package com.abevilacqua.youdude.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public final class User implements Comparable<User>{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "user_id")
+  @Setter
   private long id;
 
   @Column(name = "name")

@@ -6,7 +6,6 @@ import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class UserService {
     this.userRepo = userRepo;
   }
 
-  @Async
   @Cacheable("getAllUsersPageable")
   public CompletableFuture<Page<User>> getAllUsers(final int page,
                                                    final int size,
@@ -39,7 +37,6 @@ public class UserService {
     return getAll(userRepoPageable, page, size, sortBy);
   }
 
-  @Async
   @Cacheable("getAllUsers")
   public CompletableFuture<List<User>> getAllUsers() {
     System.out.println("Thread running getAllUsers service: " + Thread.currentThread());
@@ -49,7 +46,6 @@ public class UserService {
     });
   }
 
-  @Async
   @Cacheable("getById")
   public CompletableFuture<Optional<User>> getById(final long id) {
     System.out.println("Thread running getAllUsers pageable service: " + Thread.currentThread());
@@ -60,12 +56,11 @@ public class UserService {
     });
   }
 
-  @Async
   public CompletableFuture<User> createUser(final User user) {
     System.out.println("Thread running createUser service: " + Thread.currentThread());
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return userRepoPageable.save(user);
+      return userRepo.save(user);
     });
   }
 
