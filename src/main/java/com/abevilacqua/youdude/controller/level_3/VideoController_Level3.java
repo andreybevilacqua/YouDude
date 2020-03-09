@@ -85,15 +85,6 @@ public class VideoController_Level3 {
     return new ResponseEntity<>(videoResource, HttpStatus.CREATED);
   }
 
-  @PutMapping
-  public ResponseEntity<VideoResource> updateVideo(@RequestBody final Video video) {
-    CompletableFuture<Optional<Video>> completableFuture = videoService.updateVideo(video);
-    return completableFuture
-        .join()
-        .map(newVideo -> new ResponseEntity<>(new VideoResourceAssembler().toModel(newVideo), HttpStatus.OK))
-        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-  }
-
   @DeleteMapping("/{video_id}")
   public ResponseEntity<VideoResource> deleteVideo(@PathVariable(value = "video_id") final long video_id) {
     CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);

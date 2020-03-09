@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +18,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
-import static java.util.concurrent.CompletableFuture.*;
+import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service
 public class VideoService {
@@ -39,7 +39,6 @@ public class VideoService {
     this.videoRepo = videoRepo;
   }
 
-  @Async
   @Cacheable("getAllVideosPageable")
   public CompletableFuture<Page<Video>> getAllVideos(final int page,
                                                      final int size,
@@ -52,7 +51,6 @@ public class VideoService {
     });
   }
 
-  @Async
   @Cacheable("getAllVideos")
   public CompletableFuture<List<Video>> getAllVideos() {
     simulateSlowService();
@@ -62,7 +60,6 @@ public class VideoService {
     });
   }
 
-  @Async
   @Cacheable("getAllFromUserPageable")
   public CompletableFuture<Page<Video>> getAllFromUser(final long user_id,
                                                        final int page,
@@ -79,7 +76,6 @@ public class VideoService {
         .orElseGet(() -> completedFuture(Page.empty()));
   }
 
-  @Async
   @Cacheable("getAllFromUser")
   public CompletableFuture<List<Video>> getAllFromUser(final long user_id) {
     simulateSlowService();
@@ -92,7 +88,6 @@ public class VideoService {
         .orElseGet(() -> completedFuture(new ArrayList<>()));
   }
 
-  @Async
   @Cacheable("getVideoById")
   public CompletableFuture<Optional<Video>> getVideoById(final long id) {
     simulateSlowService();
@@ -102,7 +97,6 @@ public class VideoService {
     });
   }
 
-  @Async
   public CompletableFuture<Video> createVideo(final Video video) {
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
@@ -110,7 +104,6 @@ public class VideoService {
     });
   }
 
-  @Async
   public CompletableFuture<Optional<Video>> deleteVideo(final long video_id) {
     Optional<Video> video = videoRepoPageable.findById(video_id);
     if(video.isPresent()) {
@@ -118,21 +111,6 @@ public class VideoService {
         System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
         videoRepoPageable.delete(video.get());
         return video;
-      });
-    }
-    else return completedFuture(Optional.empty());
-  }
-
-  @Async
-  public CompletableFuture<Optional<Video>> updateVideo(final Video video) {
-    Optional<Video> optVideo = videoRepo.findById(video.getId());
-    if(optVideo.isPresent()) {
-      return supplyAsync(() -> {
-        System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-        Video tempVideo
-            = Video.newInstance(video.getName(), video.getSubject(), video.getDuration(), video.getCategory(), video.getUser());
-        videoRepo.deleteById(video.getId());
-        return Optional.of(videoRepo.save(tempVideo));
       });
     }
     else return completedFuture(Optional.empty());

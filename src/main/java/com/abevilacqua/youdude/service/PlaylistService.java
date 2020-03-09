@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class PlaylistService {
     this.playlistRepo = playlistRepo;
   }
 
-  @Async
   @Cacheable("getAllPlaylistsPageable")
   public CompletableFuture<Page<Playlist>> getAllPlaylists(final int page,
                                                            final int size,
@@ -52,7 +50,6 @@ public class PlaylistService {
     });
   }
 
-  @Async
   @Cacheable("getAllPlaylists")
   public CompletableFuture<List<Playlist>> getAllPlaylists() {
     simulateSlowService();
@@ -63,7 +60,6 @@ public class PlaylistService {
     });
   }
 
-  @Async
   @Cacheable("getAllFromUserPageable")
   public CompletableFuture<Page<Playlist>> getAllFromUser(final int page,
                                                           final int size,
@@ -81,7 +77,6 @@ public class PlaylistService {
         .orElseGet(() -> completedFuture((Page.empty())));
   }
 
-  @Async
   @Cacheable("getAllFromUser")
   public CompletableFuture<List<Playlist>> getAllFromUser(final long user_id) {
     simulateSlowService();
@@ -95,7 +90,6 @@ public class PlaylistService {
         .orElseGet(() -> completedFuture(new ArrayList<>()));
   }
 
-  @Async
   @Cacheable("getAllById")
   public CompletableFuture<Optional<Playlist>> getById(final long playlist_id) {
     simulateSlowService();
@@ -106,7 +100,6 @@ public class PlaylistService {
     });
   }
 
-  @Async
   public CompletableFuture<Playlist> createPlaylist(final Playlist playlist) {
     System.out.println("Thread running createPlaylist service: " + Thread.currentThread());
     return supplyAsync(() -> {
@@ -115,20 +108,6 @@ public class PlaylistService {
     });
   }
 
-  @Async
-  public CompletableFuture<Playlist> updatePlaylist(final Playlist playlist) {
-    System.out.println("Thread running updatePlaylist service: " + Thread.currentThread());
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      Playlist newPlaylist
-          = Playlist.newInstanceWithId(playlist.getId(), playlist.getName(), playlist.getVideos(), playlist.getUser());
-      playlistRepo.deleteById(playlist.getId());
-      playlistRepo.save(newPlaylist);
-      return newPlaylist;
-    });
-  }
-
-  @Async
   public CompletableFuture<Optional<Playlist>> deletePlaylist(final long playlist_id) {
     Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
     System.out.println("Thread running deletePlaylist service: " + Thread.currentThread());

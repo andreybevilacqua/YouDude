@@ -61,12 +61,6 @@ public class PlaylistController_Level2 {
     return new ResponseEntity<>(mapper(playlistCompletableFuture.join()), HttpStatus.CREATED);
   }
 
-  @PutMapping
-  public ResponseEntity<PlaylistDTO> updatePlaylist(@RequestBody final Playlist playlist) {
-    CompletableFuture<Playlist> playlistCompletableFuture = playlistService.updatePlaylist(playlist);
-    return new ResponseEntity<>(mapper(playlistCompletableFuture.join()), HttpStatus.OK);
-  }
-
   @DeleteMapping("/{playlist_id}")
   public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") final long playlist_id) {
     CompletableFuture<Optional<Playlist>> optionalCompletableFuture = playlistService.deletePlaylist(playlist_id);
