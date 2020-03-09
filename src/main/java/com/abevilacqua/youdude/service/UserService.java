@@ -6,9 +6,6 @@ import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
+import static com.abevilacqua.youdude.service.GenericService.getAll;
+import static com.abevilacqua.youdude.service.GenericService.simulateSlowService;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service
@@ -38,12 +36,7 @@ public class UserService {
                                                    final int size,
                                                    final String sortBy) {
     System.out.println("Thread running getAllUsers pageable service: " + Thread.currentThread());
-    simulateSlowService();
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return userRepoPageable.findAll(pageable);
-    });
+    return getAll(userRepoPageable, page, size, sortBy);
   }
 
   @Async

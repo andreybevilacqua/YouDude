@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
+import static com.abevilacqua.youdude.service.GenericService.getAll;
+import static com.abevilacqua.youdude.service.GenericService.simulateSlowService;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
@@ -43,12 +44,7 @@ public class VideoService {
   public CompletableFuture<Page<Video>> getAllVideos(final int page,
                                                      final int size,
                                                      final String sortBy) {
-    simulateSlowService();
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return videoRepoPageable.findAll(pageable);
-    });
+    return getAll(videoRepoPageable, page, size, sortBy);
   }
 
   @Cacheable("getAllVideos")

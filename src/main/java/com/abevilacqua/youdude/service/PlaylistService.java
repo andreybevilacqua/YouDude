@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static com.abevilacqua.youdude.service.helper.ServiceHelper.simulateSlowService;
+import static com.abevilacqua.youdude.service.GenericService.getAll;
+import static com.abevilacqua.youdude.service.GenericService.simulateSlowService;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
@@ -41,13 +42,7 @@ public class PlaylistService {
   public CompletableFuture<Page<Playlist>> getAllPlaylists(final int page,
                                                            final int size,
                                                            final String sortBy) {
-    simulateSlowService();
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    System.out.println("Thread running getAllPlaylists pageable service: " + Thread.currentThread());
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return playlistRepoPageable.findAll(pageable);
-    });
+    return getAll(playlistRepoPageable, page, size, sortBy);
   }
 
   @Cacheable("getAllPlaylists")

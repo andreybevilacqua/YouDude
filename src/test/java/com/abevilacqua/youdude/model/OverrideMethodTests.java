@@ -1,12 +1,12 @@
 package com.abevilacqua.youdude.model;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultVideo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class OverrideTests {
+public class OverrideMethodTests {
 
   private User user = createDefaultUser();
   private Video video = createDefaultVideo(user);
@@ -22,13 +22,10 @@ public class OverrideTests {
 
   @Test
   public void shouldCalculateHashCode() {
-    System.out.println("HashCode for user: " + user.hashCode());
-    System.out.println("HashCode for video: " + video.hashCode());
-
     User anotherUser = createDefaultUser();
-    System.out.println("First hashcode: " + user.hashCode());
-    System.out.println("Second hashcode: " + anotherUser.hashCode());
+    Video anotherVideo = createDefaultVideo(anotherUser);
 
-    Assertions.assertEquals(user.hashCode(), anotherUser.hashCode());
+    assertEquals(user.hashCode(), anotherUser.hashCode());
+    assertEquals(video.hashCode(), anotherVideo.hashCode());
   }
 }
