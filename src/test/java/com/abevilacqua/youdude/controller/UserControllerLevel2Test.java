@@ -15,18 +15,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserControllerLevel3Level2Test {
+class UserControllerLevel2Test {
 
   @Autowired
   private UserService userService;
@@ -45,7 +47,7 @@ class UserControllerLevel3Level2Test {
   @DisplayName("Should find all users")
   void shouldFindAllUsers() throws Exception {
     mockMvc.perform(get(URL)
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.[0].id").exists())
         .andExpect(jsonPath("$.content.[0].id").isNumber())
@@ -66,7 +68,7 @@ class UserControllerLevel3Level2Test {
   void shouldFindUserById() throws Exception {
     String id = "/" + 1;
     mockMvc.perform(get(URL + id)
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.id", is(1)))
@@ -81,7 +83,7 @@ class UserControllerLevel3Level2Test {
   void shouldCreateUser() throws Exception {
     User user = createDefaultUser();
     mockMvc.perform(post(URL)
-        .contentType(MediaType.APPLICATION_JSON)
+        .contentType(APPLICATION_JSON)
         .content(mapToJSON(user)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
@@ -89,5 +91,29 @@ class UserControllerLevel3Level2Test {
         .andExpect(jsonPath("$.name", is("Default User")))
         .andExpect(jsonPath("$.creationDate").exists())
         .andExpect(jsonPath("$.creationDate", is(LocalDate.now().toString())));
+  }
+
+  @Test
+  @DisplayName("Should delete user")
+  void shouldDeleteUser() throws Exception {
+    Optional<User> user = userService
+        .getAllUsers()
+        .join()
+        .stream()
+        .findFirst();
+    if(user.isPresent()) {
+      mockMvc.perform(delete(URL+ "/" + user.get().getId())
+          .contentType(APPLICATION_JSON))
+          .andDo(print())
+          .andExpect(status().isOk());
+    }
+  }
+
+  @Test
+  @DisplayName("Should fail during user delete process")
+  void shouldFailDuringUserDeleteProcess() throws Exception {
+    mockMvc.perform(delete(URL + "/" + 9999)
+        .contentType(APPLICATION_JSON))
+        .andExpect(status().isNotFound());
   }
 }

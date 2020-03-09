@@ -63,7 +63,7 @@ public class UserService {
     simulateSlowService();
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return userRepoPageable.findById(id);
+      return userRepo.findById(id);
     });
   }
 
@@ -74,6 +74,15 @@ public class UserService {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
       return userRepoPageable.save(user);
     });
+  }
+
+  public Optional<User> deleteUser(final long id) {
+    Optional<User> userOptional = userRepo.findById(id);
+    userOptional.ifPresent(user -> {
+      System.out.println("Thread running deleteUser service: " + Thread.currentThread());
+      userRepo.deleteById(id);
+    });
+    return userOptional;
   }
 
 }

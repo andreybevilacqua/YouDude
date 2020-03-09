@@ -52,4 +52,12 @@ public class UserController_Level2 {
     return new ResponseEntity<>(completableFuture.join(), HttpStatus.CREATED);
   }
 
+  @DeleteMapping("/{id}")
+  public ResponseEntity<User> deleteUser(@PathVariable("id") final long id) {
+    if(id < 0) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    return userService.deleteUser(id)
+        .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
 }
