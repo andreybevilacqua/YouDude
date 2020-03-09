@@ -20,10 +20,10 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
-import static com.abevilacqua.youdude.utils.ObjectHelper.updateDefaultVideo;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,24 +98,4 @@ class VideoControllerLevel2Test {
     }
   }
 
-  @Test
-  @DisplayName("Should update video")
-  void shouldUpdateVideo() throws Exception {
-    Optional<Video> optionalVideo = videoService.getAllVideos().join().stream().findFirst();
-    if(optionalVideo.isPresent()) {
-      Video video = updateDefaultVideo(optionalVideo.get());
-      mockMvc.perform(put(URL)
-          .contentType(APPLICATION_JSON)
-          .content(mapToJSON(video)))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$.video_id").exists())
-          .andExpect(jsonPath("$.video_id").isNumber())
-          .andExpect(jsonPath("$.name").isString())
-          .andExpect(jsonPath("$.name").value(video.getName()))
-          .andExpect(jsonPath("$.subject").isString())
-          .andExpect(jsonPath("$.duration").isNumber())
-          .andExpect(jsonPath("$.category").isString())
-          .andExpect(jsonPath("$.user_id", is(1)));
-    }
-  }
 }
