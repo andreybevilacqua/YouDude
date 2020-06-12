@@ -19,8 +19,8 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 @Service
 public class UserService {
 
-  private UserRepoPageable userRepoPageable;
-  private UserRepo userRepo;
+  private final UserRepoPageable userRepoPageable;
+  private final UserRepo userRepo;
 
   @Autowired
   public UserService(final UserRepoPageable userRepoPageable,

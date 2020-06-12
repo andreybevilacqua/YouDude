@@ -21,7 +21,7 @@ public class PlaylistDTO {
   private final long user_id;
 
   public static PlaylistDTO mapper(final Playlist playlist) {
-    List videos = playlist
+    List<Long> videos = playlist
         .getVideos()
         .stream()
         .map(Video::getId)

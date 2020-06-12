@@ -22,7 +22,7 @@ public class VideoController_Level2 {
 
   // todo: Evo Suite, gRPC
 
-  private VideoService videoService;
+  private final VideoService videoService;
 
   @Autowired
   public VideoController_Level2(final VideoService videoService) {

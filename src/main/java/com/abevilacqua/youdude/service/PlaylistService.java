@@ -24,11 +24,11 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 @Service
 public class PlaylistService {
 
-  private PlaylistRepoPageable playlistRepoPageable;
+  private final PlaylistRepoPageable playlistRepoPageable;
 
-  private PlaylistRepo playlistRepo;
+  private final PlaylistRepo playlistRepo;
 
-  private UserService userService;
+  private final UserService userService;
 
   public PlaylistService(final PlaylistRepoPageable repo,
                          final UserService userService,

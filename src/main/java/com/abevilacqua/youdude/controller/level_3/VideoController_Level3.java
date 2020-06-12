@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/level3/videos", produces = "application/hal+json")
 public class VideoController_Level3 {
 
-  private VideoService videoService;
+  private final VideoService videoService;
 
   @Autowired
   public VideoController_Level3(final VideoService videoService) {

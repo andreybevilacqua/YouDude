@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/level3/users", produces = "application/hal+json")
 public class UserController_Level3 {
 
-  private UserService userService;
+  private final UserService userService;
 
   @Autowired
   public UserController_Level3(UserService userService) {

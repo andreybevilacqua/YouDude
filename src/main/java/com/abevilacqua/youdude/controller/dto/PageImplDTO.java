@@ -11,15 +11,15 @@ import java.util.List;
 @Builder
 public class PageImplDTO<T> {
 
-  private List<T> content;
+  private final List<T> content;
 
-  private long totalElements;
+  private final long totalElements;
 
-  private int totalPages, size;
+  private final int totalPages, size;
 
-  private boolean first, last;
+  private final boolean first, last;
 
-  private Sort sort;
+  private final Sort sort;
 
   public static PageImplDTO pageMapper(final Page page) {
     return PageImplDTO.builder()

@@ -24,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/level3/playlists", produces = "application/hal+json")
 public class PlaylistController_Level3 {
 
-  private PlaylistService playlistService;
+  private final PlaylistService playlistService;
 
   @Autowired
   public PlaylistController_Level3(final PlaylistService playlistService) {

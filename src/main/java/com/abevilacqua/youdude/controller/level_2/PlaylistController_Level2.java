@@ -22,7 +22,7 @@ public class PlaylistController_Level2 {
 
   // todo: Evo Suite, gRPC
 
-  private PlaylistService playlistService;
+  private final PlaylistService playlistService;
 
   @Autowired
   public PlaylistController_Level2(final PlaylistService playlistService) {

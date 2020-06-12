@@ -25,11 +25,11 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 @Service
 public class VideoService {
 
-  private VideoRepoPageable videoRepoPageable;
+  private final VideoRepoPageable videoRepoPageable;
 
-  private VideoRepo videoRepo;
+  private final VideoRepo videoRepo;
 
-  private UserService userService;
+  private final UserService userService;
 
   @Autowired
   public VideoService(final VideoRepoPageable videoRepoPageable,

@@ -20,7 +20,7 @@ public class UserController_Level2 {
 
   // todo: Evo Suite, gRPC
 
-  private UserService userService;
+  private final UserService userService;
 
   @Autowired
   public UserController_Level2(final UserService userService) {
