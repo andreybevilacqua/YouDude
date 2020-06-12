@@ -1,6 +1,5 @@
 package com.abevilacqua.youdude;
 
-import com.abevilacqua.youdude.config.DBInitializer;
 import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
 import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
 import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
@@ -13,6 +12,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
+
+import static com.abevilacqua.youdude.config.DBInitializer.initDB;
 
 @SpringBootApplication
 @EnableAsync
@@ -27,7 +28,7 @@ public class YouDudeApplication {
 	public ApplicationRunner runner(UserRepoPageable userRepoPageable,
 									PlaylistRepoPageable playlistRepoPageable,
 									VideoRepoPageable videoRepoPageable) {
-		return DBInitializer.initDB(userRepoPageable, playlistRepoPageable, videoRepoPageable);
+		return initDB(userRepoPageable, playlistRepoPageable, videoRepoPageable);
 	}
 
 	@Bean

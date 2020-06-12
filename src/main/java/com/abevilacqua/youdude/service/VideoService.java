@@ -4,6 +4,7 @@ import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import static com.abevilacqua.youdude.service.GenericService.simulateSlowService
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
+@Slf4j
 @Service
 public class VideoService {
 
@@ -32,9 +34,9 @@ public class VideoService {
   private final UserService userService;
 
   @Autowired
-  public VideoService(final VideoRepoPageable videoRepoPageable,
-                      final UserService userService,
-                      final VideoRepo videoRepo) {
+  public VideoService(VideoRepoPageable videoRepoPageable,
+                      UserService userService,
+                      VideoRepo videoRepo) {
     this.videoRepoPageable = videoRepoPageable;
     this.userService = userService;
     this.videoRepo = videoRepo;

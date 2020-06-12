@@ -3,6 +3,7 @@ package com.abevilacqua.youdude.service;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import static com.abevilacqua.youdude.service.GenericService.getAll;
 import static com.abevilacqua.youdude.service.GenericService.simulateSlowService;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -23,8 +25,8 @@ public class UserService {
   private final UserRepo userRepo;
 
   @Autowired
-  public UserService(final UserRepoPageable userRepoPageable,
-                     final UserRepo userRepo) {
+  public UserService(UserRepoPageable userRepoPageable,
+                     UserRepo userRepo) {
     this.userRepoPageable = userRepoPageable;
     this.userRepo = userRepo;
   }

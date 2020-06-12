@@ -3,22 +3,18 @@ package com.abevilacqua.youdude.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Getter
-@Immutable
 @AllArgsConstructor
 public final class User implements Comparable<User>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "user_id")
-  @Setter
   private long id;
 
   @Column(name = "name")
@@ -37,10 +33,6 @@ public final class User implements Comparable<User>{
 
   public static User newInstance(final String name, final LocalDate creationDate) {
     return new User(name, creationDate);
-  }
-
-  public static User newInstanceWithId(final long id, final String name, final LocalDate creationDate) {
-    return new User(id, name, creationDate);
   }
 
   @Override

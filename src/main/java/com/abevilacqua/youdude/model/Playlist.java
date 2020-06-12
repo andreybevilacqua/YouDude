@@ -2,14 +2,12 @@ package com.abevilacqua.youdude.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
-@Immutable
 @AllArgsConstructor
 public final class Playlist implements Comparable<Playlist> {
 
@@ -24,7 +22,7 @@ public final class Playlist implements Comparable<Playlist> {
   @OneToMany(fetch = FetchType.EAGER)
   private List<Video> videos;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   private User user;
 

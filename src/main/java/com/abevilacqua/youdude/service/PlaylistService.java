@@ -4,6 +4,7 @@ import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import static com.abevilacqua.youdude.service.GenericService.simulateSlowService
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
+@Slf4j
 @Service
 public class PlaylistService {
 
@@ -30,9 +32,9 @@ public class PlaylistService {
 
   private final UserService userService;
 
-  public PlaylistService(final PlaylistRepoPageable repo,
-                         final UserService userService,
-                         final PlaylistRepo playlistRepo) {
+  public PlaylistService(PlaylistRepoPageable repo,
+                         UserService userService,
+                         PlaylistRepo playlistRepo) {
     this.playlistRepoPageable = repo;
     this.userService = userService;
     this.playlistRepo = playlistRepo;
