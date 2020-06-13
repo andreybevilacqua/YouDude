@@ -5,11 +5,13 @@ import com.abevilacqua.youdude.model.Video;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 @Builder
 public class VideoDTO {
 
-  private final long video_id;
+  private final UUID video_id;
 
   private final String name;
 
@@ -19,7 +21,7 @@ public class VideoDTO {
 
   private final Category category;
 
-  private final long user_id;
+  private final UUID user_id;
 
   public static VideoDTO mapper(final Video video) {
     return VideoDTO.builder()

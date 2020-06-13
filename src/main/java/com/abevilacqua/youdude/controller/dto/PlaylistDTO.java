@@ -6,28 +6,30 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
 @Builder
 public class PlaylistDTO {
 
-  private final long playlist_id;
+  private final UUID playlist_id;
 
   private final String name;
 
-  private final List<Long> videos_id;
+  private final List<UUID> videos_id;
 
-  private final long user_id;
+  private final UUID user_id;
 
   public static PlaylistDTO mapper(final Playlist playlist) {
-    List<Long> videos = playlist
+    List<UUID> videos = playlist
         .getVideos()
         .stream()
         .map(Video::getId)
         .collect(Collectors.toList());
 
-    return PlaylistDTO.builder()
+    return PlaylistDTO
+        .builder()
         .playlist_id(playlist.getId())
         .name(playlist.getName())
         .videos_id(videos)

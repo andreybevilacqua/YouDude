@@ -7,11 +7,12 @@ import lombok.Getter;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class PlaylistResource extends RepresentationModel<PlaylistResource> {
 
-  private final long id;
+  private final UUID id;
 
   private final String name;
 
