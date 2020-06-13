@@ -1,6 +1,19 @@
 # YouDude
 An API to play with Spring and Java.
 
+## Technologies
+    - Java 11
+    - Spring Boot
+    - Spring JPA
+    - Spring HATEOAS
+    - Spring Cache
+    - Lombok
+    - Flyway
+    - PostgreSQL
+    - H2 - tests
+    - JUnit5
+    - Mockito
+
 ## Requests example
 
 ### User
