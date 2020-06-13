@@ -1,7 +1,11 @@
 package com.abevilacqua.youdude.controller;
 
 import com.abevilacqua.youdude.controller.level_2.PlaylistController_Level2;
+import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
+import com.abevilacqua.youdude.repo.jpa.UserRepo;
+import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.PlaylistService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createMockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,9 +29,23 @@ class PlaylistControllerLevel2Test {
   @Autowired
   private PlaylistService playlistService;
 
+  @Autowired
+  private static UserRepo userRepo;
+
+  @Autowired
+  private static VideoRepo videoRepo;
+
+  @Autowired
+  private static PlaylistRepo playlistRepo;
+
   private MockMvc mockMvc;
 
   private final String URL = "/level2/playlists";
+
+  @BeforeAll
+  static void dbCreation() {
+    initDB(userRepo, videoRepo, playlistRepo);
+  }
 
   @BeforeEach
   void setup() {

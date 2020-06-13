@@ -15,5 +15,4 @@ import java.util.UUID;
 public interface VideoRepoPageable extends PagingAndSortingRepository<Video, UUID> {
 
   Page<Video> findAllByUser(final User user, final Pageable pageable);
-  List<Video> findAllByCategory(final Category category);
 }

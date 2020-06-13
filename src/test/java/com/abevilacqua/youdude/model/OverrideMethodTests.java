@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OverrideMethodTests {
 
-  private User user = createDefaultUser();
-  private Video video = createDefaultVideo(user);
+  private final User user = createDefaultUser();
+  private final Video video = createDefaultVideo(user);
 
   @Test
   public void shouldGeneratePleasantToString() {

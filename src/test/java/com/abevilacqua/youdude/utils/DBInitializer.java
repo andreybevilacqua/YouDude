@@ -1,13 +1,12 @@
-package com.abevilacqua.youdude.config;
+package com.abevilacqua.youdude.utils;
 
 import com.abevilacqua.youdude.model.Category;
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
-import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
-import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
-import com.abevilacqua.youdude.repo.pageable.VideoRepoPageable;
-import org.springframework.boot.ApplicationRunner;
+import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
+import com.abevilacqua.youdude.repo.jpa.UserRepo;
+import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,30 +18,28 @@ import static com.abevilacqua.youdude.model.Video.newInstance;
 
 public final class DBInitializer {
 
-  public static ApplicationRunner initDB(UserRepoPageable userRepoPageable,
-                                         PlaylistRepoPageable playlistRepoPageable,
-                                         VideoRepoPageable videoRepoPageable) {
+  public static void initDB(UserRepo userRepo,
+                            VideoRepo videoRepo,
+                            PlaylistRepo playlistRepo) {
     User user1 = newInstance("user-1", LocalDate.now());
     User user2 = newInstance("user-2", LocalDate.now());
     User user3 = newInstance("user-3", LocalDate.now());
 
-    return args -> {
-      createUsers(userRepoPageable, user1, user2, user3);
-      createVideos(videoRepoPageable, user1, user2, user3);
-      createPlaylists(playlistRepoPageable, videoRepoPageable, user1, user2, user3);
-    };
+    createUsers(userRepo, user1, user2, user3);
+    createVideos(videoRepo, user1, user2, user3);
+    createPlaylists(playlistRepo, videoRepo, user1, user2, user3);
   }
 
-  private static void createUsers(UserRepoPageable userRepoPageable,
+  private static void createUsers(UserRepo userRepo,
                                   User user1,
                                   User user2,
                                   User user3) {
     Stream
         .of(user1, user2, user3)
-        .forEach(userRepoPageable::save);
+        .forEach(userRepo::save);
   }
 
-  private static void createVideos(VideoRepoPageable videoRepoPageable,
+  private static void createVideos(VideoRepo videoRepo,
                                    User user1,
                                    User user2,
                                    User user3) {
@@ -75,7 +72,7 @@ public final class DBInitializer {
         createVideo("video-26", "subject 3", 20, Category.VLOGS, user3),
         createVideo("video-27", "subject 3", 20, Category.EDUCATIONAL, user3),
         createVideo("video-28", "subject 3", 20, Category.HOW_TO, user3))
-        .forEach(videoRepoPageable::save);
+        .forEach(videoRepo::save);
   }
 
   private static Video createVideo(String name,
@@ -86,18 +83,18 @@ public final class DBInitializer {
     return newInstance(name, subject, duration, category, user);
   }
 
-  private static void createPlaylists(PlaylistRepoPageable playlistRepoPageable,
-                                      VideoRepoPageable videoRepoPageable,
+  private static void createPlaylists(PlaylistRepo playlistRepo,
+                                      VideoRepo videoRepo,
                                       User user1,
                                       User user2,
                                       User user3) {
-    List<Video> comedyList = videoRepoPageable.findAllByCategory(Category.COMEDY);
-    List<Video> educationalList = videoRepoPageable.findAllByCategory(Category.EDUCATIONAL);
-    List<Video> vlogList = videoRepoPageable.findAllByCategory(Category.VLOGS);
-    List<Video> unboxingList = videoRepoPageable.findAllByCategory(Category.UNBOXING);
-    List<Video> howToList = videoRepoPageable.findAllByCategory(Category.HOW_TO);
-    List<Video> gamingList = videoRepoPageable.findAllByCategory(Category.GAMING);
-    List<Video> bestOfList = videoRepoPageable.findAllByCategory(Category.BEST_OF);
+    List<Video> comedyList = videoRepo.findAllByCategory(Category.COMEDY);
+    List<Video> educationalList = videoRepo.findAllByCategory(Category.EDUCATIONAL);
+    List<Video> vlogList = videoRepo.findAllByCategory(Category.VLOGS);
+    List<Video> unboxingList = videoRepo.findAllByCategory(Category.UNBOXING);
+    List<Video> howToList = videoRepo.findAllByCategory(Category.HOW_TO);
+    List<Video> gamingList = videoRepo.findAllByCategory(Category.GAMING);
+    List<Video> bestOfList = videoRepo.findAllByCategory(Category.BEST_OF);
 
     Stream.of(
         Playlist.newInstance("playlist-1", user1, comedyList),
@@ -110,7 +107,7 @@ public final class DBInitializer {
         Playlist.newInstance("playlist-8", user1, new ArrayList<>()),
         Playlist.newInstance("playlist-9", user1, new ArrayList<>()),
         Playlist.newInstance("playlist-10", user1, new ArrayList<>()))
-        .forEach(playlistRepoPageable::save);
+        .forEach(playlistRepo::save);
   }
 
 }
