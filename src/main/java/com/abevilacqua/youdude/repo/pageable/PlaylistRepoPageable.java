@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface PlaylistRepoPageable extends PagingAndSortingRepository<Playlist, Long> {
+public interface PlaylistRepoPageable extends PagingAndSortingRepository<Playlist, UUID> {
 
   Page<Playlist> findAllByUser(final User user, final Pageable pageable);
 }

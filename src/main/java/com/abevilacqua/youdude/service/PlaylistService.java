@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.GenericService.getAll;
@@ -61,7 +62,7 @@ public class PlaylistService {
   public CompletableFuture<Page<Playlist>> getAllFromUser(final int page,
                                                           final int size,
                                                           final String sortBy,
-                                                          final long user_id) {
+                                                          final UUID user_id) {
     simulateSlowService();
     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
     Optional<User> userOptional = getOptionalUser(user_id);
@@ -75,7 +76,7 @@ public class PlaylistService {
   }
 
   @Cacheable("getAllFromUser")
-  public CompletableFuture<List<Playlist>> getAllFromUser(final long user_id) {
+  public CompletableFuture<List<Playlist>> getAllFromUser(final UUID user_id) {
     simulateSlowService();
     Optional<User> userOptional = getOptionalUser(user_id);
     System.out.println("Thread running getAllFromUser service: " + Thread.currentThread());
@@ -88,7 +89,7 @@ public class PlaylistService {
   }
 
   @Cacheable("getAllById")
-  public CompletableFuture<Optional<Playlist>> getById(final long playlist_id) {
+  public CompletableFuture<Optional<Playlist>> getById(final UUID playlist_id) {
     simulateSlowService();
     System.out.println("Thread running getById service: " + Thread.currentThread());
     return supplyAsync(() -> {
@@ -105,7 +106,7 @@ public class PlaylistService {
     });
   }
 
-  public CompletableFuture<Optional<Playlist>> deletePlaylist(final long playlist_id) {
+  public CompletableFuture<Optional<Playlist>> deletePlaylist(final UUID playlist_id) {
     Optional<Playlist> playlist = playlistRepoPageable.findById(playlist_id);
     System.out.println("Thread running deletePlaylist service: " + Thread.currentThread());
     if(playlist.isPresent()) {
@@ -117,7 +118,7 @@ public class PlaylistService {
     } else return completedFuture(Optional.empty());
   }
 
-  private Optional<User> getOptionalUser(final long user_id) {
+  private Optional<User> getOptionalUser(final UUID user_id) {
     System.out.println("Thread running getOptionalUser service: " + Thread.currentThread());
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());

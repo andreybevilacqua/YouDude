@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.GenericService.getAll;
@@ -49,7 +50,7 @@ public class UserService {
   }
 
   @Cacheable("getById")
-  public CompletableFuture<Optional<User>> getById(final long id) {
+  public CompletableFuture<Optional<User>> getById(final UUID id) {
     System.out.println("Thread running getAllUsers pageable service: " + Thread.currentThread());
     simulateSlowService();
     return supplyAsync(() -> {
@@ -66,7 +67,7 @@ public class UserService {
     });
   }
 
-  public Optional<User> deleteUser(final long id) {
+  public Optional<User> deleteUser(final UUID id) {
     Optional<User> userOptional = userRepo.findById(id);
     userOptional.ifPresent(user -> {
       System.out.println("Thread running deleteUser service: " + Thread.currentThread());

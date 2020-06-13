@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -49,7 +50,7 @@ public class VideoController_Level3 {
   }
 
   @GetMapping("/user/{user_id}")
-  public ResponseEntity<CollectionModel<VideoResource>> getVideosPerUser(@PathVariable final long user_id) {
+  public ResponseEntity<CollectionModel<VideoResource>> getVideosPerUser(@PathVariable final UUID user_id) {
     CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
 
     CollectionModel<VideoResource> videoResourceCollectionModel =
@@ -63,7 +64,7 @@ public class VideoController_Level3 {
   }
 
   @GetMapping("/{video_id}")
-  public ResponseEntity<VideoResource> getVideoById(@PathVariable final long video_id) {
+  public ResponseEntity<VideoResource> getVideoById(@PathVariable final UUID video_id) {
     CompletableFuture<Optional<Video>> completableFutureOptional = videoService.getVideoById(video_id);
 
     return completableFutureOptional
@@ -86,7 +87,7 @@ public class VideoController_Level3 {
   }
 
   @DeleteMapping("/{video_id}")
-  public ResponseEntity<VideoResource> deleteVideo(@PathVariable(value = "video_id") final long video_id) {
+  public ResponseEntity<VideoResource> deleteVideo(@PathVariable(value = "video_id") final UUID video_id) {
     CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);
     return completableFuture
         .join()

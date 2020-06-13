@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
@@ -44,7 +45,7 @@ public class PlaylistController_Level2 {
 
   @GetMapping("/{user_id}")
   public ResponseEntity<PageImplDTO<PlaylistDTO>> getPlaylistPerUser(
-      @PathVariable("user_id") final long user_id,
+      @PathVariable("user_id") final UUID user_id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
@@ -62,7 +63,7 @@ public class PlaylistController_Level2 {
   }
 
   @DeleteMapping("/{playlist_id}")
-  public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") final long playlist_id) {
+  public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") final UUID playlist_id) {
     CompletableFuture<Optional<Playlist>> optionalCompletableFuture = playlistService.deletePlaylist(playlist_id);
     return optionalCompletableFuture.join()
         .map(PlaylistDTO::mapper)

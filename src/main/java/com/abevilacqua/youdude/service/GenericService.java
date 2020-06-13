@@ -7,13 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class GenericService {
 
-  public static <R extends PagingAndSortingRepository<T, Long>, T> CompletableFuture<Page<T>> getAll(R repository,
+  public static <R extends PagingAndSortingRepository<T, UUID>, T> CompletableFuture<Page<T>> getAll(R repository,
                                                                                                      final int page,
                                                                                                      final int size,
                                                                                                      final String sortBy) {

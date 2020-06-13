@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
@@ -38,7 +39,7 @@ public class UserController_Level2 {
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<User> getUserById(@PathVariable("user_id") final long user_id) {
+  public ResponseEntity<User> getUserById(@PathVariable("user_id") final UUID user_id) {
     CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
     return completableFuture
         .join()
@@ -53,8 +54,8 @@ public class UserController_Level2 {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<User> deleteUser(@PathVariable("id") final long id) {
-    if(id < 0) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  public ResponseEntity<User> deleteUser(@PathVariable("id") final UUID id) {
+    if(id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     return userService.deleteUser(id)
         .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

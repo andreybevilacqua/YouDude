@@ -9,9 +9,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface VideoRepoPageable extends PagingAndSortingRepository<Video, Long> {
+public interface VideoRepoPageable extends PagingAndSortingRepository<Video, UUID> {
 
   Page<Video> findAllByUser(final User user, final Pageable pageable);
   List<Video> findAllByCategory(final Category category);

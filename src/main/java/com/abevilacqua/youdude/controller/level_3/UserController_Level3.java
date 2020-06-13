@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -42,7 +43,7 @@ public class UserController_Level3 {
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<UserResource> getUserById(@PathVariable("user_id") long user_id) {
+  public ResponseEntity<UserResource> getUserById(@PathVariable("user_id") UUID user_id) {
     CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
     return completableFuture
         .join()

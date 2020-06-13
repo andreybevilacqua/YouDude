@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.abevilacqua.youdude.service.GenericService.getAll;
@@ -59,7 +60,7 @@ public class VideoService {
   }
 
   @Cacheable("getAllFromUserPageable")
-  public CompletableFuture<Page<Video>> getAllFromUser(final long user_id,
+  public CompletableFuture<Page<Video>> getAllFromUser(final UUID user_id,
                                                        final int page,
                                                        final int size,
                                                        final String sortBy) {
@@ -75,7 +76,7 @@ public class VideoService {
   }
 
   @Cacheable("getAllFromUser")
-  public CompletableFuture<List<Video>> getAllFromUser(final long user_id) {
+  public CompletableFuture<List<Video>> getAllFromUser(final UUID user_id) {
     simulateSlowService();
     Optional<User> optionalUser = getOptionalUser(user_id);
     return optionalUser
@@ -87,7 +88,7 @@ public class VideoService {
   }
 
   @Cacheable("getVideoById")
-  public CompletableFuture<Optional<Video>> getVideoById(final long id) {
+  public CompletableFuture<Optional<Video>> getVideoById(final UUID id) {
     simulateSlowService();
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
@@ -102,7 +103,7 @@ public class VideoService {
     });
   }
 
-  public CompletableFuture<Optional<Video>> deleteVideo(final long video_id) {
+  public CompletableFuture<Optional<Video>> deleteVideo(final UUID video_id) {
     Optional<Video> video = videoRepoPageable.findById(video_id);
     if(video.isPresent()) {
       return supplyAsync(() -> {
@@ -114,7 +115,7 @@ public class VideoService {
     else return completedFuture(Optional.empty());
   }
 
-  private Optional<User> getOptionalUser(final long user_id) {
+  private Optional<User> getOptionalUser(final UUID user_id) {
     return supplyAsync(() -> {
       System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
       return userService.getById(user_id);

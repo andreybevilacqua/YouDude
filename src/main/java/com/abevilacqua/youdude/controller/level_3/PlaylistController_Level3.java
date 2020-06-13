@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -53,7 +54,7 @@ public class PlaylistController_Level3 {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<PlaylistResource> getPlaylistById(@PathVariable("id") final long id) {
+  public ResponseEntity<PlaylistResource> getPlaylistById(@PathVariable("id") final UUID id) {
     CompletableFuture<Optional<Playlist>> optionalPlaylist = playlistService.getById(id);
     return optionalPlaylist
         .join()
@@ -65,7 +66,7 @@ public class PlaylistController_Level3 {
   }
 
   @GetMapping("/user/{user_id}")
-  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("user_id") final long user_id) {
+  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("user_id") final UUID user_id) {
     CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(user_id);
 
     CollectionModel<PlaylistResource> collectionModel =
