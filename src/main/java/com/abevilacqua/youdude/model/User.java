@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "user_application")
 @Getter
 @AllArgsConstructor
 public final class User implements Comparable<User>{
