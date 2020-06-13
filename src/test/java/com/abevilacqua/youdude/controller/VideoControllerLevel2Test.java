@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.controller;
 
-import com.abevilacqua.youdude.controller.level_2.VideoController_Level2;
+import com.abevilacqua.youdude.controller.rest.VideoController_Level2;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;

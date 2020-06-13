@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.controller;
 
-import com.abevilacqua.youdude.controller.level_2.UserController_Level2;
+import com.abevilacqua.youdude.controller.rest.UserController_Level2;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;

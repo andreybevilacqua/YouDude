@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_3;
+package com.abevilacqua.youdude.controller.hateoas;
 
 import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.model.resource.PlaylistResource;
@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/level3/playlists", produces = "application/hal+json")
+@RequestMapping(value = "/hateoas/playlists", produces = "application/hal+json")
 public class PlaylistController_Level3 {
 
   private final PlaylistService playlistService;

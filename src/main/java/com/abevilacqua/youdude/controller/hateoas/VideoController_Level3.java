@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_3;
+package com.abevilacqua.youdude.controller.hateoas;
 
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.model.resource.VideoResource;
@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/level3/videos", produces = "application/hal+json")
+@RequestMapping(value = "/hateoas/videos", produces = "application/hal+json")
 public class VideoController_Level3 {
 
   private final VideoService videoService;

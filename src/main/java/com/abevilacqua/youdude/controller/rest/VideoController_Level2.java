@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_2;
+package com.abevilacqua.youdude.controller.rest;
 
 import com.abevilacqua.youdude.controller.dto.PageImplDTO;
 import com.abevilacqua.youdude.controller.dto.VideoDTO;
@@ -18,7 +18,7 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 
 @RestController
-@RequestMapping("/level2/videos")
+@RequestMapping("/rest/videos")
 public class VideoController_Level2 {
 
   // todo: Evo Suite, gRPC

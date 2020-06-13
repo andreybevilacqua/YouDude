@@ -17,9 +17,9 @@ An API to play with Spring and Java.
 ## Requests example
 
 ### User
-REST with Page endpoint: `http://localhost:8080/youdude/level2/users`
+REST with Page endpoint: `http://localhost:8080/youdude/rest/users`
 
-RESTFul endpoint: `http://localhost:8080/youdude/level3/users`
+RESTFul endpoint: `http://localhost:8080/youdude/hateoas/users`
 
 #### JSON
 
@@ -30,9 +30,9 @@ RESTFul endpoint: `http://localhost:8080/youdude/level3/users`
     }
 
 ### Video
-REST with Page endpoint: `http://localhost:8080/youdude/level2/videos`
+REST with Page endpoint: `http://localhost:8080/youdude/rest/videos`
 
-RESTFul endpoint: `http://localhost:8080/youdude/level3/videos`
+RESTFul endpoint: `http://localhost:8080/youdude/hateoas/videos`
 
 #### JSON
 
@@ -46,9 +46,9 @@ RESTFul endpoint: `http://localhost:8080/youdude/level3/videos`
     }
 
 ### Playlist
-REST with Page endpoint: `http://localhost:8080/youdude/level2/playlists`
+REST with Page endpoint: `http://localhost:8080/youdude/rest/playlists`
 
-RESTFul endpoint: `http://localhost:8080/youdude/level3/playlists`
+RESTFul endpoint: `http://localhost:8080/youdude/hateoas/playlists`
 
 #### JSON
 

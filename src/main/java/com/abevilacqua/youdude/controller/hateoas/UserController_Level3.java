@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_3;
+package com.abevilacqua.youdude.controller.hateoas;
 
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.resource.UserResource;
@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/level3/users", produces = "application/hal+json")
+@RequestMapping(value = "/hateoas/users", produces = "application/hal+json")
 public class UserController_Level3 {
 
   private final UserService userService;

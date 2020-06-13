@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller.level_2;
+package com.abevilacqua.youdude.controller.rest;
 
 import com.abevilacqua.youdude.controller.dto.PageImplDTO;
 import com.abevilacqua.youdude.model.User;
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 
 @RestController
-@RequestMapping("/level2/users")
+@RequestMapping("/rest/users")
 public class UserController_Level2 {
 
   // todo: Evo Suite, gRPC

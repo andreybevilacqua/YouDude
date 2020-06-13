@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.model.resource;
 
-import com.abevilacqua.youdude.controller.level_3.UserController_Level3;
+import com.abevilacqua.youdude.controller.hateoas.UserController_Level3;
 import com.abevilacqua.youdude.model.User;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
