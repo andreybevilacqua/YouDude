@@ -2,19 +2,22 @@ package com.abevilacqua.youdude.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public final class Playlist implements Comparable<Playlist> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "playlist_id")
-  private long id;
+  private UUID id;
 
   @Column(name = "name")
   private String name;
@@ -25,8 +28,6 @@ public final class Playlist implements Comparable<Playlist> {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   private User user;
-
-  Playlist(){}
 
   Playlist(final String name, final User user, final List<Video> videos) {
     this.name = name;
@@ -41,7 +42,7 @@ public final class Playlist implements Comparable<Playlist> {
   }
 
   public static Playlist newInstanceWithId(
-      final long id,
+      final UUID id,
       final String name,
       final List<Video> videos,
       final User user) {
@@ -56,7 +57,7 @@ public final class Playlist implements Comparable<Playlist> {
   @Override
   public int hashCode() {
     int result;
-    result = Long.hashCode(id);
+    result = id.toString().hashCode();
     result = 31 * result + name.hashCode();
     for(Video video : videos) { result = 31 * result + video.hashCode(); }
     return result;

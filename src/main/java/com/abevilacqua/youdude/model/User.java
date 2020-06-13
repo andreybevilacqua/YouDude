@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ public final class User implements Comparable<User>{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "user_id")
-  private long id;
+  private UUID id;
 
   @Column(name = "name")
   private String name;
@@ -43,7 +44,7 @@ public final class User implements Comparable<User>{
   @Override
   public int hashCode() {
     int result;
-    result = Long.hashCode(id);
+    result = id.toString().hashCode();
     result = 31 * result + name.hashCode();
     result = 31 * result + creationDate.hashCode();
     return result;

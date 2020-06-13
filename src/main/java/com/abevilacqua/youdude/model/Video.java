@@ -1,19 +1,22 @@
 package com.abevilacqua.youdude.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public final class Video implements Comparable<Video>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "video_id")
-  private long id;
+  private UUID id;
 
   @Column(name = "name")
   @NotEmpty
@@ -34,8 +37,6 @@ public final class Video implements Comparable<Video>{
   @JoinColumn(name = "user_id")
   private User user;
 
-  Video(){}
-
   Video(final String name,
         final String subject,
         final int duration,
@@ -48,7 +49,7 @@ public final class Video implements Comparable<Video>{
     this.user = user;
   }
 
-  Video(final long id,
+  Video(final UUID id,
         final String name,
         final String subject,
         final int duration,
@@ -72,7 +73,7 @@ public final class Video implements Comparable<Video>{
   }
 
   public static Video newInstanceWithId(
-      final long id,
+      final UUID id,
       final String name,
       final String subject,
       final int duration,
@@ -89,7 +90,7 @@ public final class Video implements Comparable<Video>{
   @Override
   public int hashCode() {
     int result;
-    result = Long.hashCode(id);
+    result = id.toString().hashCode();
     result = 31 * result + name.hashCode();
     result = 31 * result + Integer.hashCode(duration);
     result = 31 * result + category.hashCode();
