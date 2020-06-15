@@ -1,5 +1,7 @@
-package com.abevilacqua.youdude.model;
+package com.abevilacqua.youdude.unit.model;
 
+import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.model.Video;
 import org.junit.jupiter.api.Test;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;

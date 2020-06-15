@@ -1,4 +1,4 @@
-package com.abevilacqua.youdude.controller;
+package com.abevilacqua.youdude.integration.controller.rest;
 
 import com.abevilacqua.youdude.controller.rest.PlaylistController_Level2;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
