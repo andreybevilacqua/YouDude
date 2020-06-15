@@ -5,7 +5,6 @@ import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.PlaylistService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,27 +29,23 @@ class PlaylistControllerLevel2Test {
   private PlaylistService playlistService;
 
   @Autowired
-  private static UserRepo userRepo;
+  private UserRepo userRepo;
 
   @Autowired
-  private static VideoRepo videoRepo;
+  private VideoRepo videoRepo;
 
   @Autowired
-  private static PlaylistRepo playlistRepo;
+  private PlaylistRepo playlistRepo;
 
   private MockMvc mockMvc;
 
-  private final String URL = "/level2/playlists";
-
-  @BeforeAll
-  static void dbCreation() {
-    initDB(userRepo, videoRepo, playlistRepo);
-  }
+  private final String URL = "/rest/playlists";
 
   @BeforeEach
   void setup() {
     PlaylistController_Level2 playlistControllerLevel2 = new PlaylistController_Level2(playlistService);
     mockMvc = createMockMvc(playlistControllerLevel2);
+    if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
   }
 
   @Test

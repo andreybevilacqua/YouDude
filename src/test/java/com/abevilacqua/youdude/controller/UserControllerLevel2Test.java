@@ -7,7 +7,6 @@ import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.UserService;
 import com.abevilacqua.youdude.utils.ObjectHelper;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,27 +37,23 @@ class UserControllerLevel2Test {
   private UserService userService;
 
   @Autowired
-  private static UserRepo userRepo;
+  private UserRepo userRepo;
 
   @Autowired
-  private static VideoRepo videoRepo;
+  private VideoRepo videoRepo;
 
   @Autowired
-  private static PlaylistRepo playlistRepo;
+  private PlaylistRepo playlistRepo;
 
   private MockMvc mockMvc;
 
-  private final String URL = "/level2/users";
-
-  @BeforeAll
-  static void dbCreation() {
-    initDB(userRepo, videoRepo, playlistRepo);
-  }
+  private final String URL = "/rest/users";
 
   @BeforeEach
   void setup() {
     UserController_Level2 userControllerLevel2 = new UserController_Level2(userService);
     mockMvc = ObjectHelper.createMockMvc(userControllerLevel2);
+    if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
   }
 
   @Test
