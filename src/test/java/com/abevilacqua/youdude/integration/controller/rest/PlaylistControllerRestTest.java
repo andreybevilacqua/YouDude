@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.integration.controller.rest;
 
-import com.abevilacqua.youdude.controller.rest.PlaylistController_Level2;
+import com.abevilacqua.youdude.controller.rest.PlaylistControllerRest;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class PlaylistControllerLevel2Test {
+class PlaylistControllerRestTest {
 
   @Autowired
   private PlaylistService playlistService;
@@ -43,8 +43,8 @@ class PlaylistControllerLevel2Test {
 
   @BeforeEach
   void setup() {
-    PlaylistController_Level2 playlistControllerLevel2 = new PlaylistController_Level2(playlistService);
-    mockMvc = createMockMvc(playlistControllerLevel2);
+    PlaylistControllerRest playlistControllerRestLevel2 = new PlaylistControllerRest(playlistService);
+    mockMvc = createMockMvc(playlistControllerRestLevel2);
     if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
   }
 

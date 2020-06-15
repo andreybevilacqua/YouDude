@@ -20,12 +20,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/hateoas/videos", produces = "application/hal+json")
-public class VideoController_Level3 {
+public class VideoControllerHateoas {
 
   private final VideoService videoService;
 
   @Autowired
-  public VideoController_Level3(final VideoService videoService) {
+  public VideoControllerHateoas(final VideoService videoService) {
     this.videoService = videoService;
   }
 
@@ -40,10 +40,10 @@ public class VideoController_Level3 {
         .forEach(videoResource ->
             videoResource
                 .add(WebMvcLinkBuilder
-                .linkTo(methodOn(UserController_Level3.class).getUserById(videoResource.getUser().getId()))
+                .linkTo(methodOn(UserControllerHateoas.class).getUserById(videoResource.getUser().getId()))
                 .withRel("user-link")));
     collectionModel.add(WebMvcLinkBuilder
-        .linkTo(methodOn(VideoController_Level3.class).getAllVideos())
+        .linkTo(methodOn(VideoControllerHateoas.class).getAllVideos())
         .withRel("self"));
 
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
@@ -57,7 +57,7 @@ public class VideoController_Level3 {
         new VideoResourceAssembler().toCollectionModel(completableFuture.join());
 
     videoResourceCollectionModel.add(WebMvcLinkBuilder
-        .linkTo(methodOn(VideoController_Level3.class).getVideosPerUser(user_id))
+        .linkTo(methodOn(VideoControllerHateoas.class).getVideosPerUser(user_id))
         .withRel("self"));
 
     return new ResponseEntity<>(videoResourceCollectionModel, HttpStatus.OK);
@@ -73,7 +73,7 @@ public class VideoController_Level3 {
           VideoResource videoResource = new VideoResourceAssembler().toModel(video);
           videoResource
               .add(WebMvcLinkBuilder
-                  .linkTo(methodOn(VideoController_Level3.class).getAllVideos())
+                  .linkTo(methodOn(VideoControllerHateoas.class).getAllVideos())
                   .withRel("base-link"));
           return new ResponseEntity<>(videoResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

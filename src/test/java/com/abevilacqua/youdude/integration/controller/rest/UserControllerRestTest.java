@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.integration.controller.rest;
 
-import com.abevilacqua.youdude.controller.rest.UserController_Level2;
+import com.abevilacqua.youdude.controller.rest.UserControllerRest;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserControllerLevel2Test {
+class UserControllerRestTest {
 
   @Autowired
   private UserService userService;
@@ -51,7 +51,7 @@ class UserControllerLevel2Test {
 
   @BeforeEach
   void setup() {
-    UserController_Level2 userControllerLevel2 = new UserController_Level2(userService);
+    UserControllerRest userControllerLevel2 = new UserControllerRest(userService);
     mockMvc = ObjectHelper.createMockMvc(userControllerLevel2);
     if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
   }

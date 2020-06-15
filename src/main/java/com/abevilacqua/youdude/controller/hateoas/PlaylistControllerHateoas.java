@@ -23,12 +23,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/hateoas/playlists", produces = "application/hal+json")
-public class PlaylistController_Level3 {
+public class PlaylistControllerHateoas {
 
   private final PlaylistService playlistService;
 
   @Autowired
-  public PlaylistController_Level3(final PlaylistService playlistService) {
+  public PlaylistControllerHateoas(final PlaylistService playlistService) {
     this.playlistService = playlistService;
   }
 
@@ -44,10 +44,10 @@ public class PlaylistController_Level3 {
         .forEach(playlistResource ->
             playlistResource
                 .add(WebMvcLinkBuilder
-                  .linkTo(methodOn(PlaylistController_Level3.class).getPlaylistById(playlistResource.getId()))
+                  .linkTo(methodOn(PlaylistControllerHateoas.class).getPlaylistById(playlistResource.getId()))
                   .withRel("playlist-link"))
                 .add(WebMvcLinkBuilder
-                  .linkTo(methodOn(UserController_Level3.class).getUserById(playlistResource.getUser().getId()))
+                  .linkTo(methodOn(UserControllerHateoas.class).getUserById(playlistResource.getUser().getId()))
                   .withRel("user-link")));
 
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);

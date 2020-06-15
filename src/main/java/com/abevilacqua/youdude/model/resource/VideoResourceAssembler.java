@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.model.resource;
 
-import com.abevilacqua.youdude.controller.hateoas.VideoController_Level3;
+import com.abevilacqua.youdude.controller.hateoas.VideoControllerHateoas;
 import com.abevilacqua.youdude.model.Video;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 public class VideoResourceAssembler extends RepresentationModelAssemblerSupport<Video, VideoResource> {
 
   public VideoResourceAssembler() {
-    super(VideoController_Level3.class, VideoResource.class);
+    super(VideoControllerHateoas.class, VideoResource.class);
   }
 
   @Override // You need to override this instantiateModel() method to be able to set the correct constructor.

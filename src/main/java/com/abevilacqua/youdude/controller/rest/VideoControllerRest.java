@@ -19,14 +19,14 @@ import static com.abevilacqua.youdude.controller.dto.VideoDTO.mapper;
 
 @RestController
 @RequestMapping("/rest/videos")
-public class VideoController_Level2 {
+public class VideoControllerRest {
 
   // todo: Evo Suite, gRPC
 
   private final VideoService videoService;
 
   @Autowired
-  public VideoController_Level2(final VideoService videoService) {
+  public VideoControllerRest(final VideoService videoService) {
     this.videoService = videoService;
   }
 

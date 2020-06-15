@@ -20,12 +20,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/hateoas/users", produces = "application/hal+json")
-public class UserController_Level3 {
+public class UserControllerHateoas {
 
   private final UserService userService;
 
   @Autowired
-  public UserController_Level3(UserService userService) {
+  public UserControllerHateoas(UserService userService) {
     this.userService = userService;
   }
 
@@ -37,7 +37,7 @@ public class UserController_Level3 {
         new UserResourceAssembler().toCollectionModel(completableFuture.join());
 
     userResources.add(WebMvcLinkBuilder
-        .linkTo(methodOn(UserController_Level3.class).getAllUsers())
+        .linkTo(methodOn(UserControllerHateoas.class).getAllUsers())
         .withRel("recents"));
     return new ResponseEntity<>(userResources, HttpStatus.OK);
   }
@@ -51,7 +51,7 @@ public class UserController_Level3 {
           UserResource userResource = new UserResourceAssembler().toModel(user);
           userResource
               .add(WebMvcLinkBuilder
-              .linkTo(methodOn(UserController_Level3.class).getUserById(user_id))
+              .linkTo(methodOn(UserControllerHateoas.class).getUserById(user_id))
               .withRel("base-uri"));
           return new ResponseEntity<>(userResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

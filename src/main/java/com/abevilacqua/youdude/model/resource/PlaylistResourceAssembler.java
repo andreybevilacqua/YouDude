@@ -1,13 +1,13 @@
 package com.abevilacqua.youdude.model.resource;
 
-import com.abevilacqua.youdude.controller.hateoas.PlaylistController_Level3;
+import com.abevilacqua.youdude.controller.hateoas.PlaylistControllerHateoas;
 import com.abevilacqua.youdude.model.Playlist;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
 public class PlaylistResourceAssembler extends RepresentationModelAssemblerSupport<Playlist, PlaylistResource> {
 
-  public PlaylistResourceAssembler() { super(PlaylistController_Level3.class, PlaylistResource.class); }
+  public PlaylistResourceAssembler() { super(PlaylistControllerHateoas.class, PlaylistResource.class); }
 
   @Override // You need to override this instantiateModel() method to be able to set the correct constructor.
   protected PlaylistResource instantiateModel(Playlist entity) {

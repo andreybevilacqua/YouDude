@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.model.resource;
 
-import com.abevilacqua.youdude.controller.hateoas.UserController_Level3;
+import com.abevilacqua.youdude.controller.hateoas.UserControllerHateoas;
 import com.abevilacqua.youdude.model.User;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 public class UserResourceAssembler extends RepresentationModelAssemblerSupport<User, UserResource> {
 
   public UserResourceAssembler() {
-    super(UserController_Level3.class, UserResource.class);
+    super(UserControllerHateoas.class, UserResource.class);
   }
 
   @Override // You need to override this instantiateModel() method to be able to set the correct constructor.

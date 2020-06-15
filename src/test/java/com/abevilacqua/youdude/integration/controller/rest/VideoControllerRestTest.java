@@ -1,6 +1,6 @@
 package com.abevilacqua.youdude.integration.controller.rest;
 
-import com.abevilacqua.youdude.controller.rest.VideoController_Level2;
+import com.abevilacqua.youdude.controller.rest.VideoControllerRest;
 import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class VideoControllerLevel2Test {
+class VideoControllerRestTest {
 
   @Autowired
   private VideoService videoService;
@@ -56,7 +56,7 @@ class VideoControllerLevel2Test {
 
   @BeforeEach
   void setup() {
-    VideoController_Level2 videoControllerLevel2 = new VideoController_Level2(videoService);
+    VideoControllerRest videoControllerLevel2 = new VideoControllerRest(videoService);
     mockMvc = ObjectHelper.createMockMvc(videoControllerLevel2);
     if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
   }
