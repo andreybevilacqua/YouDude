@@ -8,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+import static javax.persistence.EnumType.STRING;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -31,6 +33,7 @@ public final class Video implements Comparable<Video>{
   private int duration;
 
   @Column(name = "category")
+  @Enumerated(STRING)
   private Category category;
 
   @ManyToOne(cascade = CascadeType.ALL)
