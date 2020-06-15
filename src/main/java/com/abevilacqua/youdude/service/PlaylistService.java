@@ -40,8 +40,7 @@ public class PlaylistService {
     this.userService = userService;
     this.playlistRepo = playlistRepo;
   }
-
-  @Cacheable("getAllPlaylistsPageable")
+  
   public CompletableFuture<Page<Playlist>> getAllPlaylists(final int page,
                                                            final int size,
                                                            final String sortBy) {
