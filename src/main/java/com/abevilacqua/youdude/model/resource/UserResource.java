@@ -9,9 +9,9 @@ import java.time.LocalDate;
 @Getter
 public class UserResource extends RepresentationModel<UserResource> {
 
-  private String name;
+  private final String name;
 
-  private LocalDate creationDate;
+  private final LocalDate creationDate;
 
   // I decide to remove the User ID from the Resource, because it's a internal db info
   // and doesn't have to be exposed in the API. The link itself will give the correct data.

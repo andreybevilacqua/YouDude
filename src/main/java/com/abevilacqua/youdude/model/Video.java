@@ -40,6 +40,10 @@ public final class Video implements Comparable<Video>{
   @JoinColumn(name = "user_id")
   private User user;
 
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "playlist_id")
+  private Playlist playlist;
+
   Video(final String name,
         final String subject,
         final int duration,
