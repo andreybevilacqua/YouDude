@@ -21,7 +21,7 @@ import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
 @RequestMapping("/rest/playlists")
 public class PlaylistControllerRest {
 
-  // todo: Evo Suite, gRPC
+  // todo: Evo Suite, gRPC, pitest
 
   private final PlaylistService playlistService;
 

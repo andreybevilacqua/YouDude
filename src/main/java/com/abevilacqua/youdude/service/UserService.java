@@ -32,6 +32,7 @@ public class UserService {
     this.userRepo = userRepo;
   }
 
+  @Cacheable("getAllUsersPageable")
   public CompletableFuture<Page<User>> getAllUsers(final int page,
                                                    final int size,
                                                    final String sortBy) {

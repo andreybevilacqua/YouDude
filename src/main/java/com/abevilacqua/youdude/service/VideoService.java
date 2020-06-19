@@ -43,6 +43,7 @@ public class VideoService {
     this.videoRepo = videoRepo;
   }
 
+  @Cacheable("getAllVideosPageable")
   public CompletableFuture<Page<Video>> getAllVideos(final int page,
                                                      final int size,
                                                      final String sortBy) {
