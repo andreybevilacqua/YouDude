@@ -1,20 +1,23 @@
 package com.abevilacqua.youdude.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static java.util.Objects.requireNonNull;
+import static javax.persistence.GenerationType.AUTO;
+
 @Entity(name = "user_youdude")
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public final class User implements Comparable<User>{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = AUTO)
   @Column(name = "user_id")
   private UUID id;
 
@@ -25,15 +28,15 @@ public final class User implements Comparable<User>{
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate creationDate;
 
-  User(){}
-
-  User(final String name, final LocalDate creationDate) {
-    this.name = name;
-    this.creationDate = creationDate;
+  public static User newInstance(final String name, final LocalDate creationDate) {
+    requireNonNull(name, "Name should not be null");
+    requireNonNull(creationDate, "Creation date should not be null");
+    return new User(name, creationDate);
   }
 
-  public static User newInstance(final String name, final LocalDate creationDate) {
-    return new User(name, creationDate);
+  private User(final String name, final LocalDate creationDate) {
+    this.name = name;
+    this.creationDate = creationDate;
   }
 
   @Override

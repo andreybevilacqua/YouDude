@@ -6,9 +6,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.security.InvalidParameterException;
 import java.util.UUID;
 
+import static java.util.Objects.requireNonNull;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 @Getter
@@ -16,7 +20,7 @@ import static javax.persistence.EnumType.STRING;
 public final class Video implements Comparable<Video>{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = AUTO)
   @Column(name = "video_id")
   private UUID id;
 
@@ -36,7 +40,7 @@ public final class Video implements Comparable<Video>{
   @Enumerated(STRING)
   private Category category;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = ALL)
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -44,49 +48,29 @@ public final class Video implements Comparable<Video>{
   @JoinColumn(name = "playlist_id")
   private Playlist playlist;
 
-  Video(final String name,
-        final String subject,
-        final int duration,
-        final Category category,
-        final User user) {
-    this.name = name;
-    this.subject = subject;
-    this.duration = duration;
-    this.category = category;
-    this.user = user;
-  }
-
-  Video(final UUID id,
-        final String name,
-        final String subject,
-        final int duration,
-        final Category category,
-        final User user) {
-    this.id = id;
-    this.name = name;
-    this.subject = subject;
-    this.duration = duration;
-    this.category = category;
-    this.user = user;
-  }
-
-  public static Video newInstance(
-      final String name,
-      final String subject,
-      final int duration,
-      final Category category,
-      final User user) {
+  public static Video newInstance(final String name,
+                                  final String subject,
+                                  final int duration,
+                                  final Category category,
+                                  final User user) {
+    requireNonNull(name, "Name should not be null");
+    requireNonNull(subject, "Subject should not be null");
+    requireNonNull(category, "Category should not be null");
+    requireNonNull(user, "User should not be null");
+    if(duration <= 0) throw new InvalidParameterException("Duration should be bigger than 0");
     return new Video(name, subject, duration, category, user);
   }
 
-  public static Video newInstanceWithId(
-      final UUID id,
-      final String name,
-      final String subject,
-      final int duration,
-      final Category category,
-      final User user) {
-    return new Video(id, name, subject, duration, category, user);
+  private Video(final String name,
+                final String subject,
+                final int duration,
+                final Category category,
+                final User user) {
+    this.name = name;
+    this.subject = subject;
+    this.duration = duration;
+    this.category = category;
+    this.user = user;
   }
 
   @Override

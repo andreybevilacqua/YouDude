@@ -28,6 +28,6 @@ public class GenericService {
 
   @SneakyThrows
   public static void simulateSlowService() {
-    Thread.sleep(3000L);
+    Thread.sleep(2000L);
   }
 }

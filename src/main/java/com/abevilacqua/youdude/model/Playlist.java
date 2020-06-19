@@ -1,16 +1,16 @@
 package com.abevilacqua.youdude.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public final class Playlist implements Comparable<Playlist> {
 
@@ -29,24 +29,19 @@ public final class Playlist implements Comparable<Playlist> {
   @JoinColumn(name = "user_id")
   private User user;
 
-  Playlist(final String name, final User user, final List<Video> videos) {
-    this.name = name;
-    this.user = user;
-    this.videos = videos;
-  }
-
   public static Playlist newInstance(final String name,
                                      final User user,
                                      final List<Video> videos) {
-    return new Playlist(name, user, videos);
+    Objects.requireNonNull(name, "Name should not be null");
+    Objects.requireNonNull(name, "User should not be null");
+    if(videos == null) return new Playlist(name, user, new ArrayList<>());
+    else return new Playlist(name, user, videos);
   }
 
-  public static Playlist newInstanceWithId(
-      final UUID id,
-      final String name,
-      final List<Video> videos,
-      final User user) {
-    return new Playlist(id, name, videos, user);
+  private Playlist(final String name, final User user, final List<Video> videos) {
+    this.name = name;
+    this.user = user;
+    this.videos = videos;
   }
 
   @Override
