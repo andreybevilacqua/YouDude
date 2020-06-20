@@ -1,7 +1,9 @@
 package com.abevilacqua.youdude.service;
 
 import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
+import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.repo.pageable.UserRepoPageable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,18 @@ public class UserService {
 
   private final UserRepoPageable userRepoPageable;
   private final UserRepo userRepo;
+  private final VideoRepo videoRepo;
+  private final PlaylistRepo playlistRepo;
 
   @Autowired
-  public UserService(UserRepoPageable userRepoPageable, UserRepo userRepo) {
+  public UserService(UserRepoPageable userRepoPageable,
+                     UserRepo userRepo,
+                     VideoRepo videoRepo,
+                     PlaylistRepo playlistRepo) {
     this.userRepoPageable = userRepoPageable;
     this.userRepo = userRepo;
+    this.videoRepo = videoRepo;
+    this.playlistRepo = playlistRepo;
   }
 
   @Cacheable("getAllUsersPageable")
@@ -70,7 +79,9 @@ public class UserService {
     Optional<User> userOptional = userRepo.findById(id);
     userOptional.ifPresent(user -> {
       System.out.println("Thread running deleteUser service: " + Thread.currentThread());
-      userRepo.deleteById(id);
+      playlistRepo.deleteAllByUser(user);
+      videoRepo.deleteAllByUser(user);
+      userRepo.deleteUserById(id);
     });
     return userOptional;
   }

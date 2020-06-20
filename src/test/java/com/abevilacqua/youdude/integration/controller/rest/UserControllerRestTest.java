@@ -23,6 +23,7 @@ import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,14 +64,11 @@ class UserControllerRestTest {
         .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.[0].id").exists())
-        .andExpect(jsonPath("$.content.[0].id").isNumber())
-        .andExpect(jsonPath("$.content.[0].id", is(1)))
+        .andExpect(jsonPath("$.content.[0].id").isString())
         .andExpect(jsonPath("$.content.[1].id").exists())
-        .andExpect(jsonPath("$.content.[1].id").isNumber())
-        .andExpect(jsonPath("$.content.[1].id", is(2)))
+        .andExpect(jsonPath("$.content.[1].id").isString())
         .andExpect(jsonPath("$.content.[2].id").exists())
-        .andExpect(jsonPath("$.content.[2].id").isNumber())
-        .andExpect(jsonPath("$.content.[2].id", is(3)))
+        .andExpect(jsonPath("$.content.[2].id").isString())
         .andExpect(jsonPath("$.content.[0].name", is("user-1")))
         .andExpect(jsonPath("$.content.[1].name", is("user-2")))
         .andExpect(jsonPath("$.content.[2].name", is("user-3")));
@@ -79,16 +77,16 @@ class UserControllerRestTest {
   @Test
   @DisplayName("Should find user by ID")
   void shouldFindUserById() throws Exception {
-    String id = "/" + 1;
-    mockMvc.perform(get(URL + id)
+    Optional<User> first = userRepo.findAll().stream().findFirst();
+    assertTrue(first.isPresent());
+    User user = first.get();
+
+    mockMvc.perform(get(URL + "/" + first.get().getId())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.id", is(1)))
-        .andExpect(jsonPath("$.name").exists())
-        .andExpect(jsonPath("$.name", is("user-1")))
-        .andExpect(jsonPath("$.creationDate").exists())
-        .andExpect(jsonPath("$.creationDate", is(LocalDate.now().toString())));
+        .andExpect(jsonPath("$.id", is(user.getId().toString())))
+        .andExpect(jsonPath("$.name", is(user.getName())))
+        .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())));
   }
 
   @Test
@@ -100,9 +98,7 @@ class UserControllerRestTest {
         .content(mapToJSON(user)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").exists())
         .andExpect(jsonPath("$.name", is("Default User")))
-        .andExpect(jsonPath("$.creationDate").exists())
         .andExpect(jsonPath("$.creationDate", is(LocalDate.now().toString())));
   }
 

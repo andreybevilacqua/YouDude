@@ -1,9 +1,12 @@
 package com.abevilacqua.youdude.repo.jpa;
 
 import com.abevilacqua.youdude.model.Category;
+import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +21,8 @@ public interface VideoRepo extends JpaRepository<Video, UUID> {
 
   List<Video> findAllByCategory(final Category category);
 
+  @Transactional
+  @Modifying
   @Query("DELETE FROM Video v WHERE v.user = ?1")
-  void deleteAllByUserId(final UUID id);
+  void deleteAllByUser(final User user);
 }
