@@ -22,10 +22,10 @@ public final class Playlist implements Comparable<Playlist> {
   @Column(name = "name")
   private String name;
 
-  @OneToMany(mappedBy = "playlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "playlist", fetch = FetchType.EAGER)
   private List<Video> videos;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 

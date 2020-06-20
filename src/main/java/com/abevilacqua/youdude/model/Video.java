@@ -10,7 +10,6 @@ import java.security.InvalidParameterException;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.AUTO;
 
@@ -40,7 +39,7 @@ public final class Video implements Comparable<Video>{
   @Enumerated(STRING)
   private Category category;
 
-  @ManyToOne(cascade = ALL)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 

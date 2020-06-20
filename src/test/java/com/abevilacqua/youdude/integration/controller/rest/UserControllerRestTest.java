@@ -22,6 +22,7 @@ import java.util.Optional;
 import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -48,7 +49,7 @@ class UserControllerRestTest {
 
   private MockMvc mockMvc;
 
-  private final String URL = "/rest/users";
+  private final String  URL = "/rest/users";
 
   @BeforeEach
   void setup() {
@@ -121,7 +122,7 @@ class UserControllerRestTest {
   @Test
   @DisplayName("Should fail during user delete process")
   void shouldFailDuringUserDeleteProcess() throws Exception {
-    mockMvc.perform(delete(URL + "/" + 9999)
+    mockMvc.perform(delete(URL + "/" + randomUUID().toString())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
