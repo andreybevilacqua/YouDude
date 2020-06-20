@@ -31,8 +31,7 @@ public class VideoService {
   private final VideoRepo videoRepo;
 
   @Autowired
-  public VideoService(VideoRepoPageable videoRepoPageable,
-                      VideoRepo videoRepo) {
+  public VideoService(VideoRepoPageable videoRepoPageable, VideoRepo videoRepo) {
     this.videoRepoPageable = videoRepoPageable;
     this.videoRepo = videoRepo;
   }

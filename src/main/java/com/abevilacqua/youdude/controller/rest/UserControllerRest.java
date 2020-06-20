@@ -38,9 +38,9 @@ public class UserControllerRest {
     return new ResponseEntity<PageImplDTO<User>>(pageMapper(userPage), HttpStatus.OK);
   }
 
-  @GetMapping("/{user_id}")
-  public ResponseEntity<User> getUserById(@PathVariable("user_id") final UUID user_id) {
-    CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
+  @GetMapping("/{id}")
+  public ResponseEntity<User> getUserById(@PathVariable("id") final UUID id) {
+    CompletableFuture<Optional<User>> completableFuture = userService.getById(id);
     return completableFuture
         .join()
         .map(user -> new ResponseEntity<>(user, HttpStatus.OK))

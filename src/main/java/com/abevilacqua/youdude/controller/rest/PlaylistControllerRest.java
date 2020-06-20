@@ -43,13 +43,13 @@ public class PlaylistControllerRest {
     return new ResponseEntity<PageImplDTO<PlaylistDTO>>(pageMapper(playlistPage), HttpStatus.OK);
   }
 
-  @GetMapping("/{user_id}")
+  @GetMapping("/{id}")
   public ResponseEntity<PageImplDTO<PlaylistDTO>> getPlaylistPerUser(
-      @PathVariable("user_id") final UUID user_id,
+      @PathVariable("id") final UUID id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
-    CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, user_id);
+    CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, id);
     Page<PlaylistDTO> playlistPage = playlistsFromUser
         .join()
         .map(PlaylistDTO::mapper);
@@ -62,9 +62,9 @@ public class PlaylistControllerRest {
     return new ResponseEntity<>(mapper(playlistCompletableFuture.join()), HttpStatus.CREATED);
   }
 
-  @DeleteMapping("/{playlist_id}")
-  public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "playlist_id") final UUID playlist_id) {
-    CompletableFuture<Optional<Playlist>> optionalCompletableFuture = playlistService.deletePlaylist(playlist_id);
+  @DeleteMapping("/{id}")
+  public ResponseEntity<PlaylistDTO> deletePlaylist(@PathVariable(value = "id") final UUID id) {
+    CompletableFuture<Optional<Playlist>> optionalCompletableFuture = playlistService.deletePlaylist(id);
     return optionalCompletableFuture.join()
         .map(PlaylistDTO::mapper)
         .map(playlist -> new ResponseEntity<>(playlist, HttpStatus.OK))

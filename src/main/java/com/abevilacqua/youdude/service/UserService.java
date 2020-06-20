@@ -26,8 +26,7 @@ public class UserService {
   private final UserRepo userRepo;
 
   @Autowired
-  public UserService(UserRepoPageable userRepoPageable,
-                     UserRepo userRepo) {
+  public UserService(UserRepoPageable userRepoPageable, UserRepo userRepo) {
     this.userRepoPageable = userRepoPageable;
     this.userRepo = userRepo;
   }

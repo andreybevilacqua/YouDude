@@ -65,9 +65,9 @@ public class PlaylistControllerHateoas {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @GetMapping("/user/{user_id}")
-  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("user_id") final UUID user_id) {
-    CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(user_id);
+  @GetMapping("/user/{id}")
+  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("id") final UUID id) {
+    CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(id);
 
     CollectionModel<PlaylistResource> collectionModel =
         new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser.join());

@@ -42,16 +42,16 @@ public class UserControllerHateoas {
     return new ResponseEntity<>(userResources, HttpStatus.OK);
   }
 
-  @GetMapping("/{user_id}")
-  public ResponseEntity<UserResource> getUserById(@PathVariable("user_id") UUID user_id) {
-    CompletableFuture<Optional<User>> completableFuture = userService.getById(user_id);
+  @GetMapping("/{id}")
+  public ResponseEntity<UserResource> getUserById(@PathVariable("id") UUID id) {
+    CompletableFuture<Optional<User>> completableFuture = userService.getById(id);
     return completableFuture
         .join()
         .map(user -> {
           UserResource userResource = new UserResourceAssembler().toModel(user);
           userResource
               .add(WebMvcLinkBuilder
-              .linkTo(methodOn(UserControllerHateoas.class).getUserById(user_id))
+              .linkTo(methodOn(UserControllerHateoas.class).getUserById(id))
               .withRel("base-uri"));
           return new ResponseEntity<>(userResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

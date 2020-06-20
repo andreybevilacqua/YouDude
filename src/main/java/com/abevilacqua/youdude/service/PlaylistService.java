@@ -29,8 +29,7 @@ public class PlaylistService {
 
   private final PlaylistRepo playlistRepo;
 
-  public PlaylistService(PlaylistRepoPageable repo,
-                         PlaylistRepo playlistRepo) {
+  public PlaylistService(PlaylistRepoPageable repo, PlaylistRepo playlistRepo) {
     this.playlistRepoPageable = repo;
     this.playlistRepo = playlistRepo;
   }

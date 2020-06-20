@@ -42,13 +42,13 @@ public class VideoControllerRest {
     return new ResponseEntity<PageImplDTO<VideoDTO>>(pageMapper(videos), HttpStatus.OK);
   }
 
-  @GetMapping("/user/{user_id}")
+  @GetMapping("/user/{id}")
   public ResponseEntity<PageImplDTO<VideoDTO>> getVideosPerUser(
-      @PathVariable("user_id") final UUID user_id,
+      @PathVariable("id") final UUID id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
       @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
-    CompletableFuture<Page<Video>> completableFuture = videoService.getAllFromUser(user_id, page, size, sortBy);
+    CompletableFuture<Page<Video>> completableFuture = videoService.getAllFromUser(id, page, size, sortBy);
     Page<VideoDTO> videos = completableFuture
         .join()
         .map(VideoDTO::mapper);
@@ -70,9 +70,9 @@ public class VideoControllerRest {
     return new ResponseEntity<>(mapper(completableFuture.join()), HttpStatus.CREATED);
   }
 
-  @DeleteMapping("/{video_id}")
-  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "video_id") final UUID video_id) {
-    CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);
+  @DeleteMapping("/{id}")
+  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "id") final UUID id) {
+    CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(id);
     return completableFuture
         .join()
         .map(VideoDTO::mapper)

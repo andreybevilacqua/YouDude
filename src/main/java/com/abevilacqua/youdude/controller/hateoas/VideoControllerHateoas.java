@@ -49,23 +49,23 @@ public class VideoControllerHateoas {
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
   }
 
-  @GetMapping("/user/{user_id}")
-  public ResponseEntity<CollectionModel<VideoResource>> getVideosPerUser(@PathVariable final UUID user_id) {
-    CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(user_id);
+  @GetMapping("/user/{id}")
+  public ResponseEntity<CollectionModel<VideoResource>> getVideosPerUser(@PathVariable final UUID id) {
+    CompletableFuture<List<Video>> completableFuture = videoService.getAllFromUser(id);
 
     CollectionModel<VideoResource> videoResourceCollectionModel =
         new VideoResourceAssembler().toCollectionModel(completableFuture.join());
 
     videoResourceCollectionModel.add(WebMvcLinkBuilder
-        .linkTo(methodOn(VideoControllerHateoas.class).getVideosPerUser(user_id))
+        .linkTo(methodOn(VideoControllerHateoas.class).getVideosPerUser(id))
         .withRel("self"));
 
     return new ResponseEntity<>(videoResourceCollectionModel, HttpStatus.OK);
   }
 
-  @GetMapping("/{video_id}")
-  public ResponseEntity<VideoResource> getVideoById(@PathVariable final UUID video_id) {
-    CompletableFuture<Optional<Video>> completableFutureOptional = videoService.getVideoById(video_id);
+  @GetMapping("/{id}")
+  public ResponseEntity<VideoResource> getVideoById(@PathVariable final UUID id) {
+    CompletableFuture<Optional<Video>> completableFutureOptional = videoService.getVideoById(id);
 
     return completableFutureOptional
         .join()
@@ -86,9 +86,9 @@ public class VideoControllerHateoas {
     return new ResponseEntity<>(videoResource, HttpStatus.CREATED);
   }
 
-  @DeleteMapping("/{video_id}")
-  public ResponseEntity<VideoResource> deleteVideo(@PathVariable(value = "video_id") final UUID video_id) {
-    CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(video_id);
+  @DeleteMapping("/{id}")
+  public ResponseEntity<VideoResource> deleteVideo(@PathVariable(value = "id") final UUID id) {
+    CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(id);
     return completableFuture
         .join()
         .map(video -> new ResponseEntity<>(new VideoResourceAssembler().toModel(video), HttpStatus.OK))

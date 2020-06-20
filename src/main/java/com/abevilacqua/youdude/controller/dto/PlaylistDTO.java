@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 @Builder
 public class PlaylistDTO {
 
-  private final UUID playlist_id;
+  private final UUID playlistId;
 
   private final String name;
 
-  private final List<UUID> videos_id;
+  private final List<UUID> videosId;
 
-  private final UUID user_id;
+  private final UUID userId;
 
   public static PlaylistDTO mapper(final Playlist playlist) {
     List<UUID> videos = playlist
@@ -30,10 +30,10 @@ public class PlaylistDTO {
 
     return PlaylistDTO
         .builder()
-        .playlist_id(playlist.getId())
+        .playlistId(playlist.getId())
         .name(playlist.getName())
-        .videos_id(videos)
-        .user_id(playlist.getUser().getId())
+        .videosId(videos)
+        .userId(playlist.getUser().getId())
         .build();
   }
 

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 public class VideoDTO {
 
-  private final UUID video_id;
+  private final UUID videoId;
 
   private final String name;
 
@@ -21,16 +21,16 @@ public class VideoDTO {
 
   private final Category category;
 
-  private final UUID user_id;
+  private final UUID userId;
 
   public static VideoDTO mapper(final Video video) {
     return VideoDTO.builder()
-        .video_id(video.getId())
+        .videoId(video.getId())
         .name(video.getName())
         .subject(video.getSubject())
         .duration(video.getDuration())
         .category(video.getCategory())
-        .user_id(video.getUser().getId())
+        .userId(video.getUser().getId())
         .build();
   }
 }
