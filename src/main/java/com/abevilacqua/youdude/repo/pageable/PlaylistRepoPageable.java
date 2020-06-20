@@ -12,6 +12,9 @@ import java.util.UUID;
 @Repository
 public interface PlaylistRepoPageable extends PagingAndSortingRepository<Playlist, UUID> {
 
+  @Query("SELECT p FROM Playlist p ORDER BY p.name")
+  Page<Playlist> findAll(Pageable pageable);
+
   @Query("SELECT p FROM Playlist p WHERE p.user = ?1")
   Page<Playlist> findAllByUser(UUID user, Pageable pageable);
 }

@@ -12,6 +12,9 @@ import java.util.UUID;
 @Repository
 public interface VideoRepoPageable extends PagingAndSortingRepository<Video, UUID> {
 
+  @Query("SELECT v FROM Video v ORDER BY v.name")
+  Page<Video> findAll(Pageable pageable);
+
   @Query("SELECT v FROM Video v WHERE v.user = ?1")
   Page<Video> findAllByUser(UUID userId, Pageable pageable);
 }

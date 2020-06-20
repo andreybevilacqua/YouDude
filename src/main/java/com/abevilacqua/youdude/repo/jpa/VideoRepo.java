@@ -10,8 +10,14 @@ import java.util.UUID;
 
 public interface VideoRepo extends JpaRepository<Video, UUID> {
 
+  @Query("SELECT v FROM Video v ORDER BY v.name")
+  List<Video> findAll();
+
   @Query("SELECT v FROM Video v WHERE v.user = ?1")
   List<Video> findAllByUser(UUID userId);
 
   List<Video> findAllByCategory(final Category category);
+
+  @Query("DELETE FROM Video v WHERE v.user = ?1")
+  void deleteAllByUserId(final UUID id);
 }
