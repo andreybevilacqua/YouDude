@@ -1,13 +1,14 @@
 package com.abevilacqua.youdude.repo.jpa;
 
 import com.abevilacqua.youdude.model.Playlist;
-import com.abevilacqua.youdude.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface PlaylistRepo extends JpaRepository<Playlist, UUID> {
 
-  List<Playlist> findAllByUser(final User user);
+  @Query("SELECT p FROM Playlist p WHERE p.user = ?1")
+  List<Playlist> findAllByUser(final UUID user);
 }
