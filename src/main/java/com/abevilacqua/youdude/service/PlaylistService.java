@@ -6,9 +6,6 @@ import com.abevilacqua.youdude.repo.pageable.PlaylistRepoPageable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,38 +48,17 @@ public class PlaylistService {
     });
   }
 
-  @Cacheable("getAllFromUserPageable")
-  public CompletableFuture<Page<Playlist>> getAllFromUser(final int page,
-                                                          final int size,
-                                                          final String sortBy,
-                                                          final UUID userId) {
-    simulateSlowService();
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    System.out.println("Thread running getAllFromUser pageable service: " + Thread.currentThread());
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return playlistRepoPageable.findAllByUser(userId, pageable);
-    });
-  }
-
   @Cacheable("getAllFromUser")
-  public CompletableFuture<List<Playlist>> getAllFromUser(final UUID userId) {
+  public List<Playlist> getAllFromUser(final UUID userId) {
     simulateSlowService();
-    System.out.println("Thread running getAllFromUser service: " + Thread.currentThread());
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return playlistRepo.findAllByUser(userId);
-    });
+    System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
+    return playlistRepo.findAllByUser(userId);
   }
 
   @Cacheable("getAllById")
-  public CompletableFuture<Optional<Playlist>> getById(final UUID playlistId) {
+  public Optional<Playlist> getById(final UUID playlistId) {
     simulateSlowService();
-    System.out.println("Thread running getById service: " + Thread.currentThread());
-    return supplyAsync(() -> {
-      System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-      return playlistRepo.findById(playlistId);
-    });
+    return playlistRepo.findById(playlistId);
   }
 
   public CompletableFuture<Playlist> createPlaylist(final Playlist playlist) {

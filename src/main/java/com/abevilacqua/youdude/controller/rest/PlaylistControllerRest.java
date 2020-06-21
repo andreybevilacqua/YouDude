@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 import static com.abevilacqua.youdude.controller.dto.PlaylistDTO.mapper;
@@ -44,16 +46,21 @@ public class PlaylistControllerRest {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<PageImplDTO<PlaylistDTO>> getPlaylistPerUser(
-      @PathVariable("id") final UUID id,
-      @RequestParam(value = "page", defaultValue = "0") final int page,
-      @RequestParam(value = "size", defaultValue = "10") final int size,
-      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
-    CompletableFuture<Page<Playlist>> playlistsFromUser = playlistService.getAllFromUser(page, size, sortBy, id);
-    Page<PlaylistDTO> playlistPage = playlistsFromUser
-        .join()
-        .map(PlaylistDTO::mapper);
-    return new ResponseEntity<PageImplDTO<PlaylistDTO>>(pageMapper(playlistPage), HttpStatus.OK);
+  public ResponseEntity<PlaylistDTO> getPlaylistById(@PathVariable("id") final UUID id) {
+    return playlistService
+        .getById(id)
+        .map(playlist -> new ResponseEntity<>(mapper(playlist), HttpStatus.OK))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @GetMapping("/user/{id}")
+  public ResponseEntity<List<PlaylistDTO>> getAllPlaylistsFromUser(@PathVariable("id") final UUID id) {
+    List<PlaylistDTO> result = playlistService
+        .getAllFromUser(id)
+        .stream()
+        .map(PlaylistDTO::mapper)
+        .collect(Collectors.toList());
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
   @PostMapping

@@ -55,9 +55,8 @@ public class PlaylistControllerHateoas {
 
   @GetMapping("/{id}")
   public ResponseEntity<PlaylistResource> getPlaylistById(@PathVariable("id") final UUID id) {
-    CompletableFuture<Optional<Playlist>> optionalPlaylist = playlistService.getById(id);
+    Optional<Playlist> optionalPlaylist = playlistService.getById(id);
     return optionalPlaylist
-        .join()
         .map(playlist -> {
           PlaylistResource playlistResource = new PlaylistResourceAssembler().toModel(playlist);
           return new ResponseEntity<>(playlistResource, HttpStatus.OK);
@@ -67,10 +66,10 @@ public class PlaylistControllerHateoas {
 
   @GetMapping("/user/{id}")
   public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("id") final UUID id) {
-    CompletableFuture<List<Playlist>> playlistsFromUser = playlistService.getAllFromUser(id);
+    List<Playlist> playlistsFromUser = playlistService.getAllFromUser(id);
 
     CollectionModel<PlaylistResource> collectionModel =
-        new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser.join());
+        new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser);
 
     return new ResponseEntity<>(collectionModel, HttpStatus.OK);
   }

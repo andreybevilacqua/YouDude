@@ -1,10 +1,12 @@
 package com.abevilacqua.youdude.integration.controller.rest;
 
 import com.abevilacqua.youdude.controller.rest.PlaylistControllerRest;
+import com.abevilacqua.youdude.model.Playlist;
 import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.PlaylistService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createMockMvc;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,22 +60,27 @@ class PlaylistControllerRestTest {
     mockMvc.perform(get(URL)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.content.[0].playlist_id").isNumber())
+        .andDo(print())
+        .andExpect(jsonPath("$.content.[0].playlistId").exists())
+        .andExpect(jsonPath("$.content.[0].playlistId").isString())
         .andExpect(jsonPath("$.content.[0].name").isString())
-        .andExpect(jsonPath("$.content.[0].videos_id").isArray())
-        .andExpect(jsonPath("$.content.[0].user_id").isNumber());
+        .andExpect(jsonPath("$.content.[0].videosId").isArray())
+        .andExpect(jsonPath("$.content.[0].userId").isString());
   }
 
   @Test
-  @DisplayName("Should find all playlists from an user")
-  void shouldFindAllPlaylistsFromUser() throws Exception {
-    mockMvc.perform(get(URL + "/1")
+  @DisplayName("Should find playlist by id")
+  void shouldFindPlaylistById() throws Exception {
+    Optional<Playlist> first = playlistRepo.findAll().stream().findFirst();
+    assertTrue(first.isPresent());
+    Playlist p = first.get();
+    mockMvc.perform(get(URL + "/" + p.getId())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.content.[0].playlist_id").isNumber())
-        .andExpect(jsonPath("$.content.[0].name").isString())
-        .andExpect(jsonPath("$.content.[0].videos_id").isArray())
-        .andExpect(jsonPath("$.content.[0].user_id").isNumber());
+        .andExpect(jsonPath("$.playlistId").value(p.getId().toString()))
+        .andExpect(jsonPath("$.name").value(p.getName()))
+        .andExpect(jsonPath("$.videosId").isArray())
+        .andExpect(jsonPath("$.userId").value(p.getUser().getId().toString()));
   }
 
 }
