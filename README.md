@@ -1,6 +1,12 @@
 # YouDude
 An API to play with Spring and Java.
 
+To run it:
+    
+`mvn clean install -U`
+
+`docker-compose -f compose.yml up -d`
+
 ## Technologies
     - Java 11
     - Spring Boot
