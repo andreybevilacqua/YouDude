@@ -80,10 +80,10 @@ public final class Video implements Comparable<Video>{
   @Override
   public int hashCode() {
     int result;
-    result = id.toString().hashCode();
-    result = 31 * result + name.hashCode();
+    result = name.hashCode();
     result = 31 * result + Integer.hashCode(duration);
     result = 31 * result + category.hashCode();
+    result = 31 * result + subject.hashCode();
     return result;
   }
 

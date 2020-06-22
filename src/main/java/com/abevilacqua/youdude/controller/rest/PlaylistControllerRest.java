@@ -53,16 +53,6 @@ public class PlaylistControllerRest {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @GetMapping("/user/{id}")
-  public ResponseEntity<List<PlaylistDTO>> getAllPlaylistsFromUser(@PathVariable("id") final UUID id) {
-    List<PlaylistDTO> result = playlistService
-        .getAllFromUser(id)
-        .stream()
-        .map(PlaylistDTO::mapper)
-        .collect(Collectors.toList());
-    return new ResponseEntity<>(result, HttpStatus.OK);
-  }
-
   @PostMapping
   public ResponseEntity<PlaylistDTO> createPlayList(@RequestBody final Playlist playlist) {
     CompletableFuture<Playlist> playlistCompletableFuture = playlistService.createPlaylist(playlist);

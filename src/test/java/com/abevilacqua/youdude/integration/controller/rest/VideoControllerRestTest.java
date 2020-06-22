@@ -25,6 +25,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -67,28 +68,29 @@ class VideoControllerRestTest {
     mockMvc.perform(get(URL)
         .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.content.[0].video_id").exists())
-        .andExpect(jsonPath("$.content.[0].video_id").isNumber())
+        .andExpect(jsonPath("$.content.[0].videoId").exists())
+        .andExpect(jsonPath("$.content.[0].videoId").isString())
         .andExpect(jsonPath("$.content.[0].name").isString())
         .andExpect(jsonPath("$.content.[0].subject").isString())
         .andExpect(jsonPath("$.content.[0].duration").isNumber())
         .andExpect(jsonPath("$.content.[0].category").isString())
-        .andExpect(jsonPath("$.content.[0].user_id").isNumber());
+        .andExpect(jsonPath("$.content.[0].userId").isString());
   }
 
   @Test
   @DisplayName("Should find all videos from an user")
   void shouldFindAllVideosFromUser() throws Exception {
-    mockMvc.perform(get(URL + "/4")
+    Optional<Video> first = videoRepo.findAll().stream().findFirst();
+    assertTrue(first.isPresent());
+    Video v = first.get();
+    mockMvc.perform(get(URL + "/" + v.getId().toString())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.video_id").exists())
-        .andExpect(jsonPath("$.video_id").isNumber())
-        .andExpect(jsonPath("$.name").isString())
-        .andExpect(jsonPath("$.subject").isString())
-        .andExpect(jsonPath("$.duration").isNumber())
-        .andExpect(jsonPath("$.category").isString())
-        .andExpect(jsonPath("$.user_id", is(1)));
+        .andExpect(jsonPath("$.videoId").value(v.getId().toString()))
+        .andExpect(jsonPath("$.name").value(v.getName()))
+        .andExpect(jsonPath("$.subject").value(v.getSubject()))
+        .andExpect(jsonPath("$.duration").value(v.getDuration()))
+        .andExpect(jsonPath("$.userId", is(v.getUser().getId().toString())));
   }
 
   @Test
@@ -102,13 +104,13 @@ class VideoControllerRestTest {
           .contentType(APPLICATION_JSON)
           .content(mapToJSON(video)))
           .andExpect(status().isCreated())
-          .andExpect(jsonPath("$.video_id").exists())
-          .andExpect(jsonPath("$.video_id").isNumber())
+          .andExpect(jsonPath("$.videoId").exists())
+          .andExpect(jsonPath("$.videoId").isString())
           .andExpect(jsonPath("$.name").isString())
           .andExpect(jsonPath("$.subject").isString())
           .andExpect(jsonPath("$.duration").isNumber())
           .andExpect(jsonPath("$.category").isString())
-          .andExpect(jsonPath("$.user_id", is(1)));
+          .andExpect(jsonPath("$.userId").isString());
     }
   }
 

@@ -47,8 +47,7 @@ public final class User implements Comparable<User>{
   @Override
   public int hashCode() {
     int result;
-    result = id.toString().hashCode();
-    result = 31 * result + name.hashCode();
+    result = name.hashCode();
     result = 31 * result + creationDate.hashCode();
     return result;
   }

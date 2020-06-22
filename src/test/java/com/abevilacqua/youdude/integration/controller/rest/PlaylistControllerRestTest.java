@@ -6,7 +6,6 @@ import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.PlaylistService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createMockMvc;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,7 +58,6 @@ class PlaylistControllerRestTest {
     mockMvc.perform(get(URL)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andDo(print())
         .andExpect(jsonPath("$.content.[0].playlistId").exists())
         .andExpect(jsonPath("$.content.[0].playlistId").isString())
         .andExpect(jsonPath("$.content.[0].name").isString())

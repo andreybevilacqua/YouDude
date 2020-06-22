@@ -48,13 +48,6 @@ public class PlaylistService {
     });
   }
 
-  @Cacheable("getAllFromUser")
-  public List<Playlist> getAllFromUser(final UUID userId) {
-    simulateSlowService();
-    System.out.println("Thread running inside of supplyAsync: " + Thread.currentThread());
-    return playlistRepo.findAllByUser(userId);
-  }
-
   @Cacheable("getAllById")
   public Optional<Playlist> getById(final UUID playlistId) {
     simulateSlowService();

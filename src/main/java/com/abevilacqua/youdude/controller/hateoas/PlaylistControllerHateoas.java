@@ -64,14 +64,4 @@ public class PlaylistControllerHateoas {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @GetMapping("/user/{id}")
-  public ResponseEntity<CollectionModel<PlaylistResource>> getPlaylistPerUser(@PathVariable("id") final UUID id) {
-    List<Playlist> playlistsFromUser = playlistService.getAllFromUser(id);
-
-    CollectionModel<PlaylistResource> collectionModel =
-        new PlaylistResourceAssembler().toCollectionModel(playlistsFromUser);
-
-    return new ResponseEntity<>(collectionModel, HttpStatus.OK);
-  }
-
 }

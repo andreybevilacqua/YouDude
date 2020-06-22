@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,7 +113,6 @@ class UserControllerRestTest {
     if(user.isPresent()) {
       mockMvc.perform(delete(URL+ "/" + user.get().getId())
           .contentType(APPLICATION_JSON))
-          .andDo(print())
           .andExpect(status().isOk());
     }
   }
