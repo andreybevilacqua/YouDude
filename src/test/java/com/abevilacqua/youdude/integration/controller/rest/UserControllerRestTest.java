@@ -69,9 +69,9 @@ class UserControllerRestTest {
         .andExpect(jsonPath("$.content.[1].id").isString())
         .andExpect(jsonPath("$.content.[2].id").exists())
         .andExpect(jsonPath("$.content.[2].id").isString())
-        .andExpect(jsonPath("$.content.[0].name", is("user-1")))
-        .andExpect(jsonPath("$.content.[1].name", is("user-2")))
-        .andExpect(jsonPath("$.content.[2].name", is("user-3")));
+        .andExpect(jsonPath("$.content.[0].name").isString())
+        .andExpect(jsonPath("$.content.[1].name").isString())
+        .andExpect(jsonPath("$.content.[2].name").isString());
   }
 
   @Test

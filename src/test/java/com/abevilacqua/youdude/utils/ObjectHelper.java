@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static com.abevilacqua.youdude.model.Category.COMEDY;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -23,7 +24,11 @@ public final class ObjectHelper {
   }
 
   public static User createDefaultUser() {
-    return User.newInstance("Default User", LocalDate.now());
+    return User.newInstance(UUID.randomUUID(), "Default User", LocalDate.now());
+  }
+
+  public static User createAnotherDefaultUser() {
+    return User.newInstance(UUID.randomUUID(), "Another Default User", LocalDate.now());
   }
 
   public static Video createDefaultVideo(User user) {

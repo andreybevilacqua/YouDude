@@ -11,13 +11,19 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
+import static com.abevilacqua.youdude.model.User.newInstance;
 import static com.abevilacqua.youdude.service.GenericService.getAll;
 import static com.abevilacqua.youdude.service.GenericService.simulateSlowService;
+import static java.lang.String.valueOf;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Slf4j
@@ -75,6 +81,20 @@ public class UserService {
     });
   }
 
+  public CompletableFuture<User> updateUser(final User newUser, Map<String, Object> fieldsToChange) {
+    System.out.println("Thread running updateUser service: " + Thread.currentThread());
+
+    return supplyAsync(() ->
+        userRepo
+            .findById(newUser.getId())
+            .map(user -> {
+              User updatedUser = userWithFieldsToChange(fieldsToChange, user);
+              userRepo.save(updatedUser);
+              return updatedUser;
+            })
+            .orElseThrow(() -> new InvalidParameterException("User with ID does not exist")));
+  }
+
   public Optional<User> deleteUser(final UUID id) {
     Optional<User> userOptional = userRepo.findById(id);
     userOptional.ifPresent(user -> {
@@ -84,6 +104,20 @@ public class UserService {
       userRepo.deleteUserById(id);
     });
     return userOptional;
+  }
+
+  private User userWithFieldsToChange(Map<String, Object> fieldsToChange, User oldUser) {
+    AtomicReference<String> name = new AtomicReference<>(oldUser.getName());
+    AtomicReference<LocalDate> creationDate = new AtomicReference<>(oldUser.getCreationDate());
+
+    fieldsToChange
+        .keySet()
+        .forEach(field -> {
+          if(field.equals("name")) name.set(valueOf(fieldsToChange.get(field)));
+          if(field.equals("creationDate")) creationDate.set((LocalDate) fieldsToChange.get(field));
+        });
+
+    return newInstance(oldUser.getId(), name.get(), creationDate.get());
   }
 
 }

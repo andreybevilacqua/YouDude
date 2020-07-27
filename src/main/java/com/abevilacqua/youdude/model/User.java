@@ -34,7 +34,20 @@ public final class User implements Comparable<User>{
     return new User(name, creationDate);
   }
 
-  private User(final String name, final LocalDate creationDate) {
+  public static User newInstance(final UUID id, final String name, final LocalDate creationDate) {
+    requireNonNull(id, "ID should not be null");
+    requireNonNull(name, "Name should not be null");
+    requireNonNull(creationDate, "Creation date should not be null");
+    return new User(id, name, creationDate);
+  }
+
+  private User(String name, final LocalDate creationDate) {
+    this.name = name;
+    this.creationDate = creationDate;
+  }
+
+  private User(final UUID id, String name, final LocalDate creationDate) {
+    this.id = id;
     this.name = name;
     this.creationDate = creationDate;
   }

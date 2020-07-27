@@ -1,0 +1,64 @@
+package com.abevilacqua.youdude.integration.service;
+
+import com.abevilacqua.youdude.model.User;
+import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
+import com.abevilacqua.youdude.repo.jpa.UserRepo;
+import com.abevilacqua.youdude.repo.jpa.VideoRepo;
+import com.abevilacqua.youdude.service.UserService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.abevilacqua.youdude.model.User.newInstance;
+import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+public class UserServiceTest {
+
+  @Autowired
+  private UserRepo userRepo;
+
+  @Autowired
+  private VideoRepo videoRepo;
+
+  @Autowired
+  private PlaylistRepo playlistRepo;
+
+  @Autowired
+  private UserService service;
+
+  @BeforeEach
+  void setup() {
+    if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
+  }
+
+  @Test
+  @DisplayName("Should update user")
+  public void shouldUpdateUser() {
+    Optional<User> first = userRepo.findAll().stream().findFirst();
+    Assertions.assertTrue(first.isPresent());
+    User newUser = newInstance(first.get().getId(), "This is a new name", LocalDate.now());
+
+    Map<String, Object> fieldsToChange = Map.of(
+        "name", newUser.getName(),
+        "creationDate", LocalDate.of(2001, 1, 1)
+    );
+
+    User user = service.updateUser(newUser, fieldsToChange).join();
+    assertNotNull(user.getId());
+    assertEquals("This is a new name", user.getName());
+    assertEquals(LocalDate.of(2001, 1, 1), user.getCreationDate());
+  }
+}

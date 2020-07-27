@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 import static com.abevilacqua.youdude.utils.ObjectHelper.createDefaultUser;
 import static java.util.Collections.singletonList;
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -55,11 +56,11 @@ public class UserServiceTest {
   @Test
   @DisplayName("Should get user by id")
   public void shouldGetUserById() throws ExecutionException, InterruptedException {
-    UUID random = UUID.randomUUID();
+    UUID random = randomUUID();
     when(userRepo.findById(random)).thenReturn(Optional.of(createDefaultUser()));
     Optional<User> optionalUser = userService.getById(random).get();
     assertTrue(optionalUser.isPresent());
-    assertNull(optionalUser.get().getId());
+    assertNotNull(optionalUser.get().getId());
     assertEquals("Default User", optionalUser.get().getName());
     assertEquals(LocalDate.now(), optionalUser.get().getCreationDate());
   }
@@ -70,10 +71,9 @@ public class UserServiceTest {
     User newUser = createDefaultUser();
     when(userRepo.save(newUser)).thenReturn(newUser);
     User user = userService.createUser(newUser).get();
-    assertNull(user.getId());
+    assertNotNull(user.getId());
     assertEquals("Default User", user.getName());
     assertEquals(LocalDate.now(), user.getCreationDate());
   }
-
 
 }
