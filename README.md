@@ -78,3 +78,7 @@ RESTFul endpoint: `http://localhost:8080/youdude/hateoas/playlists`
           "creationDate":"2020-03-09"
        }
     }
+
+## Actuator
+To request data from Actuator, you can use the endpoint: 
+`http://localhost:8080/youdude/actuator/metrics`
