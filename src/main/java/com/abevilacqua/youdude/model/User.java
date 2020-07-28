@@ -1,10 +1,14 @@
 package com.abevilacqua.youdude.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -13,6 +17,7 @@ import static javax.persistence.GenerationType.AUTO;
 
 @Entity(name = "user_youdude")
 @Getter
+@Builder
 @NoArgsConstructor
 public final class User implements Comparable<User>{
 

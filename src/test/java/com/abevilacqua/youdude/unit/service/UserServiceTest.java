@@ -60,7 +60,7 @@ public class UserServiceTest {
     when(userRepo.findById(random)).thenReturn(Optional.of(createDefaultUser()));
     Optional<User> optionalUser = userService.getById(random).get();
     assertTrue(optionalUser.isPresent());
-    assertNotNull(optionalUser.get().getId());
+    assertNull(optionalUser.get().getId());
     assertEquals("Default User", optionalUser.get().getName());
     assertEquals(LocalDate.now(), optionalUser.get().getCreationDate());
   }
@@ -71,7 +71,7 @@ public class UserServiceTest {
     User newUser = createDefaultUser();
     when(userRepo.save(newUser)).thenReturn(newUser);
     User user = userService.createUser(newUser).get();
-    assertNotNull(user.getId());
+    assertNull(user.getId());
     assertEquals("Default User", user.getName());
     assertEquals(LocalDate.now(), user.getCreationDate());
   }
