@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -51,6 +52,21 @@ public class UserControllerRest {
   public ResponseEntity<User> createUser(@RequestBody final User user) {
     CompletableFuture<User> completableFuture = userService.createUser(user);
     return new ResponseEntity<>(completableFuture.join(), HttpStatus.CREATED);
+  }
+
+  @PutMapping("/name")
+  public ResponseEntity<User> updateUserName(@RequestParam(name = "name") final String name,
+                                             @RequestParam(name = "id") final UUID id) {
+    CompletableFuture<User> completableFuture = userService.updateUserName(name, id);
+    return new ResponseEntity<>(completableFuture.join(), HttpStatus.OK);
+  }
+
+  @PutMapping("/creation-date")
+  public ResponseEntity<User> updateUserCreationDate(@RequestParam(name = "creation-date") final String creationDate,
+                                                     @RequestParam(name = "id") final UUID id) {
+    LocalDate parsedDate = LocalDate.parse(creationDate);
+    CompletableFuture<User> completableFuture = userService.updateUserCreationDate(parsedDate, id);
+    return new ResponseEntity<>(completableFuture.join(), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")

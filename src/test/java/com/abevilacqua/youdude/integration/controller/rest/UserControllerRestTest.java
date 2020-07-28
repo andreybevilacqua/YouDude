@@ -103,6 +103,38 @@ class UserControllerRestTest {
   }
 
   @Test
+  @DisplayName("Should update user name")
+  void shouldUpdateUserName() throws Exception {
+    Optional<User> user = userRepo.findAll().stream().findFirst();
+    assertTrue(user.isPresent());
+    String name = "new name";
+    mockMvc.perform(put(URL + "/name")
+        .contentType(APPLICATION_JSON)
+        .param("name", name)
+        .param("id", user.get().getId().toString()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.name", is("new name")))
+        .andExpect(jsonPath("$.creationDate", is(user.get().getCreationDate().toString())));
+  }
+
+  @Test
+  @DisplayName("Should update user creation date")
+  void shouldUpdateUserCreationDate() throws Exception {
+    Optional<User> user = userRepo.findAll().stream().findFirst();
+    assertTrue(user.isPresent());
+    LocalDate creationDate = LocalDate.of(2001, 1, 1);
+    mockMvc.perform(put(URL + "/creation-date")
+        .contentType(APPLICATION_JSON)
+        .param("creation-date", creationDate.toString())
+        .param("id", user.get().getId().toString()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.name", is(user.get().getName())))
+        .andExpect(jsonPath("$.creationDate", is(creationDate.toString())));
+  }
+
+  @Test
   @DisplayName("Should delete user")
   void shouldDeleteUser() throws Exception {
     Optional<User> user = userService
