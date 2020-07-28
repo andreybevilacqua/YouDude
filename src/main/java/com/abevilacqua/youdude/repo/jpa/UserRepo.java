@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +25,11 @@ public interface UserRepo extends JpaRepository<User, UUID> {
   @Modifying
   @Query("UPDATE user_youdude u SET u.name = ?1 WHERE u.id = ?2")
   int updateName(String name, UUID id);
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE user_youdude u SET u.creationDate = ?1 WHERE u.id = ?2")
+  int updateCreationDate(LocalDate creationDate, UUID id);
 
   @Transactional
   @Modifying

@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -41,17 +41,28 @@ public class UserServiceTest {
   }
 
   @Test
-  @DisplayName("Should update user")
-  public void shouldUpdateUser() {
+  @DisplayName("Should update user name")
+  public void shouldUpdateUserName() {
     Optional<User> first = userRepo.findAll().stream().findFirst();
     assertTrue(first.isPresent());
 
     String newName = "new name";
-    int result = service.updateUserName(newName, first.get().getId());
-    assertEquals(1, result);
+    User result = service.updateUserName(newName, first.get().getId()).join();
+    assertNotNull(result);
+    assertEquals("new name", result.getName());
+    assertEquals(first.get().getCreationDate(), result.getCreationDate());
+  }
 
-    Optional<User> userUpdated = userRepo.findById(first.get().getId());
-    assertTrue(userUpdated.isPresent());
-    assertEquals("new name", userUpdated.get().getName());
+  @Test
+  @DisplayName("Should update user creation date")
+  public void shouldUpdateUserCreationDate() {
+    Optional<User> first = userRepo.findAll().stream().findFirst();
+    assertTrue(first.isPresent());
+
+    LocalDate creationDate = LocalDate.of(2001, 1, 1);
+    User result = service.updateUserCreationDate(creationDate, first.get().getId()).join();
+    assertNotNull(result);
+    assertEquals(creationDate, result.getCreationDate());
+    assertEquals(first.get().getName(), result.getName());
   }
 }

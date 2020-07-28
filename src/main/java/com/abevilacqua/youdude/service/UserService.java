@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -77,15 +78,32 @@ public class UserService {
     });
   }
 
-  public int updateUserName(final String newName, final UUID id) {
-    requireNonNull(newName, "Name should not be null");
-    if(newName.isBlank()) throw new InvalidParameterException("Name shoud not be empty");
+  public CompletableFuture<User> updateUserName(final String name, final UUID id) {
+    requireNonNull(name, "Name should not be null");
+    if(name.isBlank()) throw new InvalidParameterException("Name should not be empty");
     System.out.println("Thread running updateUser service: " + Thread.currentThread());
 
-    return userRepo
-        .findById(id)
-        .map(user -> userRepo.updateName(newName, id))
-        .orElseThrow(() -> new InvalidParameterException("No user found with this id"));
+    return supplyAsync(() ->
+        userRepo
+            .findById(id)
+            .map(user -> {
+              userRepo.updateName(name, id);
+              return userRepo.findById(id).get();
+            })
+            .orElseThrow(() -> new InvalidParameterException("No user found with this id")));
+  }
+
+  public CompletableFuture<User> updateUserCreationDate(final LocalDate creationDate, final UUID id) {
+    requireNonNull(creationDate, "Creation date should not be null");
+    return supplyAsync(() ->
+      userRepo
+          .findById(id)
+          .map(user -> {
+            userRepo.updateCreationDate(creationDate, id);
+            return userRepo.findById(id).get();
+          })
+          .orElseThrow(() -> new InvalidParameterException("No user fhound with this id"))
+    );
   }
 
   public Optional<User> deleteUser(final UUID id) {
