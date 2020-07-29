@@ -2,9 +2,14 @@
 An API to play with Spring and Java.
 
 To run it:
-    
+
+Build the YouDude application:    
 `mvn clean install -U`
 
+Build the YouDude Admin:    
+`mvn clean install -U`
+
+Then, from the "youdude" folder, you can run the Docker Compose command:    
 `docker-compose -f compose.yml up -d`
 
 ## Technologies
@@ -13,6 +18,8 @@ To run it:
     - Spring JPA
     - Spring HATEOAS
     - Spring Cache
+    - Spring Actuator
+    - Spring Admin
     - Lombok
     - Flyway
     - PostgreSQL
@@ -27,58 +34,6 @@ REST with Page endpoint: `http://localhost:8080/youdude/rest/users`
 
 RESTFul endpoint: `http://localhost:8080/youdude/hateoas/users`
 
-#### JSON
-
-    {
-        "id": 1,
-        "name": "user-1",
-        "creationDate": "2020-03-08"
-    }
-
-### Video
-REST with Page endpoint: `http://localhost:8080/youdude/rest/videos`
-
-RESTFul endpoint: `http://localhost:8080/youdude/hateoas/videos`
-
-#### JSON
-
-    {
-        "videoId": 4,
-        "name": "video-1",
-        "subject": "subject 1",
-        "duration": 10,
-        "category": "COMEDY",
-        "userId": 1
-    }
-
-### Playlist
-REST with Page endpoint: `http://localhost:8080/youdude/rest/playlists`
-
-RESTFul endpoint: `http://localhost:8080/youdude/hateoas/playlists`
-
-#### JSON
-
-    {
-       "id":32,
-       "name":"playlist-32",
-       "videos":[
-         "videos":[
-           {
-             "id": 4,
-             "name": "video-1",
-             "subject": "subject 1",
-             "duration": 10,
-             "category": "COMEDY",
-             "userId": 1
-           }
-        ],
-       "user":{
-          "id":1,
-          "name":"user-1",
-          "creationDate":"2020-03-09"
-       }
-    }
-
-## Actuator
-To request data from Actuator, you can use the endpoint: 
-`http://localhost:8080/youdude/actuator/metrics`
+## Actuator metrics
+All metrics are exposed via the Spring Boot Admin. Just access the URL:
+`http://localhost:8090/`
