@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizacionServerConfig extends AuthorizationServerConfigurerAdapter  {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter  {
 
   @Value("${user.username}")
   private String username;
@@ -28,7 +28,7 @@ public class AuthorizacionServerConfig extends AuthorizationServerConfigurerAdap
   @Qualifier("authenticationManagerBean")
   private final AuthenticationManager authenticationManager;
 
-  public AuthorizacionServerConfig(PasswordEncoder passwordEncoder,
+  public AuthorizationServerConfig(PasswordEncoder passwordEncoder,
                                    AuthenticationManager authenticationManager,
                                    TokenStore tokenStore) {
     this.passwordEncoder = passwordEncoder;
