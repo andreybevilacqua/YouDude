@@ -6,6 +6,7 @@ import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.UserService;
+import com.abevilacqua.youdude.service.security.SecurityService;
 import com.abevilacqua.youdude.utils.ObjectHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,6 +27,8 @@ import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +40,9 @@ class UserControllerRestTest {
 
   @Autowired
   private UserService userService;
+
+  @MockBean
+  private SecurityService securityService;
 
   @Autowired
   private UserRepo userRepo;
@@ -52,16 +59,18 @@ class UserControllerRestTest {
 
   @BeforeEach
   void setup() {
-    UserControllerRest userControllerLevel2 = new UserControllerRest(userService);
+    UserControllerRest userControllerLevel2 = new UserControllerRest(userService, securityService);
     mockMvc = ObjectHelper.createMockMvc(userControllerLevel2);
     if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
+    doNothing().when(securityService).processClientRequest(anyString());
   }
 
   @Test
   @DisplayName("Should find all users")
   void shouldFindAllUsers() throws Exception {
     mockMvc.perform(get(URL)
-        .contentType(APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .header("token", "some-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.[0].id").exists())
         .andExpect(jsonPath("$.content.[0].id").isString())
@@ -82,7 +91,8 @@ class UserControllerRestTest {
     User user = first.get();
 
     mockMvc.perform(get(URL + "/" + first.get().getId())
-        .contentType(APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .header("token", "some-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id", is(user.getId().toString())))
         .andExpect(jsonPath("$.name", is(user.getName())))
@@ -95,7 +105,8 @@ class UserControllerRestTest {
     User user = createDefaultUser();
     mockMvc.perform(post(URL)
         .contentType(APPLICATION_JSON)
-        .content(mapToJSON(user)))
+        .content(mapToJSON(user))
+        .header("token", "some-valid-token"))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name", is("Default User")))
@@ -111,7 +122,8 @@ class UserControllerRestTest {
     mockMvc.perform(put(URL + "/name")
         .contentType(APPLICATION_JSON)
         .param("name", name)
-        .param("id", user.get().getId().toString()))
+        .param("id", user.get().getId().toString())
+        .header("token", "some-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name", is("new name")))
@@ -127,7 +139,8 @@ class UserControllerRestTest {
     mockMvc.perform(put(URL + "/creation-date")
         .contentType(APPLICATION_JSON)
         .param("creation-date", creationDate.toString())
-        .param("id", user.get().getId().toString()))
+        .param("id", user.get().getId().toString())
+        .header("token", "some-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name", is(user.get().getName())))
@@ -144,7 +157,8 @@ class UserControllerRestTest {
         .findFirst();
     if(user.isPresent()) {
       mockMvc.perform(delete(URL+ "/" + user.get().getId())
-          .contentType(APPLICATION_JSON))
+          .contentType(APPLICATION_JSON)
+          .header("token", "some-valid-token"))
           .andExpect(status().isOk());
     }
   }
@@ -153,7 +167,8 @@ class UserControllerRestTest {
   @DisplayName("Should fail during user delete process")
   void shouldFailDuringUserDeleteProcess() throws Exception {
     mockMvc.perform(delete(URL + "/" + randomUUID().toString())
-        .contentType(APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .header("token", "some-valid-token"))
         .andExpect(status().isNotFound());
   }
 }

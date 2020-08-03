@@ -18,7 +18,7 @@ public class ControllerExceptionHandler {
   @ResponseBody
   @ResponseStatus(HttpStatus.FORBIDDEN)
   public ErrorResponse handle(InvalidTokenException exception) {
-    log.error("Invalid token", exception);
+    log.error("Invalid token");
     return new ErrorResponse(HttpStatus.FORBIDDEN, exception.getMessage());
   }
 
@@ -26,7 +26,14 @@ public class ControllerExceptionHandler {
   @ResponseBody
   @ResponseStatus(HttpStatus.FORBIDDEN)
   public ErrorResponse handle(IllegalArgumentException exception) {
-    log.error("Illegal request", exception);
+    log.error("Illegal request");
     return new ErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+  }
+
+  @ExceptionHandler
+  @ResponseBody
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ErrorResponse handle(RuntimeException exception) {
+    return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
   }
 }
