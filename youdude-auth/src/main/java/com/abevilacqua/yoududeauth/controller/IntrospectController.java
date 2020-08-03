@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,16 +15,16 @@ import static com.abevilacqua.yoududeauth.model.TokenValidity.invalidToken;
 import static com.abevilacqua.yoududeauth.model.TokenValidity.validToken;
 
 @RestController
-public class  IntrospectEndpoint {
+public class IntrospectController {
 
   private final TokenStore tokenStore;
 
-  public IntrospectEndpoint(TokenStore tokenStore) {
+  public IntrospectController(TokenStore tokenStore) {
     this.tokenStore = tokenStore;
   }
 
   @PostMapping("/oauth/introspect")
-  public ResponseEntity<TokenValidity> introspect(@RequestParam("token") String token) {
+  public ResponseEntity<TokenValidity> introspect(@RequestHeader("token") String token) {
     OAuth2AccessToken accessToken = this.tokenStore.readAccessToken(token);
     if(accessToken == null || accessToken.isExpired()) return new ResponseEntity<>(invalidToken(), HttpStatus.FORBIDDEN);
 
