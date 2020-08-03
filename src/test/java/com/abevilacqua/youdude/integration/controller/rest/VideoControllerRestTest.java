@@ -8,6 +8,7 @@ import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.UserService;
 import com.abevilacqua.youdude.service.VideoService;
+import com.abevilacqua.youdude.service.security.SecurityService;
 import com.abevilacqua.youdude.utils.ObjectHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +28,8 @@ import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.mapToJSON;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,22 +55,27 @@ class VideoControllerRestTest {
   @Autowired
   private PlaylistRepo playlistRepo;
 
+  @MockBean
+  private SecurityService securityService;
+
   private MockMvc mockMvc;
 
   private final String URL = "/rest/videos";
 
   @BeforeEach
   void setup() {
-    VideoControllerRest videoControllerLevel2 = new VideoControllerRest(videoService);
+    VideoControllerRest videoControllerLevel2 = new VideoControllerRest(videoService, securityService);
     mockMvc = ObjectHelper.createMockMvc(videoControllerLevel2);
     if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
+    doNothing().when(securityService).processClientRequest(anyString());
   }
 
   @Test
   @DisplayName("Should find all videos")
   void shouldFindAllVideos() throws Exception {
     mockMvc.perform(get(URL)
-        .contentType(APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .header("token", "a-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.[0].videoId").exists())
         .andExpect(jsonPath("$.content.[0].videoId").isString())
@@ -84,7 +93,8 @@ class VideoControllerRestTest {
     assertTrue(first.isPresent());
     Video v = first.get();
     mockMvc.perform(get(URL + "/" + v.getId().toString())
-        .contentType(APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .header("token", "a-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.videoId").value(v.getId().toString()))
         .andExpect(jsonPath("$.name").value(v.getName()))
@@ -102,7 +112,8 @@ class VideoControllerRestTest {
       Video video = ObjectHelper.createDefaultVideo(user.get());
       mockMvc.perform(post(URL)
           .contentType(APPLICATION_JSON)
-          .content(mapToJSON(video)))
+          .content(mapToJSON(video))
+          .header("token", "a-valid-token"))
           .andExpect(status().isCreated())
           .andExpect(jsonPath("$.videoId").exists())
           .andExpect(jsonPath("$.videoId").isString())

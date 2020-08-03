@@ -6,12 +6,14 @@ import com.abevilacqua.youdude.repo.jpa.PlaylistRepo;
 import com.abevilacqua.youdude.repo.jpa.UserRepo;
 import com.abevilacqua.youdude.repo.jpa.VideoRepo;
 import com.abevilacqua.youdude.service.PlaylistService;
+import com.abevilacqua.youdude.service.security.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +23,8 @@ import java.util.Optional;
 import static com.abevilacqua.youdude.utils.DBInitializer.initDB;
 import static com.abevilacqua.youdude.utils.ObjectHelper.createMockMvc;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,22 +45,27 @@ class PlaylistControllerRestTest {
   @Autowired
   private PlaylistRepo playlistRepo;
 
+  @MockBean
+  private SecurityService securityService;
+
   private MockMvc mockMvc;
 
   private final String URL = "/rest/playlists";
 
   @BeforeEach
   void setup() {
-    PlaylistControllerRest playlistControllerRestLevel2 = new PlaylistControllerRest(playlistService);
+    PlaylistControllerRest playlistControllerRestLevel2 = new PlaylistControllerRest(playlistService, securityService);
     mockMvc = createMockMvc(playlistControllerRestLevel2);
     if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
+    doNothing().when(securityService).processClientRequest(anyString());
   }
 
   @Test
   @DisplayName("Should find all playlists")
   void shouldFindAllPlaylists() throws Exception {
     mockMvc.perform(get(URL)
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON)
+        .header("token", "a-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.[0].playlistId").exists())
         .andExpect(jsonPath("$.content.[0].playlistId").isString())
@@ -72,7 +81,8 @@ class PlaylistControllerRestTest {
     assertTrue(first.isPresent());
     Playlist p = first.get();
     mockMvc.perform(get(URL + "/" + p.getId())
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON)
+        .header("token", "a-valid-token"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.playlistId").value(p.getId().toString()))
         .andExpect(jsonPath("$.name").value(p.getName()))

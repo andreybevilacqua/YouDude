@@ -4,6 +4,7 @@ import com.abevilacqua.youdude.controller.dto.PageImplDTO;
 import com.abevilacqua.youdude.controller.dto.VideoDTO;
 import com.abevilacqua.youdude.model.Video;
 import com.abevilacqua.youdude.service.VideoService;
+import com.abevilacqua.youdude.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,17 +25,22 @@ public class VideoControllerRest {
   // todo: Evo Suite, gRPC, pitest
 
   private final VideoService videoService;
+  private final SecurityService securityService;
 
   @Autowired
-  public VideoControllerRest(final VideoService videoService) {
+  public VideoControllerRest(final VideoService videoService,
+                             final SecurityService securityService) {
     this.videoService = videoService;
+    this.securityService = securityService;
   }
 
   @GetMapping
   public ResponseEntity<PageImplDTO<VideoDTO>> getAllVideos(
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
-      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy,
+      @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<Page<Video>> completableFuture = videoService.getAllVideos(page, size, sortBy);
     Page<VideoDTO> videos = completableFuture
         .join()
@@ -47,7 +53,9 @@ public class VideoControllerRest {
       @PathVariable("id") final UUID id,
       @RequestParam(value = "page", defaultValue = "0") final int page,
       @RequestParam(value = "size", defaultValue = "10") final int size,
-      @RequestParam(value = "sort", defaultValue = "id") final String sortBy) {
+      @RequestParam(value = "sort", defaultValue = "id") final String sortBy,
+      @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<Page<Video>> completableFuture = videoService.getAllFromUser(id, page, size, sortBy);
     Page<VideoDTO> videos = completableFuture
         .join()
@@ -56,7 +64,9 @@ public class VideoControllerRest {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<VideoDTO> getVideoById(@PathVariable("id") final UUID id) {
+  public ResponseEntity<VideoDTO> getVideoById(@PathVariable("id") final UUID id,
+                                               @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<Optional<Video>> completableFuture = videoService.getVideoById(id);
     return completableFuture
         .join()
@@ -65,13 +75,17 @@ public class VideoControllerRest {
   }
 
   @PostMapping
-  public ResponseEntity<VideoDTO> createVideo(@RequestBody final Video video) {
+  public ResponseEntity<VideoDTO> createVideo(@RequestBody final Video video,
+                                              @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<Video> completableFuture = videoService.createVideo(video);
     return new ResponseEntity<>(mapper(completableFuture.join()), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "id") final UUID id) {
+  public ResponseEntity<VideoDTO> deleteVideo(@PathVariable(value = "id") final UUID id,
+                                              @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<Optional<Video>> completableFuture = videoService.deleteVideo(id);
     return completableFuture
         .join()
