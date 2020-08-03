@@ -4,6 +4,7 @@ import com.abevilacqua.youdude.model.User;
 import com.abevilacqua.youdude.model.resource.UserResource;
 import com.abevilacqua.youdude.model.resource.UserResourceAssembler;
 import com.abevilacqua.youdude.service.UserService;
+import com.abevilacqua.youdude.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -23,27 +24,33 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserControllerHateoas {
 
   private final UserService userService;
+  private final SecurityService securityService;
 
   @Autowired
-  public UserControllerHateoas(UserService userService) {
+  public UserControllerHateoas(final UserService userService,
+                               final SecurityService securityService) {
     this.userService = userService;
+    this.securityService = securityService;
   }
 
   @GetMapping
-  public ResponseEntity<CollectionModel<UserResource>> getAllUsers() {
+  public ResponseEntity<CollectionModel<UserResource>> getAllUsers(@RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<List<User>> completableFuture = userService.getAllUsers();
 
     CollectionModel<UserResource> userResources =
         new UserResourceAssembler().toCollectionModel(completableFuture.join());
 
     userResources.add(WebMvcLinkBuilder
-        .linkTo(methodOn(UserControllerHateoas.class).getAllUsers())
+        .linkTo(methodOn(UserControllerHateoas.class).getAllUsers(token))
         .withRel("recents"));
     return new ResponseEntity<>(userResources, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserResource> getUserById(@PathVariable("id") UUID id) {
+  public ResponseEntity<UserResource> getUserById(@PathVariable("id") UUID id,
+                                                  @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<Optional<User>> completableFuture = userService.getById(id);
     return completableFuture
         .join()
@@ -51,14 +58,16 @@ public class UserControllerHateoas {
           UserResource userResource = new UserResourceAssembler().toModel(user);
           userResource
               .add(WebMvcLinkBuilder
-              .linkTo(methodOn(UserControllerHateoas.class).getUserById(id))
+              .linkTo(methodOn(UserControllerHateoas.class).getUserById(id, token))
               .withRel("base-uri"));
           return new ResponseEntity<>(userResource, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   @PostMapping(consumes = "application/json")
-  public ResponseEntity<UserResource> createUser(@RequestBody User user) {
+  public ResponseEntity<UserResource> createUser(@RequestBody User user,
+                                                 @RequestHeader("token") String token) {
+    securityService.processClientRequest(token);
     CompletableFuture<User> completableFuture = userService.createUser(user);
     UserResource userResource = new UserResourceAssembler().toModel(completableFuture.join());
     return new ResponseEntity<>(userResource, HttpStatus.CREATED);
