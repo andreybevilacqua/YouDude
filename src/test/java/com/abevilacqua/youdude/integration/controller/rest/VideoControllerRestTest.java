@@ -66,7 +66,7 @@ class VideoControllerRestTest {
   void setup() {
     VideoControllerRest videoControllerLevel2 = new VideoControllerRest(videoService, securityService);
     mockMvc = ObjectHelper.createMockMvc(videoControllerLevel2);
-    if(userRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
+    if(videoRepo.findAll().size() == 0) initDB(userRepo, videoRepo, playlistRepo);
     doNothing().when(securityService).processClientRequest(anyString());
   }
 
