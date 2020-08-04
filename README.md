@@ -1,12 +1,18 @@
 # YouDude
 An API to play with Spring and Java.
 
-To run it:
+## To run it locally:
+Just run YouDude, YouDude-Admin, and YouDude-Auth projects directly via your IDE. 
+
+## To run it via container:
 
 Build the YouDude application:  
 `mvn clean install -U`
 
 Build the YouDude Admin:
+`mvn clean install -U`
+
+Build the YouDude Auth:
 `mvn clean install -U`
 
 Then, from the "youdude" folder, you can run the Docker Compose command:    

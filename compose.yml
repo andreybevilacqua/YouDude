@@ -21,6 +21,16 @@ services:
       - 8080:8080
     networks:
       - youdude-network
+  youdude-auth:
+    build:
+      context: ./youdude-auth
+      dockerfile: Dockerfile-auth
+    ports:
+      - 8081:8081
+    container_name: youdude-auth
+    hostname: youdude-auth
+    networks:
+      - youdude-network
   youdude-admin:
     build:
       context: ./youdude-admin
