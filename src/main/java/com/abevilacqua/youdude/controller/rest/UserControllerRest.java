@@ -21,7 +21,7 @@ import static com.abevilacqua.youdude.controller.dto.PageImplDTO.pageMapper;
 @RequestMapping("/rest/users")
 public class UserControllerRest {
 
-  // todo: Evo Suite, gRPC, pitest
+  // todo: YouDude-Auth into YouDude-Admin, Evo Suite, gRPC, pitest
 
   private final UserService userService;
   private final SecurityService securityService;

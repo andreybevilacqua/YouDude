@@ -16,7 +16,7 @@ Build the YouDude Auth:
 `mvn clean install -U`
 
 Then, from the "youdude" folder, you can run the Docker Compose command:    
-`docker-compose -f compose.yml up -d`
+`docker-compose -f compose.yml up -d --build`
 
 Generate authorization token doing HTTP POST request to this endpoint:    
 `http://localhost:8081/oauth/token`

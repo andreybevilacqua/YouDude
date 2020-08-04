@@ -28,15 +28,23 @@ public class SecurityService {
   }
 
   public void processClientRequest(String token) {
+    log.info("Validating token {}", token);
     if(token != null && !token.isBlank()) {
       ResponseEntity<TokenValidity> responseEntity = requestTokenValidation(token);
-      if(!responseEntity.getStatusCode().is2xxSuccessful()) throw new RuntimeException("An error happened validating token");
-    } else throw new IllegalArgumentException("Illegal request: missing token");
+      if(!responseEntity.getStatusCode().is2xxSuccessful()) {
+        log.error("Response status different from 2xx: {}", responseEntity.getStatusCode().value());
+        throw new RuntimeException("An error happened validating token");
+      } else log.info("Valid token");
+    } else {
+      log.error("Invalid token");
+      throw new IllegalArgumentException("Illegal request: missing token");
+    }
   }
 
   private ResponseEntity<TokenValidity> requestTokenValidation(String token) {
     HttpEntity<TokenValidity> httpEntity = getHttpEntity(token);
     try {
+      log.info("Request token validation for auth server");
       return restTemplate.exchange(authUrl, POST, httpEntity, TokenValidity.class);
     } catch (HttpClientErrorException e) {
       if(e.getStatusCode().value() == 403) {
