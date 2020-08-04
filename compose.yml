@@ -17,6 +17,7 @@ services:
     depends_on:
       - postgres
       - youdude-admin
+      - youdude-auth
     ports:
       - 8080:8080
     networks:
