@@ -26,6 +26,8 @@ services:
     build:
       context: ./youdude-auth
       dockerfile: Dockerfile-auth
+    depends_on:
+      - youdude-admin
     ports:
       - 8081:8081
     container_name: youdude-auth
