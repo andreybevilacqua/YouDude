@@ -1,4 +1,4 @@
-FROM fabric8/java-centos-openjdk11-jre
+FROM openjdk:11-slim
 
 ENV JAVA_OPTS="-Xmx256m"
 
