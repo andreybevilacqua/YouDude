@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.security.InvalidParameterException;
 import java.util.UUID;
 
@@ -24,15 +22,12 @@ public final class Video implements Comparable<Video>{
   private UUID id;
 
   @Column(name = "name")
-  @NotEmpty
   private String name;
 
   @Column(name = "subject")
-  @NotEmpty
   private String subject;
 
   @Column(name = "duration")
-  @NotNull
   private int duration;
 
   @Column(name = "category")
